@@ -54,12 +54,60 @@
     padding: 0;
     height: 100%;
     overflow: hidden;
-    background: #0c0518;
+    /* Moldura institucional (DESIGN.md §11) — gradiente institucional + acentos */
+    background:
+      radial-gradient(circle at 12% 8%, rgba(234, 152, 47, .18), transparent 26%),
+      radial-gradient(circle at 90% 20%, rgba(204, 102, 204, .22), transparent 30%),
+      linear-gradient(135deg, #3A245F 0%, #552583 48%, #8D3D8F 100%);
     font-family: var(--font-body);
     color: var(--on-dark-body);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
+
+  /* ───────── Botão de tela cheia (DESIGN.md §22 ícone geométrico) ───────── */
+  .fs-btn {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    z-index: 100;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 252, 251, .08);
+    border: 1px solid rgba(255, 252, 251, .28);
+    color: #FFFCFB;
+    padding: 9px 16px;
+    border-radius: 999px;
+    font-family: var(--font-body);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    cursor: pointer;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    transition: background .22s ease, border-color .22s ease, transform .22s ease;
+  }
+  .fs-btn:hover,
+  .fs-btn:focus-visible {
+    background: rgba(234, 152, 47, .22);
+    border-color: #EA982F;
+    transform: translateY(-1px);
+    outline: none;
+  }
+  .fs-btn svg {
+    width: 14px;
+    height: 14px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2.4;
+    stroke-linejoin: miter;
+  }
+  :fullscreen .fs-btn,
+  :-webkit-full-screen .fs-btn { opacity: .35; }
+  :fullscreen .fs-btn:hover,
+  :-webkit-full-screen .fs-btn:hover { opacity: 1; }
 
   /* ───────── Framework: scale-to-fit canvas ───────── */
   .stage {
@@ -1116,6 +1164,13 @@
   </defs>
 </svg>
 
+<button class="fs-btn" id="fsBtn" type="button" title="Tela cheia (tecle F)" aria-label="Alternar tela cheia">
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M4 9 V4 H9 M20 9 V4 H15 M4 15 V20 H9 M20 15 V20 H15"/>
+  </svg>
+  <span>Tela cheia</span>
+</button>
+
 <div class="stage">
 <div class="canvas">
 
@@ -1725,8 +1780,29 @@
     go(dx < 0 ? 1 : -1);
   }, { passive: true });
 
+  // Fullscreen — preenche o monitor 1:1 sem letterbox
+  function toggleFullscreen() {
+    var root = document.documentElement;
+    var isFs = document.fullscreenElement || document.webkitFullscreenElement;
+    if (!isFs) {
+      (root.requestFullscreen || root.webkitRequestFullscreen || function () {}).call(root);
+    } else {
+      (document.exitFullscreen || document.webkitExitFullscreen || function () {}).call(document);
+    }
+  }
+  var fsBtn = document.getElementById('fsBtn');
+  if (fsBtn) fsBtn.addEventListener('click', toggleFullscreen);
+  document.addEventListener('fullscreenchange', function () { window.setTimeout(fit, 50); });
+  document.addEventListener('webkitfullscreenchange', function () { window.setTimeout(fit, 50); });
+
   document.addEventListener('keydown', function (e) {
     if (e.metaKey || e.ctrlKey || e.altKey) return;
+    if (e.key === 'f' || e.key === 'F') {
+      if (e.target && e.target.closest && e.target.closest('input, textarea, select')) return;
+      e.preventDefault();
+      toggleFullscreen();
+      return;
+    }
     switch (e.key) {
       case 'ArrowRight':
       case 'ArrowDown':
