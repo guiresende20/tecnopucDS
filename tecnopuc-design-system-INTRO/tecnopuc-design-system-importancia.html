@@ -43,10 +43,54 @@
       display: grid;
       place-items: center;
       background:
-        radial-gradient(circle at 12% 8%, rgba(234, 152, 47, .16), transparent 24%),
-        radial-gradient(circle at 90% 20%, rgba(141, 61, 143, .22), transparent 28%),
-        #17121f;
+        radial-gradient(circle at 12% 8%, rgba(234, 152, 47, .18), transparent 26%),
+        radial-gradient(circle at 90% 20%, rgba(204, 102, 204, .22), transparent 30%),
+        linear-gradient(135deg, #3A245F 0%, #552583 48%, #8D3D8F 100%);
     }
+
+    /* Botão de fullscreen — moldura institucional vira deck 1:1 (§5 tom convidativo, §22 ícone geométrico) */
+    .fs-btn {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      z-index: 100;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 252, 251, .08);
+      border: 1px solid rgba(255, 252, 251, .28);
+      color: #FFFCFB;
+      padding: 9px 16px;
+      border-radius: 999px;
+      font-family: var(--font-body);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      cursor: pointer;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      transition: background .22s ease, border-color .22s ease, transform .22s ease;
+    }
+    .fs-btn:hover,
+    .fs-btn:focus-visible {
+      background: rgba(234, 152, 47, .22);
+      border-color: #EA982F;
+      transform: translateY(-1px);
+      outline: none;
+    }
+    .fs-btn svg {
+      width: 14px;
+      height: 14px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2.4;
+      stroke-linejoin: miter;
+    }
+    :fullscreen .fs-btn,
+    :-webkit-full-screen .fs-btn { opacity: .35; }
+    :fullscreen .fs-btn:hover,
+    :-webkit-full-screen .fs-btn:hover { opacity: 1; }
 
     .deck {
       position: relative;
@@ -1093,7 +1137,13 @@
   </style>
 </head>
 <body>
-  <div class="deck-viewport">
+  <button class="fs-btn" id="fsBtn" type="button" title="Tela cheia (tecle F)" aria-label="Alternar tela cheia">
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M4 9 V4 H9 M20 9 V4 H15 M4 15 V20 H9 M20 15 V20 H15"/>
+    </svg>
+    <span>Tela cheia</span>
+  </button>
+  <div class="deck-viewport"><!-- moldura institucional · pressione F para preencher o monitor -->
     <main class="deck" id="deck" aria-live="polite">
       <section class="slide dark is-active intro-running" data-screen-label="01 Tese">
         <div class="intro-sequence" aria-hidden="true">
@@ -1381,8 +1431,28 @@
     function nextSlide() { renderSlide(current + 1); }
     function previousSlide() { renderSlide(current - 1); }
 
+    function toggleFullscreen() {
+      const root = document.documentElement;
+      const isFs = document.fullscreenElement || document.webkitFullscreenElement;
+      if (!isFs) {
+        (root.requestFullscreen || root.webkitRequestFullscreen)?.call(root);
+      } else {
+        (document.exitFullscreen || document.webkitExitFullscreen)?.call(document);
+      }
+    }
+    const fsBtn = document.getElementById("fsBtn");
+    if (fsBtn) fsBtn.addEventListener("click", toggleFullscreen);
+    document.addEventListener("fullscreenchange", () => window.setTimeout(fitDeck, 50));
+    document.addEventListener("webkitfullscreenchange", () => window.setTimeout(fitDeck, 50));
+
     window.addEventListener("resize", fitDeck);
     window.addEventListener("keydown", (event) => {
+      if (event.key === "f" || event.key === "F") {
+        if (event.target.closest("input, textarea, select")) return;
+        event.preventDefault();
+        toggleFullscreen();
+        return;
+      }
       if (["ArrowRight", "PageDown", " "].includes(event.key)) {
         event.preventDefault();
         nextSlide();
