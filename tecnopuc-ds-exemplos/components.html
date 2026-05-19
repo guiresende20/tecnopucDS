@@ -1,0 +1,612 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tokens e Componentes — Tecnopuc</title>
+  <style>
+    :root {
+      --purple-900: #3A245F;
+      --purple-800: #552583;
+      --purple-600: #8D3D8F;
+      --purple-400: #9F66A3;
+      --purple-200: #C9B7CB;
+      --magenta: #CC66CC;
+      --pink: #E83D78;
+      --ochre: #EA982F;
+      --ochre-dark: #D07E1D;
+      --blue: #027DBD;
+      --bg: #FAFAFA;
+      --surface: #fff;
+      --fg: #161617;
+      --body: #262626;
+      --muted: #6C6E71;
+      --border: rgba(58,36,95,.16);
+      --font: "Gotham", "Gotham Book", "Montserrat", "Bahnschrift", system-ui, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      font-family: var(--font);
+      color: var(--body);
+    }
+    a { text-decoration: none; color: inherit; }
+    .shell { width: min(1180px, calc(100% - 40px)); margin: auto; }
+    .top {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(250,250,250,.88);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav {
+      min-height: 70px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--purple-900);
+      font-weight: 900;
+    }
+    .mark {
+      width: 38px;
+      aspect-ratio: 1;
+      border: 2px solid var(--ochre);
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      color: var(--ochre);
+    }
+    .links { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+    .links a {
+      font-size: 13px;
+      font-weight: 850;
+      padding: 9px 12px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: #fff;
+      color: var(--purple-900);
+    }
+    .hero { padding: clamp(48px,8vw,96px) 0 34px; }
+    .hero h1 {
+      max-width: 850px;
+      font-size: clamp(42px,6vw,78px);
+      line-height: .98;
+      letter-spacing: -.04em;
+      margin: 12px 0;
+      color: var(--fg);
+    }
+    .eyebrow {
+      color: var(--ochre-dark);
+      text-transform: uppercase;
+      letter-spacing: .16em;
+      font-size: 12px;
+      font-weight: 950;
+    }
+    .lead {
+      max-width: 720px;
+      font-size: clamp(17px,2vw,22px);
+      line-height: 1.55;
+      color: var(--muted);
+    }
+    .layout {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      gap: 24px;
+      align-items: start;
+      padding-bottom: 80px;
+    }
+    .side {
+      position: sticky;
+      top: 92px;
+      display: grid;
+      gap: 10px;
+    }
+    .side button {
+      border: 1px solid var(--border);
+      background: #fff;
+      border-radius: 14px;
+      padding: 15px;
+      text-align: left;
+      font-weight: 900;
+      color: var(--purple-900);
+      cursor: pointer;
+    }
+    .side button[aria-selected=true] { background: var(--purple-900); color: #fff; }
+    .panel {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: clamp(20px,4vw,36px);
+      box-shadow: 0 18px 60px rgba(58,36,95,.08);
+      min-height: 560px;
+    }
+    .panel h2 {
+      font-size: clamp(30px,4vw,52px);
+      line-height: 1;
+      margin: 0 0 12px;
+      color: var(--fg);
+    }
+    .panel p { color: var(--muted); line-height: 1.6; }
+    .swatches {
+      display: grid;
+      grid-template-columns: repeat(4,1fr);
+      gap: 14px;
+      margin-top: 26px;
+    }
+    .swatch {
+      min-height: 150px;
+      border-radius: 18px;
+      padding: 14px;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      font-weight: 900;
+    }
+    .swatch.light { color: var(--fg); border: 1px solid var(--border); }
+    .swatch small { font-weight: 800; opacity: .82; }
+    .type-spec { display: grid; gap: 18px; margin-top: 22px; }
+    .sample { border: 1px solid var(--border); border-radius: 18px; padding: 22px; }
+    .sample strong {
+      display: block;
+      color: var(--purple-900);
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+    }
+    .sample .big {
+      font-size: clamp(34px,5vw,70px);
+      line-height: .95;
+      letter-spacing: -.04em;
+      color: var(--fg);
+      font-weight: 900;
+    }
+    .components {
+      display: grid;
+      grid-template-columns: repeat(2,1fr);
+      gap: 16px;
+      margin-top: 24px;
+    }
+    .card {
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 20px;
+      background: #fff;
+    }
+    .btn {
+      border: 0;
+      border-radius: 12px;
+      min-height: 46px;
+      padding: 0 16px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+    .primary { background: var(--purple-900); color: #fff; }
+    .accent { background: var(--ochre); color: #24153f; }
+    .ghost { background: #fff; border: 1px solid var(--border); color: var(--purple-900); }
+    .status {
+      display: inline-flex;
+      border-radius: 999px;
+      padding: 7px 10px;
+      background: rgba(2,125,189,.12);
+      color: var(--blue);
+      font-size: 12px;
+      font-weight: 900;
+    }
+    .copy-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 18px; }
+    .toast {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      background: var(--purple-900);
+      color: #fff;
+      border-radius: 14px;
+      padding: 14px 16px;
+      box-shadow: 0 18px 50px rgba(58,36,95,.25);
+      opacity: 0;
+      transform: translateY(12px);
+      transition: .22s ease;
+    }
+    .toast.show { opacity: 1; transform: translateY(0); }
+
+    .motion-grid {
+      display: grid;
+      grid-template-columns: minmax(0,1.1fr) minmax(260px,.9fr);
+      gap: 18px;
+      margin-top: 24px;
+    }
+    .network-field {
+      position: relative;
+      min-height: 460px;
+      overflow: hidden;
+      border-radius: 22px;
+      background: linear-gradient(135deg,#fdfdfd,#f4f5f6);
+      border: 1px solid rgba(108,110,113,.16);
+      color: var(--fg);
+      padding: 24px;
+      display: grid;
+      align-content: end;
+      isolation: isolate;
+    }
+    .network-field::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      pointer-events: none;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.20) 48%, rgba(255,255,255,.82) 82%),
+        radial-gradient(circle at 46% 42%, rgba(255,255,255,0), rgba(255,255,255,.62) 76%);
+    }
+    .network-field strong {
+      position: relative;
+      z-index: 3;
+      display: block;
+      font-size: clamp(28px,4vw,48px);
+      line-height: .98;
+      letter-spacing: -.035em;
+      max-width: 520px;
+    }
+    .network-field p {
+      position: relative;
+      z-index: 3;
+      max-width: 520px;
+      color: rgba(38,38,38,.72);
+      margin: 12px 0 0;
+    }
+    .network-canvas {
+      position: absolute;
+      inset: -16% -18% -10% -18%;
+      width: 136%;
+      height: 126%;
+      z-index: 1;
+      pointer-events: none;
+      opacity: .96;
+    }
+    .motion-controls {
+      position: relative;
+      z-index: 3;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 16px;
+    }
+    .motion-controls button {
+      border: 1px solid rgba(108,110,113,.24);
+      background: rgba(255,255,255,.76);
+      color: #3f4145;
+      border-radius: 999px;
+      min-height: 38px;
+      padding: 0 13px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+    .motion-controls button[aria-pressed=true] {
+      background: #3f4145;
+      border-color: #3f4145;
+      color: #fff;
+    }
+    .motion-side { display: grid; gap: 14px; }
+    .motion-card {
+      border: 1px solid rgba(108,110,113,.18);
+      border-radius: 18px;
+      background: #fff;
+      padding: 18px;
+      transition: transform .28s ease, border-color .28s ease, box-shadow .28s ease;
+    }
+    .motion-card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(108,110,113,.34);
+      box-shadow: 0 18px 44px rgba(22,22,23,.08);
+    }
+    .motion-card h3 { margin: 0 0 8px; color: var(--fg); }
+    .motion-card p { font-size: 14px; margin: 0; color: var(--muted); }
+    .transition-sample {
+      height: 9px;
+      border-radius: 999px;
+      background: rgba(108,110,113,.10);
+      overflow: hidden;
+      margin-top: 16px;
+    }
+    .transition-sample span {
+      display: block;
+      height: 100%;
+      width: 42%;
+      border-radius: inherit;
+      background: linear-gradient(90deg,rgba(108,110,113,.32),rgba(108,110,113,.12));
+      transition: width .38s cubic-bezier(.2,.8,.2,1);
+    }
+    .motion-card:hover .transition-sample span { width: 86%; }
+    .reveal-stack {
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      gap: 8px;
+      margin-top: 16px;
+    }
+    .reveal-stack i {
+      height: 48px;
+      border-radius: 12px;
+      background: rgba(108,110,113,.10);
+      transform: translateY(10px);
+      opacity: .62;
+      animation: revealTile 1.8s ease infinite alternate;
+    }
+    .reveal-stack i:nth-child(2) { animation-delay: .15s; }
+    .reveal-stack i:nth-child(3) { animation-delay: .3s; }
+    .state-pill {
+      display: inline-flex;
+      margin-top: 16px;
+      border-radius: 999px;
+      background: rgba(108,110,113,.10);
+      color: #55585c;
+      padding: 8px 10px;
+      font-size: 12px;
+      font-weight: 900;
+      transition: background .25s ease, color .25s ease;
+    }
+    .motion-card:hover .state-pill { background: rgba(108,110,113,.18); color: #2f3134; }
+    @keyframes revealTile { to { transform: translateY(0); opacity: 1; } }
+    @media (prefers-reduced-motion: reduce) {
+      .reveal-stack i { animation: none; }
+      .motion-card,
+      .transition-sample span { transition: none; }
+    }
+    @media (max-width: 880px) {
+      .layout { grid-template-columns: 1fr; }
+      .side { position: static; grid-template-columns: repeat(4,1fr); }
+      .swatches,
+      .components { grid-template-columns: repeat(2,1fr); }
+      .motion-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 560px) {
+      .shell { width: min(100% - 28px,1180px); }
+      .nav { align-items: flex-start; flex-direction: column; padding: 14px 0; }
+      .side { grid-template-columns: 1fr; }
+      .swatches,
+      .components { grid-template-columns: 1fr; }
+      .hero h1 { font-size: clamp(40px,13vw,58px); }
+      .network-field { min-height: 460px; padding: 18px; }
+      .motion-controls button { flex: 1; }
+    }
+  </style>
+</head>
+<body>
+  <header class="top">
+    <nav class="shell nav">
+      <a class="brand" href="index.html"><span class="mark">T</span><span>Tokens Tecnopuc</span></a>
+      <div class="links">
+        <a href="index.html">Amostras</a>
+        <a href="landing.html">Landing</a>
+        <a href="mobile-app.html">App</a>
+        <a href="social-cards.html">Social</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="shell hero">
+      <div class="eyebrow">Biblioteca base</div>
+      <h1>Tokens, componentes e regras para interfaces digitais.</h1>
+      <p class="lead">Uma página de referência para times que precisam aplicar a marca Tecnopuc com consistência em hotsites, portais e protótipos.</p>
+    </section>
+
+    <section class="shell layout">
+      <aside class="side" role="tablist">
+        <button aria-selected="true" data-panel="cores">Cores</button>
+        <button aria-selected="false" data-panel="tipo">Tipografia</button>
+        <button aria-selected="false" data-panel="ui">Componentes</button>
+        <button aria-selected="false" data-panel="movimento">Movimento</button>
+      </aside>
+      <article class="panel" id="panel">
+        <h2>Cores institucionais em uso digital.</h2>
+        <p>Roxo estrutura a experiência, branco garante leitura, ocre marca foco e ações decisivas.</p>
+        <div class="swatches">
+          <div class="swatch" style="background:#3A245F"><span>Roxo escuro</span><small>#3A245F</small></div>
+          <div class="swatch" style="background:#552583"><span>Roxo institucional</span><small>#552583</small></div>
+          <div class="swatch" style="background:#8D3D8F"><span>Roxo médio</span><small>#8D3D8F</small></div>
+          <div class="swatch" style="background:#EA982F;color:#24153f"><span>Ocre Tecnopuc</span><small>#EA982F</small></div>
+          <div class="swatch light" style="background:#FAFAFA"><span>Fundo claro</span><small>#FAFAFA</small></div>
+          <div class="swatch light" style="background:#FFFFFF"><span>Superfície</span><small>#FFFFFF</small></div>
+          <div class="swatch" style="background:#027DBD"><span>Azul apoio</span><small>#027DBD</small></div>
+          <div class="swatch" style="background:#E83D78"><span>Rosa destaque</span><small>#E83D78</small></div>
+        </div>
+        <div class="copy-row">
+          <button class="btn primary" data-copy="--purple-900: #3A245F;">Copiar token roxo</button>
+          <button class="btn ghost" data-copy="--ochre: #EA982F;">Copiar token ocre</button>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <div class="toast" id="toast">Token copiado</div>
+
+  <script>
+    const panels = {
+      cores: document.querySelector("#panel").innerHTML,
+      tipo: '<h2>Gotham como fonte oficial.</h2><p>A família Gotham é a fonte oficial do Tecnopuc. Em ambientes sem Gotham instalada, Montserrat e Bahnschrift entram como alternativas coerentes.</p><div class="type-spec"><div class="sample"><strong>Título / Bold</strong><div class="big">Criar futuro em rede.</div></div><div class="sample"><strong>Corpo / Regular</strong><p>Frases curtas, linguagem clara e foco em colaboração. O texto explica sem burocracia e convida sem exagero publicitário.</p></div><div class="sample"><strong>Legenda / Light</strong><p style="font-weight:300">Informações secundárias mantêm contraste suficiente e não competem com a chamada principal.</p></div></div>',
+      ui: '<h2>Componentes com foco em ação.</h2><p>Bordas discretas, radii moderados, ícones geométricos quando necessários e estados de interação visíveis.</p><div class="components"><div class="card"><span class="status">Programa aberto</span><h3>Card de programa</h3><p>Nome, público, benefício principal e relação com o ecossistema.</p><button class="btn primary">Conhecer programa</button></div><div class="card"><span class="status">Evento</span><h3>Open Office Tecnopuc</h3><p>Quinta, 10h · Auditório Tecnopuc</p><button class="btn accent">Inscrever-se</button></div><div class="card"><h3>Mensagem de sistema</h3><p>Use linguagem objetiva: “Inscrição confirmada. Enviaremos os detalhes por e-mail.”</p><button class="btn ghost">Ver detalhes</button></div><div class="card"><h3>Filtro institucional</h3><p>Abas ou pills devem reduzir carga cognitiva, não virar decoração.</p><button class="btn primary">Hubs</button> <button class="btn ghost">Eventos</button></div></div>',
+      movimento: '<h2>Transições e efeitos para web.</h2><p>A marca pode ganhar movimento com microinterações claras e uma rede orgânica inspirada na referência enviada. Nesta amostra, tudo usa cinzas neutros e fracos para preservar a leitura do conteúdo.</p><div class="motion-grid" data-mode="calmo"><div class="network-field" aria-label="Rede animada de nodos conectados em tons neutros"><strong>Rede visual com movimento sutil.</strong><p>Nodos pequenos e conexões recalculadas criam profundidade leve, próxima a uma cena Three.js, sem competir com textos de hero ou aberturas de seção.</p><div class="motion-controls" aria-label="Alternar intensidade do efeito"><button aria-pressed="true" data-mode="calmo">Calmo</button><button aria-pressed="false" data-mode="pulso">Pulso</button><button aria-pressed="false" data-mode="fluxo">Fluxo</button></div></div><div class="motion-side"><div class="motion-card"><h3>Hover de ação</h3><p>Elevação curta, borda neutra e resposta em menos de 300 ms.</p><div class="transition-sample"><span></span></div></div><div class="motion-card"><h3>Entrada de cards</h3><p>Sequência leve para listas, hubs e cards de evento.</p><div class="reveal-stack"><i></i><i></i><i></i></div></div><div class="motion-card"><h3>Estado contextual</h3><p>Contraste baixo indica progresso ou foco sem adicionar ruído cromático.</p><span class="state-pill">Conexão ativa</span></div></div></div>'
+    };
+
+    const panel = document.querySelector("#panel");
+    let motionFrame = 0;
+    let motionCleanup = null;
+
+    document.querySelectorAll(".side button").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".side button").forEach((button) => button.setAttribute("aria-selected", "false"));
+        btn.setAttribute("aria-selected", "true");
+        if (motionCleanup) motionCleanup();
+        panel.animate(
+          [{ opacity: .35, transform: "translateY(8px)" }, { opacity: 1, transform: "translateY(0)" }],
+          { duration: 220, easing: "ease-out" }
+        );
+        panel.innerHTML = panels[btn.dataset.panel];
+        wireCopy();
+        if (btn.dataset.panel === "movimento") initMotionPanel();
+      });
+    });
+
+    function initMotionPanel() {
+      const grid = document.querySelector(".motion-grid");
+      const field = document.querySelector(".network-field");
+      if (!grid || !field) return;
+
+      const canvas = document.createElement("canvas");
+      canvas.className = "network-canvas";
+      canvas.setAttribute("aria-hidden", "true");
+      field.prepend(canvas);
+
+      const ctx = canvas.getContext("2d");
+      const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const nodes = [
+        { x: -1.24, y: -.72, z: -.30, r: 18, p: .0 },
+        { x: -.76, y: -.95, z: .10, r: 24, p: .7 },
+        { x: -.48, y: -.32, z: -.18, r: 18, p: 1.5 },
+        { x: -1.13, y: .18, z: .20, r: 20, p: 2.2 },
+        { x: -.62, y: .42, z: -.34, r: 22, p: 2.9 },
+        { x: -.36, y: .92, z: .05, r: 18, p: 3.5 },
+        { x: -.06, y: -.72, z: .28, r: 26, p: 4.1 },
+        { x: .14, y: -.16, z: -.16, r: 19, p: 4.9 },
+        { x: .02, y: .38, z: .22, r: 20, p: 5.4 },
+        { x: .44, y: -1.00, z: -.24, r: 25, p: 6.0 },
+        { x: .62, y: -.30, z: .18, r: 23, p: 6.7 },
+        { x: .56, y: .54, z: -.08, r: 19, p: 7.1 },
+        { x: .96, y: -.78, z: .08, r: 23, p: 7.8 },
+        { x: 1.16, y: -.12, z: -.30, r: 25, p: 8.3 },
+        { x: .92, y: .58, z: .26, r: 18, p: 9.0 },
+        { x: 1.28, y: .36, z: .02, r: 21, p: 9.6 }
+      ];
+      const links = [
+        [0,1],[0,2],[0,3],[1,2],[1,6],[2,3],[2,4],[2,6],[2,7],
+        [3,4],[3,5],[4,5],[4,7],[4,8],[5,8],[6,7],[6,9],[6,10],
+        [7,8],[7,10],[7,11],[8,11],[9,10],[9,12],[10,12],[10,13],
+        [10,11],[11,14],[12,13],[13,14],[13,15],[14,15],
+        [0,6],[1,10],[3,8],[5,11],[6,13],[8,14],[9,13],[11,15]
+      ];
+      const modes = {
+        calmo: { speed: .00042, amp: .010, line: .16, node: .18 },
+        pulso: { speed: .00072, amp: .018, line: .19, node: .22 },
+        fluxo: { speed: .00105, amp: .026, line: .22, node: .25 }
+      };
+      let width = 1;
+      let height = 1;
+      let dpr = 1;
+
+      function resize() {
+        const rect = field.getBoundingClientRect();
+        dpr = Math.min(window.devicePixelRatio || 1, 2);
+        width = Math.max(1, rect.width * 1.36);
+        height = Math.max(1, rect.height * 1.26);
+        canvas.width = Math.round(width * dpr);
+        canvas.height = Math.round(height * dpr);
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      }
+
+      function project(point, t, mode) {
+        const driftX = Math.sin(t * .78 + point.p) * mode.amp;
+        const driftY = Math.cos(t * .64 + point.p * 1.4) * mode.amp * 1.3;
+        const driftZ = Math.sin(t * .92 + point.p * 1.7) * mode.amp * 3.8;
+        const z = point.z + driftZ;
+        const depth = 1 / (1.7 - z);
+        return {
+          x: width * .5 + (point.x + driftX) * width * .62 * depth,
+          y: height * .47 + (point.y + driftY) * height * .64 * depth,
+          z,
+          depth,
+          r: point.r * (.68 + depth * .55),
+          phase: point.p
+        };
+      }
+
+      function draw(now) {
+        const mode = modes[grid.dataset.mode] || modes.calmo;
+        const t = now * mode.speed;
+        ctx.clearRect(0, 0, width, height);
+        ctx.lineCap = "round";
+
+        const projected = nodes.map((node) => project(node, t, mode));
+
+        links.forEach(([aIndex, bIndex], index) => {
+          const a = projected[aIndex];
+          const b = projected[bIndex];
+          const depth = (a.depth + b.depth) * .5;
+          const alpha = Math.max(.055, Math.min(mode.line, depth * .10 + .055));
+          ctx.beginPath();
+          ctx.moveTo(a.x, a.y);
+          ctx.lineTo(b.x, b.y);
+          ctx.strokeStyle = `rgba(92,94,98,${alpha})`;
+          ctx.lineWidth = Math.max(.85, depth * 1.65);
+          ctx.stroke();
+
+          if (grid.dataset.mode !== "calmo" && index % 5 === 0) {
+            const flow = (Math.sin(t * 5 + index) + 1) * .5;
+            ctx.beginPath();
+            ctx.arc(a.x + (b.x - a.x) * flow, a.y + (b.y - a.y) * flow, 1.15, 0, Math.PI * 2);
+            ctx.fillStyle = "rgba(92,94,98,.10)";
+            ctx.fill();
+          }
+        });
+
+        projected.forEach((point) => {
+          const pulse = Math.sin(t * 3 + point.phase) * mode.node;
+          const radius = Math.max(2.1, Math.min(4.2, point.r * .14)) * (1 + pulse * .18);
+          const alpha = Math.max(.22, Math.min(.42, .25 + point.depth * .10));
+          ctx.beginPath();
+          ctx.arc(point.x, point.y, radius, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(86,88,92,${alpha})`;
+          ctx.fill();
+        });
+
+        if (!reduced) motionFrame = requestAnimationFrame(draw);
+      }
+
+      const observer = new ResizeObserver(() => {
+        resize();
+        draw(performance.now());
+      });
+      observer.observe(field);
+
+      document.querySelectorAll(".motion-controls button[data-mode]").forEach((button) => {
+        button.addEventListener("click", () => {
+          document.querySelectorAll(".motion-controls button[data-mode]").forEach((item) => {
+            item.setAttribute("aria-pressed", String(item === button));
+          });
+          grid.dataset.mode = button.dataset.mode;
+        });
+      });
+
+      resize();
+      draw(performance.now());
+      motionCleanup = () => {
+        cancelAnimationFrame(motionFrame);
+        observer.disconnect();
+        motionFrame = 0;
+        motionCleanup = null;
+      };
+    }
+
+    function wireCopy() {
+      document.querySelectorAll("[data-copy]").forEach((btn) => {
+        btn.addEventListener("click", async () => {
+          await navigator.clipboard.writeText(btn.dataset.copy);
+          const toast = document.querySelector("#toast");
+          toast.classList.add("show");
+          setTimeout(() => toast.classList.remove("show"), 1400);
+        });
+      });
+    }
+
+    wireCopy();
+  </script>
+</body>
+</html>

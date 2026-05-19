@@ -1,0 +1,14 @@
+# Claude Code — local project memory/settings
+.claude/
+
+# Open Design — local tooling cache
+.od-skills/
+*.artifact.json
+
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+desktop.ini
+*~
+.vscode/
+.idea/

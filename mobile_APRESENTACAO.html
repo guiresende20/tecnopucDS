@@ -1,0 +1,957 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#3A245F">
+  <title>Tecnopuc - Apresentacao Mobile</title>
+  <style>
+    :root {
+      --roxo-dark: #3A245F;
+      --roxo: #552583;
+      --roxo-mid: #8D3D8F;
+      --lilas: #CC99CC;
+      --ocre: #EA982F;
+      --ocre-dark: #D07E1D;
+      --bg: #FAFAFA;
+      --surface: #FFFFFF;
+      --text: #161617;
+      --body: #262626;
+      --muted: #6C6E71;
+      --border: rgba(58, 36, 95, 0.14);
+      --on-dark: #FFFCFB;
+      --on-dark-soft: rgba(255, 252, 251, 0.76);
+      --on-dark-muted: rgba(255, 252, 251, 0.58);
+      --font: Montserrat, Bahnschrift, -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+      --radius: 18px;
+      --shadow: 0 18px 54px rgba(22, 22, 23, 0.10);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background: var(--roxo-dark);
+    }
+
+    body {
+      margin: 0;
+      font-family: var(--font);
+      color: var(--body);
+      background: var(--bg);
+      line-height: 1.55;
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .mobile-deck {
+      min-height: 100svh;
+      background:
+        radial-gradient(circle at 16% 0%, rgba(204, 153, 204, 0.20), transparent 34rem),
+        linear-gradient(180deg, var(--roxo-dark) 0%, var(--roxo) 26rem, var(--bg) 26rem);
+    }
+
+    .section {
+      position: relative;
+      overflow: hidden;
+      padding: 28px 20px 88px;
+      min-height: 100svh;
+      isolation: isolate;
+    }
+
+    .section + .section {
+      border-top: 1px solid var(--border);
+    }
+
+    .dark {
+      color: var(--on-dark);
+      background:
+        radial-gradient(circle at 88% 12%, rgba(204, 153, 204, 0.26), transparent 20rem),
+        radial-gradient(circle at 16% 96%, rgba(234, 152, 47, 0.18), transparent 16rem),
+        linear-gradient(145deg, var(--roxo-dark), var(--roxo) 58%, #2f1c50);
+    }
+
+    .light {
+      color: var(--text);
+      background:
+        radial-gradient(circle at 94% 0%, rgba(141, 61, 143, 0.08), transparent 18rem),
+        var(--bg);
+    }
+
+    .topbar {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 52px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      min-width: 0;
+    }
+
+    .mark {
+      width: 28px;
+      height: 28px;
+      display: grid;
+      place-items: center;
+      flex: 0 0 auto;
+      position: relative;
+    }
+
+    .mark::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border: 5px solid var(--ocre);
+      border-radius: 50%;
+    }
+
+    .mark::after {
+      content: "T";
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      font-size: 20px;
+      line-height: 1;
+      font-weight: 800;
+      color: currentColor;
+    }
+
+    .wordmark {
+      display: block;
+      font-size: 18px;
+      line-height: 1;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+    }
+
+    .brand-sub {
+      display: block;
+      max-width: 22ch;
+      margin-top: 5px;
+      font-size: 9px;
+      line-height: 1.35;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: currentColor;
+      opacity: 0.62;
+    }
+
+    .kicker {
+      font-size: 11px;
+      line-height: 1.3;
+      font-weight: 800;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      color: var(--ocre-dark);
+    }
+
+    .dark .kicker {
+      color: #F2B04D;
+    }
+
+    .eyebrow {
+      display: block;
+      margin-bottom: 18px;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      color: var(--ocre-dark);
+    }
+
+    .dark .eyebrow {
+      color: #F2B04D;
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin: 0;
+    }
+
+    h1 {
+      max-width: 8.8ch;
+      font-size: clamp(48px, 15vw, 74px);
+      line-height: 0.95;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      color: var(--on-dark);
+    }
+
+    h1 em,
+    .close-title em {
+      color: #F2B04D;
+      font-style: italic;
+    }
+
+    h2 {
+      max-width: 10ch;
+      font-size: clamp(34px, 11vw, 54px);
+      line-height: 1;
+      font-weight: 800;
+      letter-spacing: -0.035em;
+      color: currentColor;
+    }
+
+    h3 {
+      font-size: 20px;
+      line-height: 1.15;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: currentColor;
+    }
+
+    .deck {
+      max-width: 34rem;
+      margin-top: 24px;
+      font-size: 18px;
+      line-height: 1.48;
+      color: var(--on-dark-soft);
+    }
+
+    .lead {
+      margin-top: 28px;
+      max-width: 34rem;
+      font-size: 19px;
+      line-height: 1.45;
+      font-weight: 520;
+      letter-spacing: -0.01em;
+      color: currentColor;
+    }
+
+    .light .lead {
+      color: var(--text);
+    }
+
+    .body-copy {
+      margin-top: 18px;
+      max-width: 36rem;
+      font-size: 15.5px;
+      line-height: 1.62;
+      color: var(--muted);
+    }
+
+    .dark .body-copy {
+      color: var(--on-dark-soft);
+    }
+
+    .card-stack,
+    .grid,
+    .hub-list,
+    .contact-list {
+      display: grid;
+      gap: 12px;
+      margin-top: 30px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .card {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      padding: 18px;
+      box-shadow: 0 1px 0 rgba(255, 255, 255, 0.70) inset;
+    }
+
+    .dark .card {
+      background: rgba(255, 252, 251, 0.07);
+      border-color: rgba(255, 252, 251, 0.16);
+      color: var(--on-dark);
+      box-shadow: none;
+      backdrop-filter: blur(12px);
+    }
+
+    .card p,
+    .hub-cat,
+    .contact-note {
+      margin-top: 8px;
+      font-size: 14px;
+      line-height: 1.55;
+      color: var(--muted);
+    }
+
+    .dark .card p,
+    .dark .hub-cat,
+    .dark .contact-note {
+      color: var(--on-dark-soft);
+    }
+
+    .tag {
+      display: block;
+      margin-bottom: 10px;
+      font-size: 10px;
+      line-height: 1.3;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ocre-dark);
+    }
+
+    .dark .tag {
+      color: #F2B04D;
+    }
+
+    .stats {
+      margin-top: 32px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .stat {
+      display: grid;
+      grid-template-columns: 64px 1fr;
+      gap: 14px;
+      align-items: center;
+      padding: 14px;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.72);
+    }
+
+    .stat-num {
+      min-height: 52px;
+      display: grid;
+      place-items: center;
+      border-radius: 13px;
+      background: rgba(208, 126, 29, 0.10);
+      color: var(--ocre-dark);
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+    }
+
+    .stat-label {
+      font-size: 14px;
+      line-height: 1.35;
+      font-weight: 760;
+      color: var(--text);
+    }
+
+    .stat-label span {
+      display: block;
+      margin-top: 4px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--muted);
+    }
+
+    .mini-flow {
+      display: grid;
+      gap: 10px;
+      margin-top: 28px;
+    }
+
+    .flow-item {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      padding: 14px;
+      border-radius: 16px;
+      background: rgba(58, 36, 95, 0.05);
+      border: 1px solid rgba(58, 36, 95, 0.10);
+    }
+
+    .flow-dot {
+      width: 10px;
+      height: 10px;
+      margin-top: 7px;
+      border-radius: 50%;
+      background: var(--ocre);
+      box-shadow: 0 0 0 6px rgba(234, 152, 47, 0.15);
+      flex: 0 0 auto;
+    }
+
+    .flow-item strong {
+      display: block;
+      font-size: 15px;
+      line-height: 1.3;
+      letter-spacing: -0.01em;
+      color: var(--text);
+    }
+
+    .flow-item span {
+      display: block;
+      margin-top: 4px;
+      font-size: 13px;
+      line-height: 1.45;
+      color: var(--muted);
+    }
+
+    .ecosystem {
+      margin-top: 30px;
+      padding: 20px;
+      border-radius: 24px;
+      background: rgba(255, 252, 251, 0.08);
+      border: 1px solid rgba(255, 252, 251, 0.14);
+      box-shadow: 0 1px 0 rgba(255, 255, 255, 0.08) inset;
+    }
+
+    .ecosystem-core {
+      display: grid;
+      place-items: center;
+      min-height: 108px;
+      border-radius: 18px;
+      background: rgba(58, 36, 95, 0.62);
+      border: 2px solid var(--ocre);
+      text-align: center;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .eco-tags {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .eco-tags span {
+      padding: 13px 10px;
+      border-radius: 14px;
+      background: rgba(255, 252, 251, 0.08);
+      border: 1px solid rgba(255, 252, 251, 0.14);
+      text-align: center;
+      font-size: 12px;
+      font-weight: 760;
+      color: var(--on-dark-soft);
+    }
+
+    ul {
+      margin: 12px 0 0;
+      padding-left: 18px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    li + li {
+      margin-top: 6px;
+    }
+
+    .dark ul {
+      color: var(--on-dark-soft);
+    }
+
+    .diff {
+      display: grid;
+      grid-template-columns: 36px 1fr;
+      gap: 14px;
+      align-items: flex-start;
+    }
+
+    .icon {
+      width: 36px;
+      height: 36px;
+      display: grid;
+      place-items: center;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 252, 251, 0.16);
+      color: #F2B04D;
+      font-size: 17px;
+      font-weight: 800;
+    }
+
+    .hub-list {
+      grid-template-columns: 1fr;
+    }
+
+    .hub-card {
+      display: grid;
+      grid-template-columns: 42px 1fr;
+      gap: 12px;
+      align-items: center;
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.76);
+    }
+
+    .hub-mark {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border-radius: 13px;
+      background: var(--roxo);
+      color: var(--on-dark);
+      font-size: 17px;
+      font-weight: 800;
+    }
+
+    .hub-name {
+      display: block;
+      font-size: 15px;
+      line-height: 1.2;
+      font-weight: 800;
+      letter-spacing: -0.015em;
+      color: var(--text);
+    }
+
+    .meta {
+      display: inline-flex;
+      margin-top: 18px;
+      padding: 8px 11px;
+      border-radius: 999px;
+      background: rgba(208, 126, 29, 0.12);
+      color: var(--ocre-dark);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .close-title {
+      max-width: 8.4ch;
+      font-size: clamp(46px, 14vw, 72px);
+      line-height: 0.95;
+      font-weight: 800;
+      letter-spacing: -0.045em;
+    }
+
+    .contact-list {
+      margin-top: 36px;
+    }
+
+    .contact-card {
+      padding: 16px;
+      border-radius: 18px;
+      background: rgba(255, 252, 251, 0.08);
+      border: 1px solid rgba(255, 252, 251, 0.14);
+    }
+
+    .contact-label {
+      display: block;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #F2B04D;
+    }
+
+    .contact-value {
+      display: block;
+      margin-top: 5px;
+      overflow-wrap: anywhere;
+      font-size: 16px;
+      line-height: 1.3;
+      font-weight: 760;
+      letter-spacing: -0.01em;
+      color: var(--on-dark);
+    }
+
+    .shape-t {
+      position: absolute;
+      z-index: -1;
+      opacity: 0.10;
+      pointer-events: none;
+    }
+
+    .shape-t::before,
+    .shape-t::after {
+      content: "";
+      position: absolute;
+      background: currentColor;
+    }
+
+    .shape-t::before {
+      width: 140px;
+      height: 40px;
+      top: 0;
+      left: 0;
+    }
+
+    .shape-t::after {
+      width: 44px;
+      height: 156px;
+      top: 0;
+      left: 48px;
+    }
+
+    .shape-1 {
+      width: 160px;
+      height: 160px;
+      right: -34px;
+      bottom: 46px;
+      color: currentColor;
+      transform: rotate(-18deg);
+    }
+
+    .shape-2 {
+      width: 160px;
+      height: 160px;
+      left: -52px;
+      top: 120px;
+      color: var(--roxo);
+      transform: rotate(24deg);
+    }
+
+    .bottom-nav {
+      position: fixed;
+      z-index: 20;
+      left: max(12px, env(safe-area-inset-left));
+      right: max(12px, env(safe-area-inset-right));
+      bottom: max(12px, env(safe-area-inset-bottom));
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      gap: 5px;
+      padding: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 18px;
+      background: rgba(22, 22, 23, 0.74);
+      backdrop-filter: blur(18px);
+      box-shadow: 0 18px 44px rgba(0, 0, 0, 0.24);
+    }
+
+    .bottom-nav a {
+      min-height: 34px;
+      display: grid;
+      place-items: center;
+      border-radius: 12px;
+      color: rgba(255, 252, 251, 0.74);
+      font-size: 11px;
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .bottom-nav a:focus-visible,
+    .bottom-nav a:hover {
+      outline: none;
+      background: rgba(234, 152, 47, 0.22);
+      color: #FFFCFB;
+    }
+
+    @media (min-width: 720px) {
+      .section {
+        padding-inline: max(48px, calc((100vw - 680px) / 2));
+      }
+
+      .grid,
+      .hub-list {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .stats {
+        grid-template-columns: 1fr 1fr 1fr;
+      }
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      .section > * {
+        animation: rise 520ms ease both;
+      }
+
+      .card,
+      .hub-card,
+      .stat,
+      .flow-item {
+        animation: rise 520ms ease both;
+      }
+
+      .card:nth-child(2),
+      .hub-card:nth-child(2),
+      .stat:nth-child(2),
+      .flow-item:nth-child(2) {
+        animation-delay: 70ms;
+      }
+
+      .card:nth-child(3),
+      .hub-card:nth-child(3),
+      .stat:nth-child(3),
+      .flow-item:nth-child(3) {
+        animation-delay: 120ms;
+      }
+
+      .card:nth-child(4),
+      .hub-card:nth-child(4),
+      .flow-item:nth-child(4) {
+        animation-delay: 170ms;
+      }
+
+      .shape-t {
+        animation: drift 9000ms ease-in-out infinite alternate;
+      }
+    }
+
+    @keyframes rise {
+      from {
+        opacity: 0;
+        transform: translateY(14px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes drift {
+      from {
+        transform: rotate(-18deg) translate3d(0, 0, 0);
+      }
+      to {
+        transform: rotate(-14deg) translate3d(8px, -10px, 0);
+      }
+    }
+
+    @media print {
+      .bottom-nav {
+        display: none;
+      }
+
+      .section {
+        min-height: auto;
+        break-after: page;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="mobile-deck">
+    <section class="section dark" id="s1">
+      <span class="shape-t shape-1"></span>
+      <div class="topbar">
+        <div class="brand">
+          <span class="mark"></span>
+          <div>
+            <span class="wordmark">Tecnopuc</span>
+            <span class="brand-sub">Parque Cient&iacute;fico e Tecnol&oacute;gico da PUCRS</span>
+          </div>
+        </div>
+        <span class="kicker">01 / 08</span>
+      </div>
+      <span class="eyebrow">Apresenta&ccedil;&atilde;o institucional</span>
+      <h1>Onde ci&ecirc;ncia, tecnologia e gente <em>criam</em> futuro.</h1>
+      <p class="deck">PUCRS Science and Technology Park &middot; Porto Alegre, Brasil.</p>
+    </section>
+
+    <section class="section light" id="s2">
+      <span class="shape-t shape-2"></span>
+      <div class="topbar">
+        <div class="brand">
+          <span class="mark"></span>
+          <span class="wordmark">Tecnopuc</span>
+        </div>
+        <span class="kicker">02 / 08</span>
+      </div>
+      <span class="eyebrow">O que &eacute;</span>
+      <h2>Um parque cient&iacute;fico e tecnol&oacute;gico, operado pela PUCRS.</h2>
+      <p class="lead">O Tecnopuc re&uacute;ne universidade, empresas, startups e centros de pesquisa em um mesmo territ&oacute;rio.</p>
+      <p class="body-copy">Conectamos conhecimento, tecnologia e mercado para transformar ideias em solu&ccedil;&otilde;es aplicadas. Operamos como articuladores de ecossistema: talento, capital, infraestrutura e comunidade em torno de desafios reais.</p>
+      <div class="stats">
+        <div class="stat">
+          <div class="stat-num">&mdash;</div>
+          <div class="stat-label">Empresas e organiza&ccedil;&otilde;es instaladas<span>N&uacute;mero atualizado anualmente</span></div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">&mdash;</div>
+          <div class="stat-label">Pessoas trabalhando no Parque<span>Colaboradores, pesquisadores, fundadores</span></div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">&mdash;</div>
+          <div class="stat-label">Hubs tem&aacute;ticos em opera&ccedil;&atilde;o<span>Verticais de inova&ccedil;&atilde;o aplicada</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section dark" id="s3">
+      <span class="shape-t shape-1"></span>
+      <div class="topbar">
+        <div class="brand">
+          <span class="mark"></span>
+          <span class="wordmark">Tecnopuc</span>
+        </div>
+        <span class="kicker">03 / 08</span>
+      </div>
+      <span class="eyebrow">Proposta de valor</span>
+      <h2>O que oferecemos a parceiros e empresas instaladas.</h2>
+      <div class="card-stack">
+        <article class="card">
+          <span class="tag">01 &middot; Ci&ecirc;ncia aplicada</span>
+          <h3>Pesquisa que vira produto.</h3>
+          <p>Acesso a laborat&oacute;rios, grupos de pesquisa e talento acad&ecirc;mico da PUCRS, com foco em solu&ccedil;&otilde;es aplic&aacute;veis ao mercado.</p>
+        </article>
+        <article class="card">
+          <span class="tag">02 &middot; Conex&atilde;o de mercado</span>
+          <h3>Encontros que fecham neg&oacute;cios.</h3>
+          <p>Programas, eventos e rodadas aproximam corpora&ccedil;&otilde;es de startups, fornecedores e centros de inova&ccedil;&atilde;o dentro do Parque.</p>
+        </article>
+        <article class="card">
+          <span class="tag">03 &middot; Comunidade</span>
+          <h3>Um ecossistema vivo.</h3>
+          <p>Organiza&ccedil;&otilde;es e pessoas trabalhando lado a lado. Encontros espont&acirc;neos podem virar parcerias estruturadas.</p>
+        </article>
+        <article class="card">
+          <span class="tag">04 &middot; Infraestrutura</span>
+          <h3>Espa&ccedil;o pronto para escalar.</h3>
+          <p>Laborat&oacute;rios, escrit&oacute;rios, &aacute;reas de conviv&ecirc;ncia e infraestrutura compartilhada em um campus integrado.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section dark" id="s4">
+      <div class="topbar">
+        <div class="brand">
+          <span class="mark"></span>
+          <span class="wordmark">Tecnopuc</span>
+        </div>
+        <span class="kicker">04 / 08</span>
+      </div>
+      <span class="eyebrow">Ecossistema</span>
+      <h2>Quatro for&ccedil;as. Um territ&oacute;rio. Conex&otilde;es reais.</h2>
+      <p class="body-copy">O Tecnopuc &eacute; o ponto de encontro de for&ccedil;as que normalmente operam em silos. Aqui, elas dividem o mesmo ch&atilde;o, e isso muda a velocidade da inova&ccedil;&atilde;o.</p>
+      <div class="ecosystem">
+        <div class="ecosystem-core">Tecnopuc<br><span style="font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--on-dark-muted);">Parque cient&iacute;fico</span></div>
+        <div class="eco-tags">
+          <span>Universidade</span>
+          <span>Startups</span>
+          <span>Empresas</span>
+          <span>Governo &amp; Capital</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section light" id="s5">
+      <span class="shape-t shape-2"></span>
+      <div class="topbar">
+        <div class="brand">
+          <span class="mark"></span>
+          <span class="wordmark">Tecnopuc</span>
+        </div>
+        <span class="kicker">05 / 08</span>
+      </div>
+      <span class="eyebrow">Startups, empresas e mercado</span>
+      <h2>Da pesquisa ao mercado em tr&ecirc;s movimentos.</h2>
+      <div class="mini-flow">
+        <div class="flow-item">
+          <span class="flow-dot"></span>
+          <div><strong>Startups que nascem aqui.</strong><span>Pr&eacute;-incuba&ccedil;&atilde;o, acelera&ccedil;&atilde;o e resid&ecirc;ncia conectam fundadores ao conhecimento da Universidade.</span></div>
+        </div>
+        <div class="flow-item">
+          <span class="flow-dot"></span>
+          <div><strong>Empresas que crescem juntas.</strong><span>Corpora&ccedil;&otilde;es instalam unidades, centros de P&amp;D e opera&ccedil;&otilde;es para acelerar agendas de inova&ccedil;&atilde;o.</span></div>
+        </div>
+        <div class="flow-item">
+          <span class="flow-dot"></span>
+          <div><strong>Mercado que circula livre.</strong><span>Eventos, programas conjuntos e rodadas estruturadas conectam empresas, startups, investidores e governo.</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section dark" id="s6">
+      <span class="shape-t shape-1"></span>
+      <div class="topbar">
+        <div class="brand">
+          <span class="mark"></span>
+          <span class="wordmark">Tecnopuc</span>
+        </div>
+        <span class="kicker">06 / 08</span>
+      </div>
+      <span class="eyebrow">Estrutura &amp; diferenciais</span>
+      <h2>Por que escolher o Tecnopuc.</h2>
+      <div class="grid">
+        <article class="card diff">
+          <span class="icon">U</span>
+          <div><h3>Universidade integrada</h3><p>Acesso a pesquisadores, grupos de pesquisa e laborat&oacute;rios da PUCRS.</p></div>
+        </article>
+        <article class="card diff">
+          <span class="icon">P</span>
+          <div><h3>Campus &uacute;nico</h3><p>Localiza&ccedil;&atilde;o em Porto Alegre, conectada ao ambiente empresarial ga&uacute;cho.</p></div>
+        </article>
+        <article class="card diff">
+          <span class="icon">H</span>
+          <div><h3>Hubs tem&aacute;ticos</h3><p>Verticais especializadas em sa&uacute;de, govtech, ind&uacute;stria criativa, educa&ccedil;&atilde;o e agro.</p></div>
+        </article>
+        <article class="card diff">
+          <span class="icon">C</span>
+          <div><h3>Comunidade ativa</h3><p>Eventos, escrit&oacute;rios e laborat&oacute;rios criam encontros que podem virar parcerias.</p></div>
+        </article>
+        <article class="card diff">
+          <span class="icon">A</span>
+          <div><h3>Acelera&ccedil;&atilde;o</h3><p>Trilhas estruturadas para startups, da pr&eacute;-incuba&ccedil;&atilde;o ao crescimento.</p></div>
+        </article>
+        <article class="card diff">
+          <span class="icon">I</span>
+          <div><h3>Articula&ccedil;&atilde;o institucional</h3><p>Pontes com governo, fundos, ag&ecirc;ncias de fomento e parques de inova&ccedil;&atilde;o.</p></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section light" id="s7">
+      <div class="topbar">
+        <div class="brand">
+          <span class="mark"></span>
+          <span class="wordmark">Tecnopuc</span>
+        </div>
+        <span class="kicker">07 / 08</span>
+      </div>
+      <span class="eyebrow">Frentes de atua&ccedil;&atilde;o</span>
+      <h2>Hubs Tecnopuc: onde a inova&ccedil;&atilde;o se especializa.</h2>
+      <p class="body-copy">Cada Hub &eacute; uma vertical tem&aacute;tica com identidade pr&oacute;pria, equipe dedicada e portf&oacute;lio de programas.</p>
+      <span class="meta">10 hubs em opera&ccedil;&atilde;o &middot; expans&atilde;o cont&iacute;nua</span>
+      <div class="hub-list">
+        <article class="hub-card"><span class="hub-mark">F</span><div><span class="hub-name">FutureGov Hub</span><span class="hub-cat">Setor p&uacute;blico &amp; govtech</span></div></article>
+        <article class="hub-card"><span class="hub-mark">B</span><div><span class="hub-name">Bio Hub</span><span class="hub-cat">Ci&ecirc;ncias da vida &amp; sa&uacute;de</span></div></article>
+        <article class="hub-card"><span class="hub-mark">P</span><div><span class="hub-name">Plug Hub</span><span class="hub-cat">Ind&uacute;stria &amp; energia</span></div></article>
+        <article class="hub-card"><span class="hub-mark">N</span><div><span class="hub-name">NAVI Hub</span><span class="hub-cat">IA &amp; ci&ecirc;ncia de dados</span></div></article>
+        <article class="hub-card"><span class="hub-mark">C</span><div><span class="hub-name">Celeiro Hub</span><span class="hub-cat">Agro &amp; food tech</span></div></article>
+        <article class="hub-card"><span class="hub-mark">O</span><div><span class="hub-name">OmniX Hub</span><span class="hub-cat">Ind&uacute;stria criativa &amp; XR</span></div></article>
+        <article class="hub-card"><span class="hub-mark">F</span><div><span class="hub-name">Fine Hub</span><span class="hub-cat">Finan&ccedil;as &amp; fintech</span></div></article>
+        <article class="hub-card"><span class="hub-mark">F</span><div><span class="hub-name">Farol Hub</span><span class="hub-cat">Impacto &amp; sustentabilidade</span></div></article>
+        <article class="hub-card"><span class="hub-mark">E</span><div><span class="hub-name">EduX Hub</span><span class="hub-cat">Educa&ccedil;&atilde;o &amp; aprendizagem</span></div></article>
+        <article class="hub-card"><span class="hub-mark">C</span><div><span class="hub-name">Creative Hub</span><span class="hub-cat">Cultura, design &amp; m&iacute;dia</span></div></article>
+      </div>
+    </section>
+
+    <section class="section dark" id="s8">
+      <span class="shape-t shape-1"></span>
+      <div class="topbar">
+        <div class="brand">
+          <span class="mark"></span>
+          <div>
+            <span class="wordmark">Tecnopuc</span>
+            <span class="brand-sub">Parque Cient&iacute;fico e Tecnol&oacute;gico da PUCRS</span>
+          </div>
+        </div>
+        <span class="kicker">08 / 08</span>
+      </div>
+      <span class="eyebrow">Convite</span>
+      <h2 class="close-title">Vamos <em>construir</em> o pr&oacute;ximo passo juntos.</h2>
+      <p class="deck">Se a sua organiza&ccedil;&atilde;o quer aproximar pesquisa, talento e mercado, o Tecnopuc &eacute; o lugar para come&ccedil;ar essa conversa.</p>
+      <div class="contact-list">
+        <div class="contact-card"><span class="contact-label">Web</span><span class="contact-value">tecnopuc.pucrs.br</span><span class="contact-note">Programas, hubs, eventos</span></div>
+        <div class="contact-card"><span class="contact-label">Contato institucional</span><span class="contact-value">contato@tecnopuc.pucrs.br</span><span class="contact-note">Resposta em at&eacute; 2 dias &uacute;teis</span></div>
+        <div class="contact-card"><span class="contact-label">Endere&ccedil;o</span><span class="contact-value">Av. Ipiranga, 6681 &mdash; Porto Alegre/RS</span><span class="contact-note">Campus PUCRS</span></div>
+      </div>
+    </section>
+  </main>
+
+  <nav class="bottom-nav" aria-label="Navega&ccedil;&atilde;o da apresenta&ccedil;&atilde;o">
+    <a href="#s1">1</a>
+    <a href="#s2">2</a>
+    <a href="#s3">3</a>
+    <a href="#s4">4</a>
+    <a href="#s5">5</a>
+    <a href="#s6">6</a>
+    <a href="#s7">7</a>
+    <a href="#s8">8</a>
+  </nav>
+</body>
+</html>

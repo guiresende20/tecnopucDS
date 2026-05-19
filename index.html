@@ -1,0 +1,751 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tecnopuc Design System — Apresentações</title>
+  <meta name="description" content="Portal de apresentações, amostras e referências do Design System do Tecnopuc — Parque Científico e Tecnológico da PUCRS.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800;900&display=swap">
+
+  <style>
+    /* ============================================================
+       Tokens — Tecnopuc Design System (DESIGN.md §8–§11)
+       ============================================================ */
+    :root {
+      /* Cores principais da marca */
+      --cinza-tecnopuc:   #6C6E71;
+      --ocre-tecnopuc:    #EA982F;
+
+      /* Cores institucionais — fundo e apoio */
+      --roxo-escuro:      #3A245F;
+      --roxo:             #552583;
+      --roxo-medio:       #8D3D8F;
+      --roxo-claro:       #9F66A3;
+      --lilas:            #CC99CC;
+      --magenta:          #CC66CC;
+      --lilas-claro:      #C9B7CB;
+      --branco-puro:      #FAFAFA;
+
+      /* Cores complementares */
+      --rosa-claro:       #E376A1;
+      --rosa-forte:       #E83D78;
+      --azul-tecnopuc:    #027DBD;
+      --azul-pucrs:       #005288;
+
+      /* Texto — dark mode */
+      --dark-titulo:      #FFFCFB;
+      --dark-corpo:       #E3E3E4;
+      --dark-simbolo:     #F2B04D;
+
+      /* Texto — light mode */
+      --light-titulo:     #161617;
+      --light-corpo:      #262626;
+      --light-simbolo:    #D07E1D;
+
+      /* Tipografia (§7, §33) — Montserrat como fonte web preferencial */
+      --font: "Montserrat", "Bahnschrift", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+      /* Composição */
+      --shell-max:        1180px;
+      --radius:           20px;
+      --shadow:           0 24px 60px rgba(38, 20, 64, .32);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: var(--font);
+      font-weight: 400;
+      color: var(--dark-corpo);
+      background: var(--roxo-escuro);
+      /* Gradiente institucional (§11) — diagonal entre #3A245F, #552583, #8D3D8F, #9F66A3 */
+      background-image:
+        linear-gradient(135deg,
+          var(--roxo-escuro)  0%,
+          var(--roxo)         34%,
+          var(--roxo-medio)   68%,
+          var(--roxo-claro)   100%);
+      background-attachment: fixed;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    .shell { width: min(var(--shell-max), calc(100% - 48px)); margin: 0 auto; }
+
+    /* ============================================================
+       Grafismos derivados do T (§21)
+       Formas geométricas, recortes, baixa opacidade, nas extremidades.
+       ============================================================ */
+    .grafismo {
+      position: absolute;
+      pointer-events: none;
+      user-select: none;
+    }
+    .grafismo--hero-tr {
+      top: -40px; right: -60px;
+      width: 520px; height: 520px;
+      opacity: .12;
+      transform: rotate(18deg);
+    }
+    .grafismo--hero-bl {
+      bottom: -60px; left: -40px;
+      width: 280px; height: 280px;
+      opacity: .10;
+      transform: rotate(-22deg);
+    }
+    .grafismo--section {
+      right: -40px;
+      width: 180px; height: 180px;
+      opacity: .08;
+      top: 8px;
+    }
+
+    /* ============================================================
+       Topbar — marca institucional (§12)
+       ============================================================ */
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      background: rgba(58, 36, 95, .82);
+      border-bottom: 1px solid rgba(255, 252, 251, .14);
+    }
+    .nav {
+      min-height: 76px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      color: var(--dark-titulo);
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .brand-mark {
+      width: 44px;
+      height: 44px;
+      display: block;
+      flex-shrink: 0;
+    }
+    .brand-text { display: flex; flex-direction: column; gap: 2px; line-height: 1; }
+    .brand-name {
+      font-weight: 800;
+      font-size: 17px;
+      letter-spacing: .01em;
+      color: var(--dark-titulo);
+    }
+    .brand-descr {
+      font-weight: 600;
+      font-size: 9.5px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--lilas-claro);
+    }
+    .navlinks {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+    .navlinks a {
+      border: 1px solid rgba(255, 252, 251, .20);
+      background: rgba(255, 252, 251, .06);
+      color: var(--dark-titulo);
+      padding: 10px 16px;
+      border-radius: 999px;
+      font-size: 12.5px;
+      font-weight: 700;
+      letter-spacing: .02em;
+      transition: background .22s ease, border-color .22s ease, transform .22s ease;
+    }
+    .navlinks a:hover,
+    .navlinks a:focus-visible {
+      background: rgba(234, 152, 47, .22);
+      border-color: var(--ocre-tecnopuc);
+      transform: translateY(-1px);
+      outline: none;
+    }
+
+    /* ============================================================
+       Hero institucional (§34)
+       Título forte · Subtítulo claro · Gradiente institucional
+       ============================================================ */
+    .hero {
+      position: relative;
+      padding: 104px 0 80px;
+      overflow: hidden;
+    }
+    .hero-inner { position: relative; z-index: 2; }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 9px 16px;
+      border: 1px solid rgba(255, 252, 251, .26);
+      background: rgba(255, 252, 251, .06);
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--ocre-tecnopuc);
+    }
+    .eyebrow::before {
+      content: "";
+      width: 8px; height: 8px;
+      background: var(--ocre-tecnopuc);
+      border-radius: 50%;
+      display: inline-block;
+    }
+    .hero h1 {
+      margin: 28px 0 20px;
+      font-size: clamp(40px, 6.4vw, 76px);
+      line-height: 1.02;
+      letter-spacing: -.02em;
+      font-weight: 800;
+      color: var(--dark-titulo);
+      max-width: 940px;
+    }
+    .hero h1 em {
+      font-style: normal;
+      color: var(--ocre-tecnopuc);
+    }
+    .hero .lede {
+      max-width: 720px;
+      font-size: clamp(16px, 1.55vw, 19px);
+      font-weight: 400;
+      line-height: 1.55;
+      color: var(--dark-corpo);
+    }
+    .meta {
+      margin-top: 36px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .meta span {
+      padding: 7px 14px;
+      border: 1px solid rgba(255, 252, 251, .20);
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--lilas-claro);
+      letter-spacing: .03em;
+    }
+
+    /* ============================================================
+       Sections — composição em blocos (§24, §33)
+       ============================================================ */
+    section.group {
+      position: relative;
+      padding: 56px 0 16px;
+    }
+    .group-head {
+      position: relative;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 32px;
+      flex-wrap: wrap;
+      padding-bottom: 24px;
+      border-bottom: 1px solid rgba(255, 252, 251, .16);
+      margin-bottom: 32px;
+    }
+    .group-head .label {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .group-glyph {
+      width: 36px; height: 36px;
+      flex-shrink: 0;
+      color: var(--ocre-tecnopuc);
+    }
+    .group-head h2 {
+      margin: 0 0 8px;
+      font-size: clamp(26px, 3vw, 36px);
+      font-weight: 800;
+      letter-spacing: -.01em;
+      line-height: 1.1;
+      color: var(--dark-titulo);
+    }
+    .group-head .sub {
+      margin: 0;
+      max-width: 720px;
+      color: var(--dark-corpo);
+      font-size: 15px;
+      font-weight: 400;
+      line-height: 1.55;
+    }
+    .group-counter {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--ocre-tecnopuc);
+      padding: 8px 14px;
+      border: 1px solid rgba(234, 152, 47, .55);
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+
+    /* ============================================================
+       Grid + Cards (§33 — fundos translúcidos / bordas discretas)
+       ============================================================ */
+    .grid {
+      display: grid;
+      gap: 22px;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+    }
+
+    .card {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      padding: 28px 26px 24px;
+      border-radius: var(--radius);
+      background: rgba(255, 252, 251, .94);
+      color: var(--light-corpo);
+      border: 1px solid rgba(58, 36, 95, .10);
+      box-shadow: var(--shadow);
+      min-height: 210px;
+      transition: transform .28s cubic-bezier(.2,.7,.2,1),
+                  box-shadow .28s ease,
+                  border-color .28s ease;
+      overflow: hidden;
+    }
+    .card::before {
+      /* T-derived accent — recorte em barra no topo do card (§21) */
+      content: "";
+      position: absolute;
+      top: 0; left: 26px;
+      width: 44px; height: 6px;
+      background: var(--ocre-tecnopuc);
+      border-radius: 0 0 4px 4px;
+      transition: width .28s ease;
+    }
+    .card:hover,
+    .card:focus-visible {
+      transform: translateY(-4px);
+      box-shadow: 0 32px 80px rgba(38, 20, 64, .42);
+      border-color: rgba(234, 152, 47, .55);
+      outline: none;
+    }
+    .card:hover::before,
+    .card:focus-visible::before { width: 72px; }
+
+    .tag {
+      align-self: flex-start;
+      font-size: 10.5px;
+      font-weight: 800;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      padding: 6px 11px;
+      border-radius: 999px;
+      margin-bottom: 16px;
+    }
+    .tag.intro    { background: rgba(2, 125, 189, .14);   color: var(--azul-pucrs); }
+    .tag.deck     { background: rgba(234, 152, 47, .18);  color: var(--light-simbolo); }
+    .tag.sample   { background: rgba(141, 61, 143, .14);  color: var(--roxo); }
+    .tag.ref      { background: rgba(108, 110, 113, .16); color: var(--cinza-tecnopuc); }
+
+    .card h3 {
+      margin: 0 0 10px;
+      font-size: 20px;
+      font-weight: 800;
+      line-height: 1.2;
+      letter-spacing: -.005em;
+      color: var(--roxo-escuro);
+    }
+    .card p {
+      margin: 0 0 20px;
+      font-size: 14.5px;
+      font-weight: 400;
+      line-height: 1.55;
+      color: var(--light-corpo);
+    }
+    .card .file {
+      margin-top: auto;
+      font-family: ui-monospace, "Cascadia Mono", Consolas, "SF Mono", monospace;
+      font-size: 11.5px;
+      font-weight: 400;
+      color: var(--cinza-tecnopuc);
+      word-break: break-all;
+    }
+    .card .cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 14px;
+      font-weight: 800;
+      font-size: 13.5px;
+      letter-spacing: .02em;
+      color: var(--roxo);
+      text-transform: uppercase;
+    }
+    .cta-arrow {
+      display: inline-block;
+      transition: transform .22s ease;
+    }
+    .card:hover .cta-arrow,
+    .card:focus-visible .cta-arrow { transform: translateX(6px); }
+
+    /* Cards de referência — fundo translúcido sobre roxo */
+    .card.ref-card {
+      background: rgba(255, 252, 251, .08);
+      color: var(--dark-corpo);
+      border: 1px dashed rgba(255, 252, 251, .32);
+      box-shadow: none;
+      min-height: auto;
+    }
+    .card.ref-card::before { background: var(--lilas); }
+    .card.ref-card h3 { color: var(--dark-titulo); }
+    .card.ref-card p { color: var(--dark-corpo); }
+    .card.ref-card .cta { color: var(--ocre-tecnopuc); }
+    .card.ref-card .file { color: rgba(255, 252, 251, .56); }
+    .card.ref-card:hover { border-color: var(--ocre-tecnopuc); }
+
+    .ref-note {
+      grid-column: 1 / -1;
+      font-size: 13.5px;
+      line-height: 1.6;
+      color: var(--dark-corpo);
+      padding: 16px 20px;
+      border-left: 4px solid var(--ocre-tecnopuc);
+      background: rgba(255, 252, 251, .06);
+      border-radius: 0 12px 12px 0;
+      margin-bottom: 6px;
+    }
+    .ref-note code {
+      background: rgba(0, 0, 0, .26);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 12.5px;
+    }
+
+    /* ============================================================
+       Footer
+       ============================================================ */
+    footer {
+      margin-top: 80px;
+      padding: 40px 0 56px;
+      border-top: 1px solid rgba(255, 252, 251, .14);
+      color: var(--lilas-claro);
+      font-size: 13px;
+    }
+    .footer-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 24px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .footer-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 700;
+      color: var(--dark-titulo);
+    }
+    .footer-brand .small-mark { width: 28px; height: 28px; }
+    .footer-note {
+      font-weight: 400;
+      color: var(--lilas-claro);
+      max-width: 380px;
+      text-align: right;
+    }
+
+    @media (max-width: 720px) {
+      .hero { padding: 72px 0 56px; }
+      .navlinks a { padding: 8px 12px; font-size: 11.5px; }
+      .brand-descr { display: none; }
+      .group-counter { align-self: flex-start; }
+      .footer-note { text-align: left; }
+    }
+
+    /* Acessibilidade */
+    a:focus-visible {
+      outline: 2px solid var(--ocre-tecnopuc);
+      outline-offset: 4px;
+      border-radius: 4px;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        transition-duration: .01ms !important;
+        animation-duration: .01ms !important;
+      }
+      html { scroll-behavior: auto; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- SVG símbolos reutilizáveis: marca + ícones de seção (§22, stroke pesado, sharp edges) -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <!-- Símbolo Tecnopuc — T com aro circular (§12) -->
+      <symbol id="tecnopuc-mark" viewBox="0 0 64 64">
+        <circle cx="32" cy="32" r="29" fill="none" stroke="#EA982F" stroke-width="4"/>
+        <path d="M16 22 H48 M32 22 V46" fill="none" stroke="#EA982F" stroke-width="6" stroke-linecap="square"/>
+      </symbol>
+
+      <!-- Ícones de seção — geométricos, stroke pesado, pontas não arredondadas -->
+      <symbol id="ic-intro" viewBox="0 0 32 32">
+        <path d="M6 6 H26 V26 H6 Z M11 12 H21 M11 17 H21 M11 22 H17"
+              fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square" stroke-linejoin="miter"/>
+      </symbol>
+      <symbol id="ic-deck" viewBox="0 0 32 32">
+        <path d="M4 6 H28 V22 H4 Z M12 26 H20 M16 22 V26"
+              fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square" stroke-linejoin="miter"/>
+        <path d="M12 14 L18 11 V17 Z" fill="currentColor"/>
+      </symbol>
+      <symbol id="ic-sample" viewBox="0 0 32 32">
+        <path d="M5 5 H14 V14 H5 Z M18 5 H27 V14 H18 Z M5 18 H14 V27 H5 Z M18 18 H27 V27 H18 Z"
+              fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="miter"/>
+      </symbol>
+      <symbol id="ic-ref" viewBox="0 0 32 32">
+        <path d="M8 4 H22 L26 8 V28 H8 Z M22 4 V8 H26 M12 14 H22 M12 19 H22 M12 24 H18"
+              fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square" stroke-linejoin="miter"/>
+      </symbol>
+
+      <!-- Grafismo decorativo: composição derivada do T (§21) — recortes, rotação, geométrico -->
+      <symbol id="grafismo-t" viewBox="0 0 200 200">
+        <g fill="none" stroke="currentColor" stroke-width="2.5">
+          <rect x="20"  y="20"  width="60" height="60" transform="rotate(8 50 50)"/>
+          <rect x="110" y="40"  width="70" height="70" transform="rotate(-14 145 75)"/>
+          <rect x="50"  y="110" width="80" height="50" transform="rotate(22 90 135)"/>
+        </g>
+        <g fill="currentColor">
+          <!-- T sólidos (símbolo) em diferentes ângulos/tamanhos -->
+          <g transform="translate(135 130) rotate(18)">
+            <rect x="-20" y="-20" width="40" height="6"/>
+            <rect x="-3"  y="-20" width="6"  height="36"/>
+          </g>
+          <g transform="translate(45 60) rotate(-10)">
+            <rect x="-14" y="-14" width="28" height="4"/>
+            <rect x="-2"  y="-14" width="4"  height="26"/>
+          </g>
+        </g>
+      </symbol>
+    </defs>
+  </svg>
+
+  <header class="topbar">
+    <div class="shell nav">
+      <a class="brand" href="#topo" aria-label="Tecnopuc — Parque Científico e Tecnológico da PUCRS">
+        <svg class="brand-mark" aria-hidden="true"><use href="#tecnopuc-mark"/></svg>
+        <span class="brand-text">
+          <span class="brand-name">Tecnopuc</span>
+          <span class="brand-descr">Parque Científico e Tecnológico da PUCRS</span>
+        </span>
+      </a>
+      <nav class="navlinks" aria-label="Navegação principal">
+        <a href="#introducao">Introdução</a>
+        <a href="#apresentacoes">Apresentações</a>
+        <a href="#amostras">Amostras</a>
+        <a href="#referencia">Referência</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="shell" id="topo">
+
+    <!-- HERO INSTITUCIONAL (§34) -->
+    <section class="hero">
+      <svg class="grafismo grafismo--hero-tr" style="color:var(--lilas-claro)" aria-hidden="true"><use href="#grafismo-t"/></svg>
+      <svg class="grafismo grafismo--hero-bl" style="color:var(--magenta)" aria-hidden="true"><use href="#grafismo-t"/></svg>
+
+      <div class="hero-inner">
+        <span class="eyebrow">Design System · Tecnopuc</span>
+        <h1>O sistema que dá forma ao nosso <em>ecossistema</em>.</h1>
+        <p class="lede">
+          Reunimos aqui as apresentações, amostras e referências do Design System do Tecnopuc.
+          Material para times, parceiros e toda a rede que constrói ciência, tecnologia e inovação
+          junto com a PUCRS.
+        </p>
+        <div class="meta">
+          <span>PUCRS · Tecnopuc</span>
+          <span>Atualizado em maio de 2026</span>
+          <span>Publicado via GitHub Pages</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 01 · INTRODUÇÃO -->
+    <section class="group" id="introducao">
+      <svg class="grafismo grafismo--section" style="color:var(--lilas)" aria-hidden="true"><use href="#grafismo-t"/></svg>
+      <div class="group-head">
+        <div class="label">
+          <svg class="group-glyph" aria-hidden="true"><use href="#ic-intro"/></svg>
+          <div>
+            <h2>Introdução</h2>
+            <p class="sub">Começamos pelo porquê. Antes de aplicar, entendemos o valor que um Design System gera para todo o ecossistema Tecnopuc.</p>
+          </div>
+        </div>
+        <span class="group-counter">01 · Fundamentos</span>
+      </div>
+      <div class="grid">
+        <a class="card" href="tecnopuc-design-system-INTRO/tecnopuc-design-system-importancia.html">
+          <span class="tag intro">Conceitual</span>
+          <h3>Por que o Design System importa para o Tecnopuc</h3>
+          <p>Apresentação introdutória sobre o papel do DS na consistência da marca, na eficiência de produção e no fortalecimento institucional do parque.</p>
+          <span class="cta">Abrir apresentação <span class="cta-arrow">→</span></span>
+          <span class="file">tecnopuc-design-system-INTRO/tecnopuc-design-system-importancia.html</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- 02 · APRESENTAÇÕES -->
+    <section class="group" id="apresentacoes">
+      <svg class="grafismo grafismo--section" style="color:var(--lilas)" aria-hidden="true"><use href="#grafismo-t"/></svg>
+      <div class="group-head">
+        <div class="label">
+          <svg class="group-glyph" aria-hidden="true"><use href="#ic-deck"/></svg>
+          <div>
+            <h2>Apresentações institucionais</h2>
+            <p class="sub">Decks prontos para conduzir conversas com parceiros, eventos institucionais e ações de relacionamento — em formatos web e mobile.</p>
+          </div>
+        </div>
+        <span class="group-counter">02 · Decks</span>
+      </div>
+      <div class="grid">
+        <a class="card" href="TECNOPUC_APRESENTACAO_EXEMPLO.html">
+          <span class="tag deck">Web</span>
+          <h3>Tecnopuc — Apresentação Institucional</h3>
+          <p>Deck completo aplicando a identidade: paleta institucional, tipografia, grafismos do T e a narrativa do nosso ecossistema.</p>
+          <span class="cta">Abrir apresentação <span class="cta-arrow">→</span></span>
+          <span class="file">TECNOPUC_APRESENTACAO_EXEMPLO.html</span>
+        </a>
+        <a class="card" href="mobile_APRESENTACAO.html">
+          <span class="tag deck">Mobile</span>
+          <h3>Tecnopuc — Apresentação Mobile</h3>
+          <p>Versão móvel do deck, pensada para conduzir conversas em campo, em eventos e em ações com parceiros.</p>
+          <span class="cta">Abrir apresentação <span class="cta-arrow">→</span></span>
+          <span class="file">mobile_APRESENTACAO.html</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- 03 · AMOSTRAS -->
+    <section class="group" id="amostras">
+      <svg class="grafismo grafismo--section" style="color:var(--lilas)" aria-hidden="true"><use href="#grafismo-t"/></svg>
+      <div class="group-head">
+        <div class="label">
+          <svg class="group-glyph" aria-hidden="true"><use href="#ic-sample"/></svg>
+          <div>
+            <h2>Amostras do Design System</h2>
+            <p class="sub">Exemplos vivos do DS aplicado em diferentes superfícies: tokens, componentes, landing, app e cards sociais.</p>
+          </div>
+        </div>
+        <span class="group-counter">03 · Aplicações</span>
+      </div>
+      <div class="grid">
+        <a class="card" href="tecnopuc-ds-exemplos/index.html">
+          <span class="tag sample">Hub</span>
+          <h3>Amostras Digitais — Visão geral</h3>
+          <p>Ponto de entrada das amostras. Use como hub para navegar entre todos os exemplos do sistema aplicados em interface.</p>
+          <span class="cta">Abrir hub <span class="cta-arrow">→</span></span>
+          <span class="file">tecnopuc-ds-exemplos/index.html</span>
+        </a>
+        <a class="card" href="tecnopuc-ds-exemplos/components.html">
+          <span class="tag sample">Tokens · Componentes</span>
+          <h3>Tokens e Componentes</h3>
+          <p>Catálogo dos tokens — cores, tipografia, espaçamentos — e dos componentes aplicados em interface digital.</p>
+          <span class="cta">Abrir amostra <span class="cta-arrow">→</span></span>
+          <span class="file">tecnopuc-ds-exemplos/components.html</span>
+        </a>
+        <a class="card" href="tecnopuc-ds-exemplos/landing.html">
+          <span class="tag sample">Landing</span>
+          <h3>Landing Institucional</h3>
+          <p>Landing aplicando hierarquia, gradientes institucionais e grafismos derivados do T como apoio.</p>
+          <span class="cta">Abrir amostra <span class="cta-arrow">→</span></span>
+          <span class="file">tecnopuc-ds-exemplos/landing.html</span>
+        </a>
+        <a class="card" href="tecnopuc-ds-exemplos/mobile-app.html">
+          <span class="tag sample">App Mobile</span>
+          <h3>App Mobile — Tecnopuc Connect</h3>
+          <p>Tela de app com o DS aplicado em navegação, cards, filtros e mensagens para a comunidade do parque.</p>
+          <span class="cta">Abrir amostra <span class="cta-arrow">→</span></span>
+          <span class="file">tecnopuc-ds-exemplos/mobile-app.html</span>
+        </a>
+        <a class="card" href="tecnopuc-ds-exemplos/social-cards.html">
+          <span class="tag sample">Social</span>
+          <h3>Cards Sociais</h3>
+          <p>Modelos para redes sociais: composição em F, tipografia, gradientes e uso correto do logotipo Tecnopuc.</p>
+          <span class="cta">Abrir amostra <span class="cta-arrow">→</span></span>
+          <span class="file">tecnopuc-ds-exemplos/social-cards.html</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- 04 · REFERÊNCIA -->
+    <section class="group" id="referencia">
+      <svg class="grafismo grafismo--section" style="color:var(--lilas)" aria-hidden="true"><use href="#grafismo-t"/></svg>
+      <div class="group-head">
+        <div class="label">
+          <svg class="group-glyph" aria-hidden="true"><use href="#ic-ref"/></svg>
+          <div>
+            <h2>Referência</h2>
+            <p class="sub">Documentação-fonte do DS: especificação completa, handoff para times de implementação e manifesto de tokens.</p>
+          </div>
+        </div>
+        <span class="group-counter">04 · Documentos</span>
+      </div>
+      <div class="grid">
+        <p class="ref-note">
+          <strong>Atenção:</strong> estes arquivos são fontes em <strong>Markdown</strong> e <strong>JSON</strong>.
+          No GitHub Pages eles abrem como texto bruto. Para visualizá-los renderizados, abra-os pelo navegador
+          do repositório no GitHub (URL <code>/blob/main/&lt;arquivo&gt;</code>).
+        </p>
+        <a class="card ref-card" href="DESIGN.md">
+          <span class="tag ref">Markdown</span>
+          <h3>DESIGN.md</h3>
+          <p>Especificação completa: identidade, princípios, arquétipo, personalidade, tom de voz, tokens, composição e diretrizes para IA.</p>
+          <span class="cta">Abrir documento <span class="cta-arrow">→</span></span>
+          <span class="file">DESIGN.md</span>
+        </a>
+        <a class="card ref-card" href="DESIGN-HANDOFF.md">
+          <span class="tag ref">Markdown</span>
+          <h3>DESIGN-HANDOFF.md</h3>
+          <p>Guia objetivo para times implementarem o DS em produtos digitais, com atalhos para tokens e componentes.</p>
+          <span class="cta">Abrir documento <span class="cta-arrow">→</span></span>
+          <span class="file">DESIGN-HANDOFF.md</span>
+        </a>
+        <a class="card ref-card" href="DESIGN-MANIFEST.json">
+          <span class="tag ref">JSON</span>
+          <h3>DESIGN-MANIFEST.json</h3>
+          <p>Manifesto estruturado dos tokens e metadados do sistema, pronto para consumo programático em pipelines de design.</p>
+          <span class="cta">Abrir manifesto <span class="cta-arrow">→</span></span>
+          <span class="file">DESIGN-MANIFEST.json</span>
+        </a>
+      </div>
+    </section>
+
+    <footer>
+      <div class="shell footer-row">
+        <div class="footer-brand">
+          <svg class="brand-mark small-mark" aria-hidden="true"><use href="#tecnopuc-mark"/></svg>
+          <span>Tecnopuc · Parque Científico e Tecnológico da PUCRS</span>
+        </div>
+        <div class="footer-note">
+          Construímos este sistema juntos. Compartilhe, aplique, evolua — e siga conectando ciência, tecnologia e pessoas.
+        </div>
+      </div>
+    </footer>
+
+  </main>
+</body>
+</html>

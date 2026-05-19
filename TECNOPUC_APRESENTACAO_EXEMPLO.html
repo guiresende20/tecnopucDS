@@ -1,0 +1,1768 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tecnopuc — Apresentação Institucional</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    /* Cores institucionais Tecnopuc */
+    --roxo-escuro: #3A245F;
+    --roxo-inst:   #552583;
+    --roxo-medio:  #8D3D8F;
+    --roxo-claro:  #9F66A3;
+    --lilas:       #CC99CC;
+    --lilas-claro: #C9B7CB;
+
+    /* Marca */
+    --ocre:        #EA982F;
+    --ocre-dark:   #D07E1D;
+    --ocre-light:  #F2B04D;
+    --cinza:       #6C6E71;
+
+    /* Light surface */
+    --paper:       #FAFAFA;
+    --ink:         #161617;
+    --ink-body:    #262626;
+
+    /* Texto sobre dark */
+    --on-dark-title: #FFFCFB;
+    --on-dark-body:  #E3E3E4;
+    --on-dark-muted: rgba(255, 252, 251, 0.62);
+    --on-dark-line:  rgba(255, 252, 251, 0.18);
+
+    /* Gradientes */
+    --grad-inst:   linear-gradient(135deg, #3A245F 0%, #552583 45%, #8D3D8F 78%, #9F66A3 100%);
+    --grad-inst-soft: linear-gradient(160deg, #3A245F 0%, #4A2270 60%, #5E2C82 100%);
+    --grad-inst-alt: linear-gradient(135deg, #3A245F 0%, #552583 30%, #8D3D8F 60%, #E376A1 100%);
+
+    /* Fontes */
+    --font-display: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    --font-body:    'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+
+    /* Canvas */
+    --slide-w: 1920px;
+    --slide-h: 1080px;
+  }
+
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
+    background: #0c0518;
+    font-family: var(--font-body);
+    color: var(--on-dark-body);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* ───────── Framework: scale-to-fit canvas ───────── */
+  .stage {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    height: 100svh;
+    display: block;
+    overflow: hidden;
+  }
+  .canvas {
+    width: var(--slide-w);
+    height: var(--slide-h);
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform-origin: top left;
+    will-change: transform;
+  }
+  .slide {
+    position: absolute;
+    inset: 0;
+    width: var(--slide-w);
+    height: var(--slide-h);
+    overflow: hidden;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translate3d(18px, 0, 0);
+    transition:
+      opacity 320ms cubic-bezier(0.22, 0.8, 0.22, 1),
+      transform 320ms cubic-bezier(0.22, 0.8, 0.22, 1),
+      visibility 0s linear 320ms;
+  }
+  .slide.is-active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translate3d(0, 0, 0);
+    transition-delay: 0s;
+    z-index: 2;
+  }
+  body:not(.deck-ready) .slide:first-of-type {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translate3d(0, 0, 0);
+    z-index: 2;
+  }
+
+  @keyframes content-rise {
+    from {
+      opacity: 0;
+      transform: translate3d(0, 24px, 0);
+    }
+    to {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+  }
+  @keyframes content-soft {
+    from {
+      opacity: 0;
+      transform: translate3d(0, 14px, 0);
+    }
+    to {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+  }
+  @keyframes ambient-gfx {
+    0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg); }
+    50% { transform: translate3d(12px, -10px, 0) rotate(0.9deg); }
+  }
+  @keyframes ambient-leak {
+    0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+    50% { transform: translate3d(-10px, 12px, 0) scale(1.025); }
+  }
+  @keyframes draw-line {
+    from { stroke-dashoffset: 520; }
+    to { stroke-dashoffset: 0; }
+  }
+
+  .slide.is-active :is(.topbar, .kicker, .title-display, .title-section, .lede, .body-md, .s1-stack, .close-title, .close-sub, .close-contact, .eco-copy) {
+    animation: content-rise 560ms cubic-bezier(0.22, 0.8, 0.22, 1) both;
+  }
+  .slide.is-active .topbar { animation-delay: 40ms; }
+  .slide.is-active .kicker { animation-delay: 80ms; }
+  .slide.is-active :is(.title-display, .title-section, .close-title) { animation-delay: 140ms; }
+  .slide.is-active .close-sub { animation-delay: 220ms; }
+  .slide.is-active :is(.lede, .body-md, .eco-copy, .close-contact) { animation-delay: 240ms; }
+  .slide.is-active :is(.card, .pillar, .col, .diff, .hub-card, .metric, .eco-tag) {
+    animation: content-soft 520ms cubic-bezier(0.22, 0.8, 0.22, 1) both;
+  }
+  .slide.is-active :is(.card, .pillar, .col, .diff, .hub-card, .metric, .eco-tag):nth-child(1) { animation-delay: 180ms; }
+  .slide.is-active :is(.card, .pillar, .col, .diff, .hub-card, .metric, .eco-tag):nth-child(2) { animation-delay: 260ms; }
+  .slide.is-active :is(.card, .pillar, .col, .diff, .hub-card, .metric, .eco-tag):nth-child(3) { animation-delay: 340ms; }
+  .slide.is-active :is(.card, .pillar, .col, .diff, .hub-card, .metric, .eco-tag):nth-child(4) { animation-delay: 420ms; }
+  .slide.is-active :is(.card, .pillar, .col, .diff, .hub-card, .metric, .eco-tag):nth-child(5) { animation-delay: 500ms; }
+  .slide.is-active :is(.card, .pillar, .col, .diff, .hub-card, .metric, .eco-tag):nth-child(6) { animation-delay: 580ms; }
+  .slide.is-active :is(.card, .pillar, .col, .diff, .hub-card, .metric, .eco-tag):nth-child(n+7) { animation-delay: 640ms; }
+  .slide.is-active .glyph-list li {
+    animation: content-soft 500ms cubic-bezier(0.22, 0.8, 0.22, 1) both;
+  }
+  .slide.is-active .glyph-list li:nth-child(1) { animation-delay: 220ms; }
+  .slide.is-active .glyph-list li:nth-child(2) { animation-delay: 300ms; }
+  .slide.is-active .glyph-list li:nth-child(3) { animation-delay: 380ms; }
+  .slide.is-active .glyph-list li:nth-child(n+4) { animation-delay: 460ms; }
+  .slide.is-active .gfx {
+    animation: ambient-gfx 13s ease-in-out infinite;
+    will-change: transform;
+  }
+  .slide.is-active .leak {
+    animation: ambient-leak 15s ease-in-out infinite;
+    will-change: transform;
+  }
+  .slide.is-active .eco-diagram {
+    animation: content-soft 620ms cubic-bezier(0.22, 0.8, 0.22, 1) 260ms both;
+  }
+  .slide.is-active .eco-diagram line {
+    stroke-dasharray: 520;
+    stroke-dashoffset: 520;
+    animation: draw-line 760ms ease-out 360ms forwards;
+  }
+  .slide.is-active .eco-diagram :is(circle, text) {
+    animation: content-soft 540ms cubic-bezier(0.22, 0.8, 0.22, 1) 520ms both;
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+
+  /* ───────── Chrome: counter + nav ───────── */
+  .deck-chrome {
+    position: fixed;
+    bottom: 20px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 18px;
+    z-index: 50;
+    font-family: var(--font-display);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(255, 252, 251, 0.55);
+    pointer-events: none;
+    user-select: none;
+  }
+  .deck-chrome button {
+    pointer-events: auto;
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(255, 252, 251, 0.16);
+    color: rgba(255, 252, 251, 0.78);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+    font-family: var(--font-display);
+    transition: background 0.2s, border-color 0.2s, color 0.2s;
+  }
+  .deck-chrome button:hover {
+    background: rgba(234, 152, 47, 0.18);
+    border-color: var(--ocre);
+    color: var(--ocre-light);
+  }
+  .deck-chrome .counter {
+    min-width: 80px;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ───────── Marca Tecnopuc (símbolo + wordmark) ───────── */
+  .logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    color: var(--on-dark-title);
+  }
+  .logo .mark {
+    width: 44px;
+    height: 44px;
+    position: relative;
+    flex-shrink: 0;
+  }
+  .logo .mark::before {
+    /* aro circular ocre */
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 3px solid var(--ocre);
+  }
+  .logo .mark::after {
+    /* T branca */
+    content: "T";
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 26px;
+    color: var(--on-dark-title);
+    letter-spacing: -0.04em;
+    line-height: 1;
+  }
+  .logo .wordmark {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 26px;
+    letter-spacing: -0.01em;
+    color: var(--on-dark-title);
+    line-height: 1;
+  }
+  .logo .sub {
+    display: block;
+    font-weight: 400;
+    font-size: 9.5px;
+    letter-spacing: 0.18em;
+    color: var(--on-dark-muted);
+    margin-top: 5px;
+    text-transform: uppercase;
+  }
+  /* light variant */
+  .logo--light .mark::after { color: var(--ink); }
+  .logo--light .wordmark { color: var(--ink); }
+  .logo--light .sub { color: var(--cinza); }
+  .logo--light .mark::before { border-color: var(--ocre-dark); }
+
+  /* ───────── Grafismos derivados do T ───────── */
+  .gfx {
+    position: absolute;
+    pointer-events: none;
+    opacity: 0.18;
+  }
+  .gfx svg { display: block; width: 100%; height: 100%; }
+
+  /* Light leak suave */
+  .leak {
+    position: absolute;
+    pointer-events: none;
+    background: radial-gradient(closest-side, rgba(234, 152, 47, 0.22), rgba(234, 152, 47, 0) 70%);
+    mix-blend-mode: screen;
+  }
+
+  /* ───────── Layouts compartilhados ───────── */
+  .slide-dark { background: var(--grad-inst-soft); color: var(--on-dark-body); }
+  .slide-light { background: var(--paper); color: var(--ink-body); }
+
+  .pad {
+    position: absolute;
+    inset: 80px 100px;
+  }
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+  .footer-row {
+    position: absolute;
+    bottom: 60px;
+    left: 100px;
+    right: 100px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    font-family: var(--font-display);
+    font-size: 13px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--on-dark-muted);
+  }
+  .slide-light .footer-row { color: var(--cinza); }
+
+  /* Eyebrow / kicker */
+  .kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 13px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ocre-light);
+  }
+  .slide-light .kicker { color: var(--ocre-dark); }
+  .kicker::before {
+    content: "";
+    width: 36px;
+    height: 2px;
+    background: currentColor;
+  }
+
+  /* Tipografia de título */
+  .title-display {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 96px;
+    line-height: 1.02;
+    letter-spacing: -0.025em;
+    color: var(--on-dark-title);
+    margin: 0;
+    text-wrap: balance;
+  }
+  .slide-light .title-display { color: var(--ink); }
+
+  .title-section {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 72px;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: var(--on-dark-title);
+    margin: 0;
+    text-wrap: balance;
+  }
+  .slide-light .title-section { color: var(--ink); }
+
+  .lede {
+    font-family: var(--font-body);
+    font-weight: 400;
+    font-size: 28px;
+    line-height: 1.45;
+    color: var(--on-dark-body);
+    max-width: 70ch;
+    margin: 0;
+  }
+  .slide-light .lede { color: var(--ink-body); }
+
+  .body-md {
+    font-family: var(--font-body);
+    font-weight: 400;
+    font-size: 22px;
+    line-height: 1.55;
+    color: var(--on-dark-body);
+  }
+  .slide-light .body-md { color: var(--ink-body); }
+
+  /* Card padrão */
+  .card {
+    border: 1px solid var(--on-dark-line);
+    background: rgba(255, 252, 251, 0.04);
+    padding: 36px 36px;
+    position: relative;
+    backdrop-filter: blur(2px);
+  }
+  .slide-light .card {
+    background: #fff;
+    border-color: rgba(22, 22, 23, 0.10);
+    box-shadow: 0 1px 0 rgba(22, 22, 23, 0.04);
+  }
+  .card h4 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 24px;
+    letter-spacing: -0.01em;
+    margin: 0 0 14px 0;
+    color: var(--on-dark-title);
+  }
+  .slide-light .card h4 { color: var(--ink); }
+  .card p {
+    font-family: var(--font-body);
+    font-weight: 400;
+    font-size: 17px;
+    line-height: 1.55;
+    margin: 0;
+    color: var(--on-dark-body);
+  }
+  .slide-light .card p { color: var(--ink-body); }
+  .card .num {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 13px;
+    letter-spacing: 0.14em;
+    color: var(--ocre-light);
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    display: block;
+  }
+  .slide-light .card .num { color: var(--ocre-dark); }
+
+  /* Bullet com glifo geométrico */
+  .glyph-list {
+    display: grid;
+    gap: 22px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .glyph-list li {
+    display: grid;
+    grid-template-columns: 28px 1fr;
+    gap: 22px;
+    align-items: start;
+  }
+  .glyph-list li::before {
+    content: "";
+    margin-top: 12px;
+    width: 18px;
+    height: 18px;
+    background: var(--ocre);
+    transform: rotate(45deg);
+  }
+  .slide-light .glyph-list li::before { background: var(--ocre-dark); }
+
+  /* ───────── SLIDE 1 — CAPA ───────── */
+  .s1 { background: var(--grad-inst); }
+  .s1 .pad { inset: 80px 120px; }
+  .s1 .hero-title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(96px, 9vw, 168px);
+    line-height: 0.94;
+    letter-spacing: -0.035em;
+    color: var(--on-dark-title);
+    margin: 0;
+    max-width: 16ch;
+    text-wrap: balance;
+  }
+  .s1 .hero-sub {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 20px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--on-dark-muted);
+    margin: 36px 0 0 0;
+  }
+  .s1 .hero-mark {
+    display: inline-block;
+    color: var(--ocre);
+    font-style: normal;
+  }
+  .s1-stack {
+    position: absolute;
+    bottom: 140px;
+    left: 120px;
+    right: 120px;
+  }
+  .s1 .gfx-mega {
+    position: absolute;
+    right: -180px;
+    top: 60px;
+    width: 1100px;
+    height: 1100px;
+    opacity: 0.22;
+  }
+  .s1 .leak-1 {
+    width: 900px;
+    height: 900px;
+    top: -200px;
+    right: -100px;
+    opacity: 0.6;
+  }
+  .s1 .leak-2 {
+    width: 700px;
+    height: 700px;
+    bottom: -300px;
+    left: -200px;
+    background: radial-gradient(closest-side, rgba(204, 153, 204, 0.28), rgba(204, 153, 204, 0) 70%);
+    opacity: 0.7;
+  }
+
+  /* ───────── SLIDE 2 — O que é ───────── */
+  .s2 { background: var(--paper); }
+  .s2 .body-grid {
+    position: absolute;
+    top: 430px;
+    left: 100px;
+    right: 100px;
+    bottom: 140px;
+    display: grid;
+    grid-template-columns: 1.15fr 1fr;
+    gap: 96px;
+    align-content: start;
+  }
+  .s2 .stats {
+    display: grid;
+    gap: 0;
+    align-self: start;
+  }
+  .stat-row {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 36px;
+    align-items: baseline;
+    padding: 28px 0;
+    border-top: 1px solid rgba(22, 22, 23, 0.12);
+  }
+  .stat-row:last-child { border-bottom: 1px solid rgba(22, 22, 23, 0.12); }
+  .stat-num {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 88px;
+    line-height: 0.9;
+    letter-spacing: -0.04em;
+    color: var(--roxo-inst);
+    font-variant-numeric: tabular-nums;
+  }
+  .stat-label {
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: 17px;
+    line-height: 1.4;
+    color: var(--ink-body);
+    letter-spacing: -0.005em;
+  }
+  .stat-label .muted {
+    display: block;
+    font-weight: 400;
+    color: var(--cinza);
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-top: 6px;
+  }
+  .s2 .gfx-corner {
+    position: absolute;
+    right: -120px;
+    bottom: -120px;
+    width: 480px;
+    height: 480px;
+    opacity: 0.06;
+  }
+
+  /* ───────── SLIDE 3 — Proposta de valor ───────── */
+  .s3 .pillars {
+    position: absolute;
+    top: 382px;
+    left: 100px;
+    right: 100px;
+    bottom: 140px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 22px;
+  }
+  .s3 .pillar {
+    border: 1px solid var(--on-dark-line);
+    background: rgba(255, 252, 251, 0.04);
+    padding: 30px 34px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .s3 .pillar-num {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 13px;
+    letter-spacing: 0.18em;
+    color: var(--ocre-light);
+    text-transform: uppercase;
+  }
+  .s3 .pillar h4 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 31px;
+    line-height: 1.1;
+    letter-spacing: -0.015em;
+    color: var(--on-dark-title);
+    margin: 16px 0 0 0;
+  }
+  .s3 .pillar p {
+    font-family: var(--font-body);
+    font-weight: 400;
+    font-size: 16.5px;
+    line-height: 1.45;
+    color: var(--on-dark-body);
+    margin: 14px 0 0 0;
+    max-width: 38ch;
+  }
+  .s3 .pillar-accent {
+    position: absolute;
+    right: 28px;
+    top: 36px;
+    width: 24px;
+    height: 24px;
+    border: 2px solid var(--ocre);
+    border-radius: 50%;
+  }
+  .s3 .pillar-accent::after {
+    content: "";
+    position: absolute;
+    inset: 6px 8px 6px 8px;
+    background: var(--ocre);
+    clip-path: polygon(0 0, 100% 0, 100% 30%, 65% 30%, 65% 100%, 35% 100%, 35% 30%, 0 30%);
+  }
+
+  /* ───────── SLIDE 4 — Ecossistema ───────── */
+  .s4 { background: var(--grad-inst); }
+  .s4 .eco-stage {
+    position: absolute;
+    top: 382px;
+    left: 100px;
+    right: 100px;
+    bottom: 140px;
+    display: grid;
+    grid-template-columns: 1fr 1.1fr;
+    gap: 60px;
+    align-items: center;
+  }
+  .s4 .eco-copy { align-self: center; }
+  .s4 .eco-copy p {
+    font-family: var(--font-body);
+    font-weight: 400;
+    font-size: 22px;
+    line-height: 1.55;
+    color: var(--on-dark-body);
+    margin: 0 0 28px 0;
+    max-width: 38ch;
+  }
+  .s4 .eco-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 18px;
+  }
+  .eco-tag {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--on-dark-title);
+    padding: 8px 14px;
+    border: 1px solid rgba(255, 252, 251, 0.28);
+    border-radius: 999px;
+  }
+  .s4 .eco-diagram {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    min-height: 520px;
+  }
+
+  /* ───────── SLIDE 5 — Startups e mercado ───────── */
+  .s5 .three-col {
+    position: absolute;
+    top: 382px;
+    left: 100px;
+    right: 100px;
+    bottom: 140px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+  }
+  .s5 .col {
+    background: #fff;
+    border: 1px solid rgba(22, 22, 23, 0.08);
+    padding: 34px 32px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+  .s5 .col-tag {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    color: var(--ocre-dark);
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .s5 .col h4 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 34px;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    margin: 0 0 18px 0;
+  }
+  .s5 .col p {
+    font-family: var(--font-body);
+    font-weight: 400;
+    font-size: 17px;
+    line-height: 1.45;
+    color: var(--ink-body);
+    margin: 0 0 18px 0;
+  }
+  .s5 .col ul {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 8px 0;
+    display: grid;
+    gap: 10px;
+  }
+  .s5 .col li {
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: 15.5px;
+    line-height: 1.35;
+    color: var(--ink);
+    display: grid;
+    grid-template-columns: 14px 1fr;
+    gap: 14px;
+    align-items: start;
+  }
+  .s5 .col li::before {
+    content: "";
+    margin-top: 8px;
+    width: 8px;
+    height: 8px;
+    background: var(--ocre-dark);
+    transform: rotate(45deg);
+  }
+  .s5 .col-flow {
+    margin-top: auto;
+    padding-top: 18px;
+    border-top: 1px solid rgba(22, 22, 23, 0.08);
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 12.5px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--roxo-inst);
+  }
+
+  /* ───────── SLIDE 6 — Estrutura e diferenciais ───────── */
+  .s6 .diff-grid {
+    position: absolute;
+    top: 340px;
+    left: 100px;
+    right: 100px;
+    bottom: 140px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 1px;
+    background: var(--on-dark-line);
+    border: 1px solid var(--on-dark-line);
+  }
+  .s6 .diff {
+    background: var(--grad-inst-soft);
+    padding: 34px 34px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+  }
+  .s6 .diff-icon {
+    width: 48px;
+    height: 48px;
+    color: var(--ocre);
+  }
+  .s6 .diff h4 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 26px;
+    line-height: 1.1;
+    letter-spacing: -0.015em;
+    color: var(--on-dark-title);
+    margin: 28px 0 12px 0;
+  }
+  .s6 .diff p {
+    font-family: var(--font-body);
+    font-weight: 400;
+    font-size: 15.5px;
+    line-height: 1.5;
+    color: var(--on-dark-body);
+    margin: 0;
+  }
+
+  /* ───────── SLIDE 7 — Casos / Hubs ───────── */
+  .s7 .hubs {
+    position: absolute;
+    top: 382px;
+    left: 100px;
+    right: 100px;
+    bottom: 140px;
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 80px;
+  }
+  .s7 .hubs-intro p {
+    font-family: var(--font-body);
+    font-weight: 400;
+    font-size: 22px;
+    line-height: 1.55;
+    color: var(--ink-body);
+    max-width: 30ch;
+    margin: 0 0 28px 0;
+  }
+  .s7 .hubs-intro .meta {
+    border-top: 1px solid rgba(22, 22, 23, 0.12);
+    padding-top: 24px;
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 14px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--cinza);
+  }
+  .s7 .hubs-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+    align-content: start;
+  }
+  .hub-card {
+    background: #fff;
+    border: 1px solid rgba(22, 22, 23, 0.10);
+    padding: 18px 24px;
+    display: grid;
+    grid-template-columns: 36px 1fr;
+    gap: 18px;
+    align-items: center;
+  }
+  .hub-mark {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 2px solid var(--ocre-dark);
+    display: grid;
+    place-items: center;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 17px;
+    color: var(--roxo-inst);
+    letter-spacing: -0.02em;
+    line-height: 1;
+    padding-bottom: 2px;
+  }
+  .hub-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .hub-name {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 16px;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    line-height: 1.1;
+  }
+  .hub-cat {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 10.5px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--cinza);
+  }
+
+  /* ───────── SLIDE 8 — Encerramento ───────── */
+  .s8 { background: var(--grad-inst); }
+  .s8 .leak-a { width: 1000px; height: 1000px; top: -200px; left: -150px; opacity: 0.5; }
+  .s8 .leak-b {
+    width: 800px; height: 800px; bottom: -250px; right: -200px;
+    background: radial-gradient(closest-side, rgba(141, 61, 143, 0.35), rgba(141, 61, 143, 0) 70%);
+    opacity: 0.7;
+  }
+  .s8 .close-stack {
+    position: absolute;
+    top: 50%;
+    left: 120px;
+    right: 120px;
+    transform: translateY(-50%);
+  }
+  .s8 .close-title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 156px;
+    line-height: 0.92;
+    letter-spacing: -0.04em;
+    color: var(--on-dark-title);
+    margin: 28px 0 0 0;
+    max-width: 16ch;
+    text-wrap: balance;
+  }
+  .s8 .close-title em {
+    font-style: normal;
+    color: var(--ocre);
+  }
+  .s8 .close-sub {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: 30px;
+    line-height: 1.4;
+    color: var(--on-dark-body);
+    max-width: 36ch;
+    margin: 40px 0 0 0;
+  }
+  .s8 .close-contact {
+    position: absolute;
+    bottom: 110px;
+    left: 120px;
+    right: 120px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
+    padding-top: 32px;
+    border-top: 1px solid var(--on-dark-line);
+  }
+  .s8 .close-contact .label {
+    display: block;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ocre-light);
+    margin-bottom: 10px;
+  }
+  .s8 .close-contact .value {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 22px;
+    color: var(--on-dark-title);
+    letter-spacing: -0.01em;
+  }
+  .s8 .close-contact .muted {
+    font-family: var(--font-body);
+    font-weight: 400;
+    font-size: 14px;
+    color: var(--on-dark-muted);
+    margin-top: 4px;
+  }
+
+  /* Placeholder marker — honest dash for a value */
+  .ph {
+    display: inline-block;
+    color: var(--ocre);
+    letter-spacing: 0;
+    font-feature-settings: "tnum";
+  }
+
+  /* ───────── Print / PDF export ───────── */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 1ms !important;
+      animation-iteration-count: 1 !important;
+      scroll-behavior: auto !important;
+      transition-duration: 1ms !important;
+    }
+    .slide,
+    .slide.is-active {
+      transform: none !important;
+    }
+  }
+
+  @media print {
+    @page { size: 1920px 1080px; margin: 0; }
+    html, body { overflow: visible; background: #000; }
+    .stage { position: static; display: block; overflow: visible; }
+    .canvas { width: 1920px; height: auto; transform: none !important; }
+    .slide {
+      display: block !important;
+      position: relative;
+      inset: auto;
+      width: 1920px;
+      height: 1080px;
+      opacity: 1 !important;
+      visibility: visible !important;
+      pointer-events: auto !important;
+      transform: none !important;
+      animation: none !important;
+      transition: none !important;
+      page-break-after: always;
+      break-after: page;
+    }
+    .slide *,
+    .slide *::before,
+    .slide *::after {
+      animation: none !important;
+      transition: none !important;
+    }
+    .deck-chrome { display: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ───────── SVG sprite (T-derived shapes & icons) ───────── -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <!-- T desconstruído com aro -->
+    <symbol id="g-t-ring" viewBox="0 0 200 200">
+      <circle cx="100" cy="100" r="92" fill="none" stroke="currentColor" stroke-width="4"/>
+      <path d="M52 56 H148 V78 H112 V158 H88 V78 H52 Z" fill="currentColor"/>
+    </symbol>
+    <!-- Forma do T rotacionado/recortado -->
+    <symbol id="g-t-shard" viewBox="0 0 300 300">
+      <g fill="currentColor">
+        <path d="M40 40 H180 V70 H115 V130 H85 V70 H40 Z"/>
+        <path d="M200 140 H290 V160 H250 V230 H230 V160 H200 Z" opacity="0.55"/>
+        <path d="M60 200 H140 V216 H106 V268 H94 V216 H60 Z" opacity="0.35"/>
+      </g>
+    </symbol>
+    <!-- Composição modular para fundo -->
+    <symbol id="g-t-stack" viewBox="0 0 400 400">
+      <g fill="currentColor">
+        <path d="M20 20 H180 V52 H115 V160 H85 V52 H20 Z"/>
+        <circle cx="280" cy="100" r="78" fill="none" stroke="currentColor" stroke-width="4"/>
+        <path d="M232 64 H328 V84 H292 V160 H268 V84 H232 Z"/>
+        <path d="M60 240 H220 V268 H148 V370 H132 V268 H60 Z" opacity="0.55"/>
+        <path d="M260 240 H380 V258 H326 V330 H314 V258 H260 Z" opacity="0.35"/>
+      </g>
+    </symbol>
+
+    <!-- Ícones geométricos (stroke pesado, pontas vivas) -->
+    <symbol id="ic-network" viewBox="0 0 48 48">
+      <g fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="square">
+        <circle cx="24" cy="10" r="4"/>
+        <circle cx="9" cy="36" r="4"/>
+        <circle cx="39" cy="36" r="4"/>
+        <circle cx="24" cy="26" r="4"/>
+        <path d="M24 14 V22 M22 28 L11 33 M26 28 L37 33"/>
+      </g>
+    </symbol>
+    <symbol id="ic-lab" viewBox="0 0 48 48">
+      <g fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="square">
+        <path d="M18 6 H30 M20 6 V22 L10 42 H38 L28 22 V6"/>
+        <path d="M14 34 H34" stroke-width="2"/>
+      </g>
+    </symbol>
+    <symbol id="ic-building" viewBox="0 0 48 48">
+      <g fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="square">
+        <path d="M8 42 V14 L24 6 L40 14 V42 Z"/>
+        <path d="M16 42 V28 H32 V42"/>
+        <path d="M20 20 H28"/>
+      </g>
+    </symbol>
+    <symbol id="ic-rocket" viewBox="0 0 48 48">
+      <g fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="square">
+        <path d="M24 4 L34 16 V28 L24 38 L14 28 V16 Z"/>
+        <circle cx="24" cy="20" r="3"/>
+        <path d="M14 28 L8 36 L14 36 M34 28 L40 36 L34 36"/>
+      </g>
+    </symbol>
+    <symbol id="ic-link" viewBox="0 0 48 48">
+      <g fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="square">
+        <path d="M20 16 H12 V32 H20 M28 32 H36 V16 H28"/>
+        <path d="M16 24 H32"/>
+      </g>
+    </symbol>
+    <symbol id="ic-people" viewBox="0 0 48 48">
+      <g fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="square">
+        <circle cx="16" cy="18" r="6"/>
+        <circle cx="34" cy="18" r="6"/>
+        <path d="M4 40 V36 C4 30 10 28 16 28 C22 28 28 30 28 36 V40"/>
+        <path d="M22 40 V36 C22 30 28 28 34 28 C40 28 44 30 44 36 V40"/>
+      </g>
+    </symbol>
+  </defs>
+</svg>
+
+<div class="stage">
+<div class="canvas">
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<!-- SLIDE 1 — CAPA                                                    -->
+<!-- ════════════════════════════════════════════════════════════════ -->
+<section class="slide s1 is-active" data-screen-label="01 Capa">
+  <span class="leak leak-1"></span>
+  <span class="leak leak-2"></span>
+
+  <span class="gfx gfx-mega" style="color: rgba(255,252,251,0.18)">
+    <svg viewBox="0 0 400 400"><use href="#g-t-stack"/></svg>
+  </span>
+
+  <div class="pad">
+    <div class="topbar">
+      <div class="logo">
+        <span class="mark"></span>
+        <div>
+          <span class="wordmark">Tecnopuc</span>
+          <span class="sub">Parque Científico e Tecnológico da PUCRS</span>
+        </div>
+      </div>
+      <div class="kicker" style="color: var(--ocre-light)">Apresentação institucional</div>
+    </div>
+  </div>
+
+  <div class="s1-stack">
+    <h1 class="hero-title">
+      Onde ciência, tecnologia<br>
+      e gente <i class="hero-mark">criam</i> futuro.
+    </h1>
+    <p class="hero-sub">PUCRS Science and Technology Park · Porto Alegre — Brasil</p>
+  </div>
+
+  <div class="footer-row" style="color: var(--on-dark-muted)">
+    <span>tecnopuc.pucrs.br</span>
+    <span>01 · 08</span>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<!-- SLIDE 2 — O QUE É O TECNOPUC                                      -->
+<!-- ════════════════════════════════════════════════════════════════ -->
+<section class="slide s2 slide-light" data-screen-label="02 O que é">
+  <span class="gfx gfx-corner" style="color: var(--roxo-inst)">
+    <svg viewBox="0 0 300 300"><use href="#g-t-shard"/></svg>
+  </span>
+
+  <div class="pad">
+    <div class="topbar">
+      <div class="logo logo--light">
+        <span class="mark"></span>
+        <div>
+          <span class="wordmark">Tecnopuc</span>
+        </div>
+      </div>
+      <div class="kicker">O que é</div>
+    </div>
+
+    <h2 class="title-section" style="margin-top: 64px; max-width: 22ch;">
+      Um parque científico e tecnológico,<br>
+      operado pela PUCRS.
+    </h2>
+  </div>
+
+  <div class="body-grid">
+    <div>
+      <p class="lede">
+        O Tecnopuc reúne universidade, empresas, startups e centros de pesquisa
+        em um mesmo território — para que conhecimento, tecnologia e mercado
+        trabalhem lado a lado, transformando ideias em soluções aplicadas.
+      </p>
+      <p class="body-md" style="margin-top: 28px; max-width: 56ch;">
+        Operamos como articuladores de ecossistema: conectamos talento,
+        capital, infraestrutura e comunidade em torno de desafios reais —
+        do laboratório à operação em escala.
+      </p>
+    </div>
+
+    <div class="stats">
+      <div class="stat-row">
+        <div class="stat-num"><span class="ph">—</span></div>
+        <div class="stat-label">Empresas e organizações instaladas<span class="muted">Número atualizado anualmente</span></div>
+      </div>
+      <div class="stat-row">
+        <div class="stat-num"><span class="ph">—</span></div>
+        <div class="stat-label">Pessoas trabalhando no Parque<span class="muted">Colaboradores, pesquisadores, fundadores</span></div>
+      </div>
+      <div class="stat-row">
+        <div class="stat-num"><span class="ph">—</span></div>
+        <div class="stat-label">Hubs temáticos em operação<span class="muted">Verticais de inovação aplicada</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-row">
+    <span>02 · O que é o Tecnopuc</span>
+    <span>02 · 08</span>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<!-- SLIDE 3 — PROPOSTA DE VALOR                                       -->
+<!-- ════════════════════════════════════════════════════════════════ -->
+<section class="slide s3 slide-dark" data-screen-label="03 Proposta de valor">
+  <span class="leak" style="width: 700px; height: 700px; top: -200px; right: -150px; opacity: 0.4"></span>
+  <span class="gfx" style="width: 360px; height: 360px; bottom: -60px; left: -80px; opacity: 0.08; color: var(--on-dark-title)">
+    <svg viewBox="0 0 300 300"><use href="#g-t-shard"/></svg>
+  </span>
+
+  <div class="pad">
+    <div class="topbar">
+      <div class="logo">
+        <span class="mark"></span>
+        <div><span class="wordmark">Tecnopuc</span></div>
+      </div>
+      <div class="kicker">Proposta de valor</div>
+    </div>
+    <h2 class="title-section" style="margin-top: 64px; max-width: 30ch;">
+      <span style="white-space: nowrap;">O que oferecemos a parceiros</span><br>
+      e empresas instaladas.
+    </h2>
+  </div>
+
+  <div class="pillars">
+    <div class="pillar">
+      <div>
+        <span class="pillar-num">01 · Ciência aplicada</span>
+        <h4>Pesquisa que vira produto.</h4>
+        <p>Acesso direto a laboratórios, grupos de pesquisa e talento acadêmico da PUCRS, com foco em soluções aplicáveis ao seu mercado.</p>
+      </div>
+      <div class="pillar-accent"></div>
+    </div>
+
+    <div class="pillar">
+      <div>
+        <span class="pillar-num">02 · Conexão de mercado</span>
+        <h4>Encontros que fecham negócios.</h4>
+        <p>Programas, eventos e rodadas que aproximam corporações de startups, fornecedores e centros de inovação dentro do Parque.</p>
+      </div>
+      <div class="pillar-accent"></div>
+    </div>
+
+    <div class="pillar">
+      <div>
+        <span class="pillar-num">03 · Comunidade</span>
+        <h4>Um ecossistema vivo.</h4>
+        <p>Mais de uma centena de organizações e milhares de pessoas trabalhando lado a lado — encontros espontâneos viram parcerias estruturadas.</p>
+      </div>
+      <div class="pillar-accent"></div>
+    </div>
+
+    <div class="pillar">
+      <div>
+        <span class="pillar-num">04 · Infraestrutura</span>
+        <h4>Espaço pronto para escalar.</h4>
+        <p>Laboratórios, escritórios, áreas de convivência e infraestrutura compartilhada — em um campus integrado, no coração de Porto Alegre.</p>
+      </div>
+      <div class="pillar-accent"></div>
+    </div>
+  </div>
+
+  <div class="footer-row" style="color: var(--on-dark-muted)">
+    <span>03 · Proposta de valor</span>
+    <span>03 · 08</span>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<!-- SLIDE 4 — ECOSSISTEMA DE INOVAÇÃO                                 -->
+<!-- ════════════════════════════════════════════════════════════════ -->
+<section class="slide s4" data-screen-label="04 Ecossistema">
+  <span class="leak" style="width: 900px; height: 900px; top: -300px; left: -200px; opacity: 0.45"></span>
+  <span class="leak" style="width: 700px; height: 700px; bottom: -200px; right: -150px; background: radial-gradient(closest-side, rgba(204,153,204,0.22), rgba(204,153,204,0) 70%); opacity: 0.7"></span>
+
+  <div class="pad">
+    <div class="topbar">
+      <div class="logo">
+        <span class="mark"></span>
+        <div><span class="wordmark">Tecnopuc</span></div>
+      </div>
+      <div class="kicker">Ecossistema</div>
+    </div>
+    <h2 class="title-section" style="margin-top: 64px; max-width: 22ch;">
+      Quatro forças. Um território.<br>
+      Conexões reais.
+    </h2>
+  </div>
+
+  <div class="eco-stage">
+    <div class="eco-copy">
+      <p>
+        O Tecnopuc é o ponto de encontro de quatro forças que normalmente
+        operam em silos. Aqui, elas dividem o mesmo chão — e isso muda
+        a velocidade da inovação.
+      </p>
+      <div class="eco-tags">
+        <span class="eco-tag">Universidade</span>
+        <span class="eco-tag">Startups</span>
+        <span class="eco-tag">Empresas</span>
+        <span class="eco-tag">Governo &amp; Capital</span>
+      </div>
+    </div>
+
+    <div class="eco-diagram">
+      <svg viewBox="0 0 720 600" style="width: 100%; height: 100%; display: block;" aria-label="Diagrama do ecossistema Tecnopuc">
+        <!-- linhas de conexão -->
+        <g stroke="rgba(255,252,251,0.32)" stroke-width="1.4" fill="none">
+          <line x1="180" y1="120" x2="540" y2="120"/>
+          <line x1="180" y1="120" x2="180" y2="480"/>
+          <line x1="540" y1="120" x2="540" y2="480"/>
+          <line x1="180" y1="480" x2="540" y2="480"/>
+          <line x1="180" y1="120" x2="540" y2="480"/>
+          <line x1="540" y1="120" x2="180" y2="480"/>
+          <line x1="180" y1="120" x2="360" y2="300"/>
+          <line x1="540" y1="120" x2="360" y2="300"/>
+          <line x1="180" y1="480" x2="360" y2="300"/>
+          <line x1="540" y1="480" x2="360" y2="300"/>
+        </g>
+
+        <!-- nó central — Tecnopuc -->
+        <g>
+          <circle cx="360" cy="300" r="92" fill="rgba(58,36,95,0.85)" stroke="#EA982F" stroke-width="3"/>
+          <text x="360" y="296" text-anchor="middle" fill="#FFFCFB" font-family="Montserrat, sans-serif" font-weight="700" font-size="22" letter-spacing="-0.02em">Tecnopuc</text>
+          <text x="360" y="318" text-anchor="middle" fill="rgba(255,252,251,0.65)" font-family="Montserrat, sans-serif" font-weight="500" font-size="11" letter-spacing="0.16em">PARQUE CIENTÍFICO</text>
+        </g>
+
+        <!-- 4 nós -->
+        <g font-family="Montserrat, sans-serif" font-weight="600" font-size="16" fill="#FFFCFB" letter-spacing="-0.01em">
+          <g>
+            <circle cx="180" cy="120" r="56" fill="rgba(255,252,251,0.06)" stroke="rgba(255,252,251,0.4)" stroke-width="1.4"/>
+            <text x="180" y="115" text-anchor="middle">PUCRS</text>
+            <text x="180" y="135" text-anchor="middle" fill="rgba(255,252,251,0.6)" font-size="11" font-weight="500" letter-spacing="0.12em">PESQUISA</text>
+          </g>
+          <g>
+            <circle cx="540" cy="120" r="56" fill="rgba(255,252,251,0.06)" stroke="rgba(255,252,251,0.4)" stroke-width="1.4"/>
+            <text x="540" y="115" text-anchor="middle">Startups</text>
+            <text x="540" y="135" text-anchor="middle" fill="rgba(255,252,251,0.6)" font-size="11" font-weight="500" letter-spacing="0.12em">VELOCIDADE</text>
+          </g>
+          <g>
+            <circle cx="180" cy="480" r="56" fill="rgba(255,252,251,0.06)" stroke="rgba(255,252,251,0.4)" stroke-width="1.4"/>
+            <text x="180" y="475" text-anchor="middle">Empresas</text>
+            <text x="180" y="495" text-anchor="middle" fill="rgba(255,252,251,0.6)" font-size="11" font-weight="500" letter-spacing="0.12em">ESCALA</text>
+          </g>
+          <g>
+            <circle cx="540" cy="480" r="56" fill="rgba(255,252,251,0.06)" stroke="rgba(255,252,251,0.4)" stroke-width="1.4"/>
+            <text x="540" y="475" text-anchor="middle">Governo</text>
+            <text x="540" y="495" text-anchor="middle" fill="rgba(255,252,251,0.6)" font-size="11" font-weight="500" letter-spacing="0.12em">&amp; CAPITAL</text>
+          </g>
+        </g>
+      </svg>
+    </div>
+  </div>
+
+  <div class="footer-row" style="color: var(--on-dark-muted)">
+    <span>04 · Ecossistema de inovação</span>
+    <span>04 · 08</span>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<!-- SLIDE 5 — STARTUPS, EMPRESAS E MERCADO                            -->
+<!-- ════════════════════════════════════════════════════════════════ -->
+<section class="slide s5 slide-light" data-screen-label="05 Startups e mercado">
+  <span class="gfx" style="width: 380px; height: 380px; bottom: -100px; right: -100px; opacity: 0.07; color: var(--roxo-inst)">
+    <svg viewBox="0 0 300 300"><use href="#g-t-shard"/></svg>
+  </span>
+
+  <div class="pad">
+    <div class="topbar">
+      <div class="logo logo--light">
+        <span class="mark"></span>
+        <div><span class="wordmark">Tecnopuc</span></div>
+      </div>
+      <div class="kicker">Startups, empresas e mercado</div>
+    </div>
+    <h2 class="title-section" style="margin-top: 64px; max-width: 26ch;">
+      Da pesquisa ao mercado —<br>
+      em três movimentos.
+    </h2>
+  </div>
+
+  <div class="three-col">
+    <div class="col">
+      <span class="col-tag">01 · Origem</span>
+      <h4>Startups que nascem aqui.</h4>
+      <p>Programas de pré-incubação, aceleração e residência conectam fundadores ao conhecimento da Universidade e à comunidade do Parque.</p>
+      <ul>
+        <li>Pré-incubação e aceleração</li>
+        <li>Mentoria e capital semente</li>
+        <li>Acesso a laboratórios e talento</li>
+      </ul>
+      <div class="col-flow">→ Pesquisa vira produto</div>
+    </div>
+
+    <div class="col">
+      <span class="col-tag">02 · Escala</span>
+      <h4>Empresas que crescem juntas.</h4>
+      <p>Corporações instalam unidades, centros de P&amp;D e operações no Parque para acelerar agendas de inovação e contratar talento qualificado.</p>
+      <ul>
+        <li>Sedes corporativas e P&amp;D</li>
+        <li>Operações de tecnologia</li>
+        <li>Acesso direto a fornecedores</li>
+      </ul>
+      <div class="col-flow">→ Produto encontra escala</div>
+    </div>
+
+    <div class="col">
+      <span class="col-tag">03 · Conexão</span>
+      <h4>Mercado que circula livre.</h4>
+      <p>Eventos, programas conjuntos e rodadas estruturadas conectam corporações, startups, investidores e governo dentro de um mesmo território.</p>
+      <ul>
+        <li>Programas de inovação aberta</li>
+        <li>Rodadas e demo days</li>
+        <li>Articulação com investidores</li>
+      </ul>
+      <div class="col-flow">→ Negócios fecham mais rápido</div>
+    </div>
+  </div>
+
+  <div class="footer-row">
+    <span>05 · Startups, empresas e conexão com mercado</span>
+    <span>05 · 08</span>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<!-- SLIDE 6 — ESTRUTURA E DIFERENCIAIS                                -->
+<!-- ════════════════════════════════════════════════════════════════ -->
+<section class="slide s6 slide-dark" data-screen-label="06 Estrutura e diferenciais">
+  <span class="leak" style="width: 800px; height: 800px; top: -250px; left: -200px; opacity: 0.4"></span>
+
+  <div class="pad">
+    <div class="topbar">
+      <div class="logo">
+        <span class="mark"></span>
+        <div><span class="wordmark">Tecnopuc</span></div>
+      </div>
+      <div class="kicker">Estrutura &amp; diferenciais</div>
+    </div>
+    <h2 class="title-section" style="margin-top: 64px; max-width: 24ch;">
+      Por que escolher o Tecnopuc.
+    </h2>
+  </div>
+
+  <div class="diff-grid">
+    <div class="diff">
+      <svg class="diff-icon"><use href="#ic-lab"/></svg>
+      <div>
+        <h4>Universidade integrada</h4>
+        <p>Acesso direto a pesquisadores, grupos de pesquisa e laboratórios da PUCRS, sem fricção burocrática.</p>
+      </div>
+    </div>
+
+    <div class="diff">
+      <svg class="diff-icon"><use href="#ic-building"/></svg>
+      <div>
+        <h4>Campus único, em Porto Alegre</h4>
+        <p>Localização estratégica, conectada a transporte, aeroporto e à malha empresarial gaúcha.</p>
+      </div>
+    </div>
+
+    <div class="diff">
+      <svg class="diff-icon"><use href="#ic-network"/></svg>
+      <div>
+        <h4>Hubs temáticos</h4>
+        <p>Verticais especializadas — saúde, govtech, indústria criativa, edu, agro — articuladas por equipes dedicadas.</p>
+      </div>
+    </div>
+
+    <div class="diff">
+      <svg class="diff-icon"><use href="#ic-people"/></svg>
+      <div>
+        <h4>Comunidade ativa</h4>
+        <p>Milhares de pessoas circulando entre escritórios, eventos e laboratórios — encontros viram parcerias.</p>
+      </div>
+    </div>
+
+    <div class="diff">
+      <svg class="diff-icon"><use href="#ic-rocket"/></svg>
+      <div>
+        <h4>Programas de aceleração</h4>
+        <p>Trilhas estruturadas para startups em diferentes estágios — da pré-incubação ao crescimento.</p>
+      </div>
+    </div>
+
+    <div class="diff">
+      <svg class="diff-icon"><use href="#ic-link"/></svg>
+      <div>
+        <h4>Articulação institucional</h4>
+        <p>Pontes com governo, fundos, agências de fomento e parques de inovação no Brasil e no exterior.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-row" style="color: var(--on-dark-muted)">
+    <span>06 · Estrutura e diferenciais</span>
+    <span>06 · 08</span>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<!-- SLIDE 7 — CASOS / FRENTES DE ATUAÇÃO                              -->
+<!-- ════════════════════════════════════════════════════════════════ -->
+<section class="slide s7 slide-light" data-screen-label="07 Frentes de atuação">
+  <span class="gfx" style="width: 380px; height: 380px; top: -80px; right: -100px; opacity: 0.07; color: var(--roxo-inst)">
+    <svg viewBox="0 0 400 400"><use href="#g-t-stack"/></svg>
+  </span>
+
+  <div class="pad">
+    <div class="topbar">
+      <div class="logo logo--light">
+        <span class="mark"></span>
+        <div><span class="wordmark">Tecnopuc</span></div>
+      </div>
+      <div class="kicker">Frentes de atuação</div>
+    </div>
+    <h2 class="title-section" style="margin-top: 64px; max-width: 24ch;">
+      Hubs Tecnopuc —<br>
+      onde a inovação se especializa.
+    </h2>
+  </div>
+
+  <div class="hubs">
+    <div class="hubs-intro">
+      <p>
+        Cada Hub é uma vertical temática com identidade própria, equipe
+        dedicada e portfólio de programas. Juntos, cobrem áreas-chave
+        para a transformação econômica e social.
+      </p>
+      <div class="meta">10 hubs em operação · expansão contínua</div>
+    </div>
+
+    <div class="hubs-grid">
+      <div class="hub-card">
+        <div class="hub-mark">F</div>
+        <div class="hub-text"><span class="hub-name">FutureGov Hub</span><span class="hub-cat">Setor público &amp; govtech</span></div>
+      </div>
+      <div class="hub-card">
+        <div class="hub-mark">B</div>
+        <div class="hub-text"><span class="hub-name">Bio Hub</span><span class="hub-cat">Ciências da vida &amp; saúde</span></div>
+      </div>
+      <div class="hub-card">
+        <div class="hub-mark">P</div>
+        <div class="hub-text"><span class="hub-name">Plug Hub</span><span class="hub-cat">Indústria &amp; energia</span></div>
+      </div>
+      <div class="hub-card">
+        <div class="hub-mark">N</div>
+        <div class="hub-text"><span class="hub-name">NAVI Hub</span><span class="hub-cat">IA &amp; ciência de dados</span></div>
+      </div>
+      <div class="hub-card">
+        <div class="hub-mark">C</div>
+        <div class="hub-text"><span class="hub-name">Celeiro Hub</span><span class="hub-cat">Agro &amp; food tech</span></div>
+      </div>
+      <div class="hub-card">
+        <div class="hub-mark">O</div>
+        <div class="hub-text"><span class="hub-name">OmniX Hub</span><span class="hub-cat">Indústria criativa &amp; XR</span></div>
+      </div>
+      <div class="hub-card">
+        <div class="hub-mark">F</div>
+        <div class="hub-text"><span class="hub-name">Fine Hub</span><span class="hub-cat">Finanças &amp; fintech</span></div>
+      </div>
+      <div class="hub-card">
+        <div class="hub-mark">F</div>
+        <div class="hub-text"><span class="hub-name">Farol Hub</span><span class="hub-cat">Impacto &amp; sustentabilidade</span></div>
+      </div>
+      <div class="hub-card">
+        <div class="hub-mark">E</div>
+        <div class="hub-text"><span class="hub-name">EduX Hub</span><span class="hub-cat">Educação &amp; aprendizagem</span></div>
+      </div>
+      <div class="hub-card">
+        <div class="hub-mark">C</div>
+        <div class="hub-text"><span class="hub-name">Creative Hub</span><span class="hub-cat">Cultura, design &amp; mídia</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-row">
+    <span>07 · Frentes de atuação</span>
+    <span>07 · 08</span>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<!-- SLIDE 8 — ENCERRAMENTO E CONVITE                                  -->
+<!-- ════════════════════════════════════════════════════════════════ -->
+<section class="slide s8" data-screen-label="08 Vamos conectar">
+  <span class="leak leak-a"></span>
+  <span class="leak leak-b"></span>
+  <span class="gfx" style="right: -200px; bottom: -150px; width: 900px; height: 900px; opacity: 0.16; color: rgba(255,252,251,0.9)">
+    <svg viewBox="0 0 400 400"><use href="#g-t-stack"/></svg>
+  </span>
+
+  <div class="pad">
+    <div class="topbar">
+      <div class="logo">
+        <span class="mark"></span>
+        <div>
+          <span class="wordmark">Tecnopuc</span>
+          <span class="sub">Parque Científico e Tecnológico da PUCRS</span>
+        </div>
+      </div>
+      <div class="kicker" style="color: var(--ocre-light)">Encerramento</div>
+    </div>
+  </div>
+
+  <div class="close-stack">
+    <div class="kicker" style="color: var(--ocre-light)">Convite</div>
+    <h2 class="close-title">
+      Vamos <em>construir</em><br>
+      o próximo passo juntos.
+    </h2>
+    <p class="close-sub">
+      Se a sua organização quer aproximar pesquisa, talento e mercado —
+      o Tecnopuc é o lugar para começar essa conversa.
+    </p>
+  </div>
+
+  <div class="close-contact">
+    <div>
+      <span class="label">Web</span>
+      <div class="value">tecnopuc.pucrs.br</div>
+      <div class="muted">Programas, hubs, eventos</div>
+    </div>
+    <div>
+      <span class="label">Contato institucional</span>
+      <div class="value">contato@tecnopuc.pucrs.br</div>
+      <div class="muted">Resposta em até 2 dias úteis</div>
+    </div>
+    <div>
+      <span class="label">Endereço</span>
+      <div class="value">Av. Ipiranga, 6681 — Porto Alegre/RS</div>
+      <div class="muted">Campus PUCRS</div>
+    </div>
+  </div>
+</section>
+
+</div><!-- /.canvas -->
+</div><!-- /.stage -->
+
+<div class="deck-chrome" role="navigation" aria-label="Navegação do deck">
+  <button id="prev" type="button" aria-label="Slide anterior">‹</button>
+  <span class="counter"><span id="cur">1</span> / <span id="total">8</span></span>
+  <button id="next" type="button" aria-label="Próximo slide">›</button>
+</div>
+
+<script>
+(function () {
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var total = slides.length;
+  var canvas = document.querySelector('.canvas');
+  var stage = document.querySelector('.stage');
+  var curEl = document.getElementById('cur');
+  var totalEl = document.getElementById('total');
+  var prevBtn = document.getElementById('prev');
+  var nextBtn = document.getElementById('next');
+  if (!slides.length || !canvas || !stage || !curEl || !totalEl || !prevBtn || !nextBtn) {
+    document.body.classList.add('deck-ready');
+    return;
+  }
+  totalEl.textContent = total;
+
+  var STORAGE_KEY = 'tecnopuc-deck-position-v1';
+  var stored = 0;
+  try {
+    stored = parseInt(localStorage.getItem(STORAGE_KEY) || '0', 10);
+  } catch (e) {
+    stored = 0;
+  }
+  var index = (isFinite(stored) && stored >= 0 && stored < total) ? stored : 0;
+
+  function render() {
+    slides.forEach(function (s, i) {
+      s.classList.toggle('is-active', i === index);
+    });
+    curEl.textContent = (index + 1);
+    try { localStorage.setItem(STORAGE_KEY, String(index)); } catch (e) {}
+  }
+
+  function go(delta) {
+    index = Math.max(0, Math.min(total - 1, index + delta));
+    render();
+  }
+  function goTo(i) {
+    index = Math.max(0, Math.min(total - 1, i));
+    render();
+  }
+
+  prevBtn.addEventListener('click', function () { go(-1); });
+  nextBtn.addEventListener('click', function () { go(1); });
+
+  var touchStartX = null;
+  var touchStartY = null;
+  stage.addEventListener('touchstart', function (e) {
+    if (!e.touches || e.touches.length !== 1) return;
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+  }, { passive: true });
+  stage.addEventListener('touchend', function (e) {
+    if (touchStartX === null || touchStartY === null || !e.changedTouches || !e.changedTouches.length) return;
+    var dx = e.changedTouches[0].clientX - touchStartX;
+    var dy = e.changedTouches[0].clientY - touchStartY;
+    touchStartX = null;
+    touchStartY = null;
+    if (Math.abs(dx) < 44 || Math.abs(dx) < Math.abs(dy) * 1.2) return;
+    go(dx < 0 ? 1 : -1);
+  }, { passive: true });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    switch (e.key) {
+      case 'ArrowRight':
+      case 'ArrowDown':
+      case 'PageDown':
+      case ' ':
+        e.preventDefault(); go(1); break;
+      case 'ArrowLeft':
+      case 'ArrowUp':
+      case 'PageUp':
+        e.preventDefault(); go(-1); break;
+      case 'Home':
+        e.preventDefault(); goTo(0); break;
+      case 'End':
+        e.preventDefault(); goTo(total - 1); break;
+    }
+  });
+
+  // Scale-to-fit
+  function fit() {
+    var viewport = window.visualViewport || window;
+    var sw = viewport.width || window.innerWidth;
+    var sh = viewport.height || window.innerHeight;
+    var scale = Math.min(sw / 1920, sh / 1080);
+    var x = Math.max(0, (sw - 1920 * scale) / 2);
+    var y = Math.max(0, (sh - 1080 * scale) / 2);
+    canvas.style.transform = 'translate3d(' + x + 'px, ' + y + 'px, 0) scale(' + scale + ')';
+  }
+  window.addEventListener('resize', fit);
+  if (window.visualViewport) {
+    window.visualViewport.addEventListener('resize', fit);
+  }
+  fit();
+  render();
+  document.body.classList.add('deck-ready');
+})();
+</script>
+
+</body>
+</html>

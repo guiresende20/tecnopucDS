@@ -1,0 +1,1467 @@
+
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Por que o Design System importa para o Tecnopuc</title>
+  <style>
+    :root {
+      --purple-900: #3A245F;
+      --purple-800: #552583;
+      --purple-600: #8D3D8F;
+      --purple-400: #9F66A3;
+      --lilac: #C9B7CB;
+      --ocre: #EA982F;
+      --ocre-dark: #D07E1D;
+      --blue: #027DBD;
+      --magenta: #E83D78;
+      --paper: #FAFAFA;
+      --surface: #FFFFFF;
+      --ink: #161617;
+      --body: #262626;
+      --muted: #6C6E71;
+      --line: rgba(108, 110, 113, .22);
+      --line-dark: rgba(255, 255, 255, .22);
+      --font-display: Gotham, Montserrat, Bahnschrift, "Segoe UI", system-ui, sans-serif;
+      --font-body: Gotham, Montserrat, Bahnschrift, "Segoe UI", system-ui, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; }
+    body {
+      background: #17121f;
+      color: var(--ink);
+      font-family: var(--font-body);
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    .deck-viewport {
+      position: fixed;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      background:
+        radial-gradient(circle at 12% 8%, rgba(234, 152, 47, .16), transparent 24%),
+        radial-gradient(circle at 90% 20%, rgba(141, 61, 143, .22), transparent 28%),
+        #17121f;
+    }
+
+    .deck {
+      position: relative;
+      width: 1920px;
+      height: 1080px;
+      transform-origin: center center;
+      overflow: hidden;
+      background: var(--paper);
+      box-shadow: 0 40px 120px rgba(0, 0, 0, .44);
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      display: block;
+      width: 1920px;
+      height: 1080px;
+      padding: 86px 104px 76px;
+      overflow: hidden;
+      background: var(--paper);
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transform: translate3d(56px, 0, 0) scale(.985);
+      transition: opacity 620ms cubic-bezier(.2, .9, .2, 1), transform 780ms cubic-bezier(.2, .9, .2, 1), visibility 0ms linear 780ms;
+    }
+
+    .slide.is-active {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+      transform: translate3d(0, 0, 0) scale(1);
+      transition: opacity 620ms cubic-bezier(.2, .9, .2, 1), transform 780ms cubic-bezier(.2, .9, .2, 1), visibility 0ms linear 0ms;
+    }
+    .slide.dark {
+      color: #FFFCFB;
+      background:
+        linear-gradient(135deg, rgba(58, 36, 95, .98), rgba(85, 37, 131, .95) 46%, rgba(141, 61, 143, .94)),
+        var(--purple-900);
+    }
+    .slide.light { color: var(--ink); background: var(--paper); }
+    .slide.split {
+      display: grid;
+      grid-template-columns: .88fr 1.12fr;
+      gap: 74px;
+      align-items: stretch;
+    }
+
+    .slide.is-exiting {
+      opacity: 0;
+      transform: translate3d(-42px, 0, 0) scale(.985);
+    }
+
+    .slide.is-active .kicker,
+    .slide.is-active h1,
+    .slide.is-active h2,
+    .slide.is-active .lead,
+    .slide.is-active .statement,
+    .slide.is-active .proof-card,
+    .slide.is-active .rule-card,
+    .slide.is-active .surface-card,
+    .slide.is-active .example,
+    .slide.is-active .closing-box,
+    .slide.is-active .definition-panel,
+    .slide.is-active .pillar-card,
+    .slide.is-active .pillar-orbit,
+    .slide.is-active .mock-panel {
+      animation: riseIn 720ms cubic-bezier(.2, .9, .2, 1) both;
+    }
+    .slide.is-active h1,
+    .slide.is-active h2 { animation-delay: 80ms; }
+    .slide.is-active .lead,
+    .slide.is-active .statement { animation-delay: 170ms; }
+    .slide.is-active .proof-card:nth-child(2),
+    .slide.is-active .rule-card:nth-child(2),
+    .slide.is-active .surface-card:nth-child(3),
+    .slide.is-active .example:nth-child(2),
+    .slide.is-active .pillar-card:nth-child(2),
+    .slide.is-active .mock-panel:nth-child(2) { animation-delay: 140ms; }
+    .slide.is-active .proof-card:nth-child(3),
+    .slide.is-active .rule-card:nth-child(3),
+    .slide.is-active .surface-card:nth-child(4),
+    .slide.is-active .example:nth-child(3),
+    .slide.is-active .pillar-card:nth-child(3) { animation-delay: 220ms; }
+    .slide.is-active .proof-card:nth-child(4),
+    .slide.is-active .rule-card:nth-child(4),
+    .slide.is-active .surface-card:nth-child(5),
+    .slide.is-active .pillar-card:nth-child(4) { animation-delay: 300ms; }
+    .slide.is-active .pillar-card:nth-child(5) { animation-delay: 380ms; }
+
+    .brand-row {
+      position: absolute;
+      left: 104px;
+      top: 56px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: .01em;
+      z-index: 5;
+    }
+    .brand-row .mark {
+      width: 42px;
+      height: 42px;
+      border: 3px solid currentColor;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      color: var(--ocre);
+      font-weight: 800;
+      line-height: 1;
+    }
+    .dark .brand-row { color: #FFFCFB; }
+    .light .brand-row { color: var(--purple-900); }
+
+    .counter {
+      position: absolute;
+      right: 104px;
+      bottom: 54px;
+      z-index: 20;
+      font-size: 22px;
+      font-weight: 700;
+      color: rgba(255, 255, 255, .72);
+      font-variant-numeric: tabular-nums;
+    }
+    .light .counter { color: rgba(58, 36, 95, .62); }
+
+    .kicker {
+      margin: 0 0 26px;
+      color: var(--ocre);
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+    }
+    .light .kicker { color: var(--ocre-dark); }
+
+    h1, h2, h3, p { margin-top: 0; }
+    h1 {
+      max-width: 1280px;
+      margin-bottom: 34px;
+      font-family: var(--font-display);
+      font-size: 104px;
+      line-height: .95;
+      letter-spacing: -.025em;
+      font-weight: 800;
+      text-wrap: balance;
+    }
+    h2 {
+      margin-bottom: 28px;
+      font-family: var(--font-display);
+      font-size: 76px;
+      line-height: 1;
+      letter-spacing: -.02em;
+      font-weight: 800;
+      text-wrap: balance;
+    }
+    h3 {
+      margin-bottom: 14px;
+      font-size: 32px;
+      line-height: 1.08;
+      font-weight: 800;
+      text-wrap: balance;
+    }
+    p {
+      margin-bottom: 0;
+      color: inherit;
+      font-size: 26px;
+      line-height: 1.38;
+      text-wrap: pretty;
+    }
+    .lead {
+      max-width: 980px;
+      font-size: 34px;
+      line-height: 1.25;
+      color: rgba(255, 255, 255, .82);
+    }
+    .light .lead { color: var(--body); }
+    .muted { color: var(--muted); }
+
+    .hero-content {
+      position: relative;
+      z-index: 3;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      height: 100%;
+      padding-top: 38px;
+    }
+    .intro-sequence {
+      position: absolute;
+      inset: 0;
+      z-index: 30;
+      display: grid;
+      place-items: center;
+      background:
+        radial-gradient(circle at 26% 28%, rgba(234, 152, 47, .16), transparent 22%),
+        radial-gradient(circle at 76% 70%, rgba(204, 102, 204, .18), transparent 26%),
+        linear-gradient(135deg, #3A245F, #552583 48%, #8D3D8F);
+      pointer-events: none;
+      opacity: 0;
+      visibility: hidden;
+    }
+    .intro-word {
+      position: absolute;
+      max-width: 1500px;
+      color: #FFFCFB;
+      font-family: var(--font-display);
+      font-size: 152px;
+      line-height: .9;
+      font-weight: 800;
+      letter-spacing: -.035em;
+      text-align: center;
+      text-wrap: balance;
+      opacity: 0;
+      transform: translate3d(0, 48px, 0) scale(.94);
+      filter: blur(14px);
+    }
+    .intro-word:nth-child(2) { color: var(--ocre); }
+    .intro-word:nth-child(4) { color: #F9D4C5; }
+    .slide.intro-running .intro-sequence {
+      visibility: visible;
+      animation: introLayer 9200ms cubic-bezier(.2, .9, .2, 1) both;
+    }
+    .slide.intro-running .intro-word {
+      animation: keywordBurst 2100ms cubic-bezier(.18, .9, .18, 1) both;
+    }
+    .slide.intro-running .intro-word:nth-child(1) { animation-delay: 300ms; }
+    .slide.intro-running .intro-word:nth-child(2) { animation-delay: 1650ms; }
+    .slide.intro-running .intro-word:nth-child(3) { animation-delay: 3000ms; }
+    .slide.intro-running .intro-word:nth-child(4) { animation-delay: 4350ms; }
+    .slide.intro-running .intro-word:nth-child(5) { animation-delay: 5700ms; }
+    .slide.intro-running .hero-content,
+    .slide.intro-running > .brand-row,
+    .slide.intro-running .hero-kinetic,
+    .slide.intro-running > .counter {
+      animation: coverReveal 900ms cubic-bezier(.2, .9, .2, 1) 8400ms both;
+    }
+    .hero-rule {
+      width: 560px;
+      height: 8px;
+      margin-top: 54px;
+      background: linear-gradient(90deg, var(--ocre), rgba(255, 255, 255, .22));
+    }
+    .hero-kinetic {
+      position: absolute;
+      right: 34px;
+      top: 118px;
+      width: 770px;
+      height: 770px;
+      z-index: 1;
+    }
+    .particle-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      opacity: .9;
+    }
+    .t3d-wrap {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      perspective: 1200px;
+      transform-style: preserve-3d;
+    }
+    .t3d {
+      position: relative;
+      width: 430px;
+      height: 520px;
+      transform-style: preserve-3d;
+      animation: tSpin 11s cubic-bezier(.45, 0, .2, 1) infinite;
+      filter: drop-shadow(0 36px 54px rgba(12, 5, 30, .38));
+    }
+    .t3d span {
+      position: absolute;
+      display: block;
+      background: linear-gradient(145deg, #FFFCFB, #C9B7CB 54%, #EA982F);
+      border: 1px solid rgba(255, 255, 255, .68);
+      box-shadow: inset 0 -18px 36px rgba(58, 36, 95, .22);
+    }
+    .t3d .top {
+      left: 0;
+      top: 34px;
+      width: 430px;
+      height: 102px;
+      transform: translateZ(70px);
+    }
+    .t3d .stem {
+      left: 162px;
+      top: 34px;
+      width: 106px;
+      height: 454px;
+      transform: translateZ(72px);
+    }
+    .t3d .top-shadow {
+      left: 18px;
+      top: 52px;
+      width: 430px;
+      height: 102px;
+      background: rgba(58, 36, 95, .56);
+      transform: translateZ(6px) translateX(24px) translateY(24px);
+      border-color: transparent;
+      filter: blur(1px);
+    }
+    .t3d .stem-shadow {
+      left: 184px;
+      top: 64px;
+      width: 106px;
+      height: 454px;
+      background: rgba(58, 36, 95, .58);
+      transform: translateZ(4px) translateX(24px) translateY(24px);
+      border-color: transparent;
+      filter: blur(1px);
+    }
+    .orbit-ring {
+      position: absolute;
+      inset: 96px;
+      border: 1px solid rgba(255, 255, 255, .18);
+      border-radius: 50%;
+      animation: orbitRotate 18s linear infinite;
+    }
+    .orbit-ring::before,
+    .orbit-ring::after {
+      content: "";
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--ocre);
+      box-shadow: 0 0 34px rgba(234, 152, 47, .82);
+    }
+    .orbit-ring::before { left: 18%; top: 4%; }
+    .orbit-ring::after { right: 10%; bottom: 12%; background: #C9B7CB; }
+    .t-shape {
+      position: absolute;
+      right: -80px;
+      bottom: -110px;
+      width: 620px;
+      height: 620px;
+      opacity: .22;
+      transform: rotate(-13deg);
+    }
+    .t-shape::before,
+    .t-shape::after {
+      content: "";
+      position: absolute;
+      background: #FFFCFB;
+    }
+    .t-shape::before {
+      left: 80px;
+      top: 80px;
+      width: 460px;
+      height: 106px;
+    }
+    .t-shape::after {
+      left: 256px;
+      top: 80px;
+      width: 110px;
+      height: 460px;
+    }
+
+    .definition-grid {
+      display: grid;
+      grid-template-columns: .92fr 1.08fr;
+      gap: 58px;
+      align-items: stretch;
+      height: 100%;
+      padding-top: 40px;
+    }
+    .definition-panel {
+      position: relative;
+      min-height: 520px;
+      padding: 38px;
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background: #fff;
+      overflow: hidden;
+    }
+    .definition-panel.dark-card {
+      color: #FFFCFB;
+      border-color: rgba(255, 255, 255, .18);
+      background:
+        radial-gradient(circle at 90% 18%, rgba(234, 152, 47, .22), transparent 26%),
+        linear-gradient(135deg, var(--purple-900), var(--purple-800) 62%, var(--purple-600));
+    }
+    .definition-panel h3 {
+      margin-bottom: 22px;
+      color: inherit;
+      font-size: 42px;
+    }
+    .definition-panel p {
+      color: inherit;
+      font-size: 28px;
+      line-height: 1.34;
+    }
+    .definition-panel .muted { color: rgba(255, 255, 255, .74); }
+    .identity-system {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 22px;
+      margin-top: 32px;
+    }
+    .compare-card {
+      padding: 26px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, .12);
+      border: 1px solid rgba(255, 255, 255, .18);
+    }
+    .compare-card.light-card {
+      color: var(--body);
+      background: #fff;
+      border-color: var(--line);
+    }
+    .compare-card b {
+      display: block;
+      margin-bottom: 14px;
+      color: var(--ocre);
+      font-size: 27px;
+    }
+    .compare-card.light-card b { color: var(--purple-800); }
+    .compare-card p {
+      font-size: 23px;
+      line-height: 1.32;
+    }
+    .ai-relevance {
+      display: grid;
+      grid-template-columns: 128px 1fr;
+      gap: 26px;
+      align-items: center;
+      margin-top: 30px;
+      padding: 28px;
+      border-radius: 20px;
+      background: rgba(234, 152, 47, .14);
+      border: 1px solid rgba(234, 152, 47, .34);
+    }
+    .ai-mark {
+      width: 128px;
+      height: 128px;
+      display: grid;
+      place-items: center;
+      border: 3px solid var(--ocre);
+      border-radius: 50%;
+      color: var(--ocre);
+      font-size: 48px;
+      font-weight: 900;
+      letter-spacing: -.04em;
+    }
+    .ai-relevance p {
+      color: #FFFCFB;
+      font-size: 25px;
+    }
+
+    .pillars-board {
+      display: grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 54px;
+      align-items: stretch;
+      height: 100%;
+      padding-top: 18px;
+    }
+    .pillars-board .kicker {
+      margin-bottom: 18px;
+    }
+    .pillars-board h2 {
+      max-width: 980px;
+      margin-bottom: 22px;
+      font-size: 66px;
+      line-height: 1.02;
+    }
+    .pillar-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+    .pillar-card {
+      position: relative;
+      min-height: 152px;
+      padding: 24px 28px;
+      border: 1px solid rgba(255, 255, 255, .18);
+      border-radius: 22px;
+      background: rgba(255, 255, 255, .10);
+      overflow: hidden;
+    }
+    .pillar-card::before {
+      content: attr(data-index);
+      position: absolute;
+      right: 20px;
+      top: 18px;
+      color: rgba(255, 255, 255, .18);
+      font-size: 52px;
+      font-weight: 900;
+      line-height: 1;
+    }
+    .pillar-card h3 {
+      max-width: 360px;
+      margin-bottom: 10px;
+      color: #FFFCFB;
+      font-size: 28px;
+      line-height: 1.08;
+    }
+    .pillar-card p {
+      max-width: 410px;
+      color: rgba(255, 255, 255, .78);
+      font-size: 20px;
+      line-height: 1.3;
+    }
+    .pillar-card.accent {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: minmax(260px, .55fr) minmax(0, 1fr);
+      column-gap: 28px;
+      align-items: center;
+      min-height: 132px;
+      padding-right: 112px;
+      border-color: rgba(234, 152, 47, .48);
+      background: rgba(234, 152, 47, .16);
+    }
+    .pillar-card.accent h3 {
+      margin-bottom: 0;
+    }
+    .pillar-card.accent p {
+      max-width: 560px;
+    }
+    .pillar-orbit {
+      position: relative;
+      display: grid;
+      place-items: center;
+      min-height: 720px;
+      border-radius: 34px;
+      border: 1px solid rgba(255, 255, 255, .16);
+      background:
+        radial-gradient(circle at center, rgba(255, 255, 255, .14), transparent 32%),
+        rgba(255, 255, 255, .08);
+      overflow: hidden;
+    }
+    .pillar-orbit::before,
+    .pillar-orbit::after {
+      content: "";
+      position: absolute;
+      border: 1px solid rgba(255, 255, 255, .18);
+      border-radius: 50%;
+      animation: orbitRotate 22s linear infinite;
+    }
+    .pillar-orbit::before { width: 560px; height: 560px; }
+    .pillar-orbit::after {
+      width: 390px;
+      height: 390px;
+      border-color: rgba(234, 152, 47, .36);
+      animation-direction: reverse;
+      animation-duration: 16s;
+    }
+    .pillar-center {
+      position: relative;
+      z-index: 2;
+      width: 260px;
+      height: 260px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      color: #24153f;
+      background: var(--ocre);
+      font-size: 40px;
+      font-weight: 900;
+      text-align: center;
+      line-height: .95;
+      box-shadow: 0 24px 80px rgba(0, 0, 0, .24);
+    }
+    .orbit-label {
+      position: absolute;
+      z-index: 3;
+      padding: 12px 16px;
+      border-radius: 999px;
+      color: #FFFCFB;
+      background: rgba(58, 36, 95, .82);
+      border: 1px solid rgba(255, 255, 255, .18);
+      font-size: 22px;
+      font-weight: 800;
+    }
+    .orbit-label:nth-of-type(1) { left: 50%; top: 36px; transform: translateX(-50%); }
+    .orbit-label:nth-of-type(2) { top: 92px; left: 96px; }
+    .orbit-label:nth-of-type(3) { top: 150px; right: 78px; }
+    .orbit-label:nth-of-type(4) { right: 118px; bottom: 142px; }
+    .orbit-label:nth-of-type(5) { bottom: 106px; left: 72px; }
+
+    .statement {
+      border-left: 9px solid var(--ocre);
+      padding-left: 34px;
+    }
+    .statement p {
+      max-width: 680px;
+      color: var(--body);
+      font-size: 30px;
+    }
+    .proof-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+    }
+    .proof-card {
+      min-height: 234px;
+      padding: 30px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: var(--surface);
+    }
+    .proof-card strong {
+      display: block;
+      margin-bottom: 18px;
+      color: var(--purple-900);
+      font-size: 42px;
+      line-height: 1;
+      font-weight: 800;
+    }
+    .proof-card p {
+      color: var(--body);
+      font-size: 24px;
+      line-height: 1.34;
+    }
+
+    .motion-board {
+      position: relative;
+      align-self: center;
+      padding: 72px 28px 28px;
+      border: 1px solid var(--line);
+      border-radius: 30px;
+      background:
+        linear-gradient(90deg, rgba(58, 36, 95, .05) 1px, transparent 1px),
+        linear-gradient(0deg, rgba(58, 36, 95, .05) 1px, transparent 1px),
+        #fff;
+      background-size: 48px 48px;
+      overflow: hidden;
+    }
+    .motion-board::before {
+      content: "Tokens -> Componente -> Canal -> Aprendizado";
+      position: absolute;
+      left: 28px;
+      top: 24px;
+      color: var(--purple-900);
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: .03em;
+    }
+    .motion-board::after {
+      content: "";
+      position: absolute;
+      left: 32px;
+      right: 32px;
+      top: 56px;
+      height: 4px;
+      background: linear-gradient(90deg, var(--purple-900), var(--purple-600), var(--ocre));
+      transform-origin: left;
+      animation: scanLine 2600ms cubic-bezier(.2, .9, .2, 1) infinite;
+    }
+    .motion-board .proof-card {
+      position: relative;
+      min-height: 214px;
+      box-shadow: 0 20px 48px rgba(58, 36, 95, .08);
+    }
+    .motion-board .proof-card::before {
+      content: attr(data-step);
+      position: absolute;
+      right: 24px;
+      top: 24px;
+      color: rgba(58, 36, 95, .28);
+      font-size: 28px;
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .stack {
+      display: grid;
+      gap: 22px;
+      align-content: center;
+      height: 100%;
+      padding-top: 42px;
+    }
+    .rule-card {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: 28px;
+      padding: 30px 34px;
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 20px;
+    }
+    .rule-card .label {
+      color: var(--purple-800);
+      font-size: 24px;
+      font-weight: 800;
+    }
+    .rule-card p { color: var(--body); font-size: 25px; }
+    .dark .rule-card {
+      position: relative;
+      overflow: hidden;
+      border-color: rgba(255, 255, 255, .22);
+      background: rgba(255, 255, 255, .12);
+      backdrop-filter: blur(14px);
+    }
+    .dark .rule-card::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 6px;
+      height: 100%;
+      background: var(--ocre);
+      transform-origin: top;
+      animation: rulePulse 2200ms ease-in-out infinite;
+    }
+    .dark .rule-card .label { color: var(--ocre); }
+    .dark .rule-card p { color: rgba(255, 255, 255, .86); }
+
+    .before-after {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      align-self: center;
+    }
+    .mock-panel {
+      min-height: 650px;
+      border-radius: 26px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, .26);
+      background: rgba(255, 255, 255, .10);
+      backdrop-filter: blur(18px);
+    }
+    .before-after .mock-panel:not(.light-panel) {
+      border-color: rgba(255, 255, 255, .24);
+      background:
+        linear-gradient(145deg, rgba(58, 36, 95, .98), rgba(85, 37, 131, .92) 58%, rgba(141, 61, 143, .88));
+      box-shadow: 0 28px 74px rgba(58, 36, 95, .16);
+    }
+    .mock-panel.light-panel {
+      background: #fff;
+      border-color: var(--line);
+      box-shadow: 0 28px 74px rgba(58, 36, 95, .12);
+    }
+    .mock-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 26px 28px;
+      border-bottom: 1px solid rgba(255, 255, 255, .18);
+      color: #fff;
+      font-size: 22px;
+      font-weight: 800;
+    }
+    .light-panel .mock-head {
+      border-bottom-color: var(--line);
+      color: var(--purple-900);
+    }
+    .mock-body { padding: 30px; }
+    .bad-block {
+      margin-bottom: 22px;
+      padding: 24px;
+      border-radius: 18px;
+      color: rgba(255, 252, 251, .94);
+      background: rgba(255, 255, 255, .16);
+      font-size: 22px;
+      line-height: 1.25;
+    }
+    .good-title {
+      margin-bottom: 22px;
+      color: var(--purple-900);
+      font-size: 46px;
+      line-height: 1.02;
+      font-weight: 800;
+    }
+    .good-copy {
+      color: var(--body);
+      font-size: 24px;
+      line-height: 1.35;
+    }
+    .good-chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin: 28px 0 34px;
+    }
+    .chip {
+      padding: 12px 16px;
+      border-radius: 999px;
+      color: var(--purple-900);
+      background: rgba(201, 183, 203, .34);
+      font-size: 22px;
+      font-weight: 800;
+    }
+    .good-cta {
+      display: inline-flex;
+      min-height: 58px;
+      align-items: center;
+      padding: 0 24px;
+      border-radius: 999px;
+      color: #24153f;
+      background: var(--ocre);
+      font-size: 24px;
+      font-weight: 800;
+    }
+
+    .system-map {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 26px;
+      align-self: center;
+    }
+    .orbit-map {
+      position: relative;
+      padding: 86px 28px 28px;
+      border-radius: 32px;
+      background:
+        radial-gradient(circle at center, rgba(234, 152, 47, .12), transparent 30%),
+        linear-gradient(135deg, rgba(85, 37, 131, .06), transparent 42%);
+    }
+    .ecosystem-core {
+      position: absolute;
+      left: 50%;
+      top: 28px;
+      z-index: 3;
+      transform: translateX(-50%);
+      display: inline-grid;
+      place-items: center;
+      min-width: 236px;
+      height: 58px;
+      padding: 0 28px;
+      border-radius: 999px;
+      color: #FFFCFB;
+      background: linear-gradient(135deg, var(--purple-900), var(--purple-600));
+      box-shadow: 0 18px 52px rgba(58, 36, 95, .2);
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+    .orbit-map::before,
+    .orbit-map::after {
+      content: "";
+      position: absolute;
+      inset: 82px 72px 54px;
+      border: 1px dashed rgba(85, 37, 131, .28);
+      border-radius: 42%;
+      pointer-events: none;
+      animation: orbitRotate 22s linear infinite;
+    }
+    .orbit-map::after {
+      inset: 116px 104px 86px;
+      animation-duration: 30s;
+      animation-direction: reverse;
+    }
+    .surface-card {
+      min-height: 284px;
+      padding: 32px;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: #fff;
+      position: relative;
+      overflow: hidden;
+    }
+    .surface-card::after {
+      content: "";
+      position: absolute;
+      right: -46px;
+      bottom: -46px;
+      width: 156px;
+      height: 156px;
+      border: 28px solid rgba(234, 152, 47, .25);
+      border-radius: 50%;
+    }
+    .surface-card span {
+      display: inline-flex;
+      margin-bottom: 22px;
+      padding: 9px 13px;
+      border-radius: 999px;
+      color: var(--purple-900);
+      background: rgba(201, 183, 203, .38);
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    .surface-card h3 { color: var(--purple-900); }
+    .surface-card p { color: var(--body); font-size: 23px; }
+
+    .example-strip {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-top: 40px;
+    }
+    .example {
+      min-height: 260px;
+      padding: 28px;
+      border: 1px solid var(--line-dark);
+      border-radius: 24px;
+      background: rgba(255, 255, 255, .10);
+    }
+    .example b {
+      display: block;
+      margin-bottom: 18px;
+      color: var(--ocre);
+      font-size: 22px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .example p {
+      color: rgba(255, 255, 255, .82);
+      font-size: 25px;
+    }
+
+    .experiment-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 34px;
+      height: 100%;
+      align-items: center;
+      padding-top: 30px;
+    }
+    .closing-box {
+      position: relative;
+      padding: 44px;
+      border: 1px solid rgba(255, 255, 255, .24);
+      border-radius: 28px;
+      background: rgba(255, 255, 255, .12);
+      overflow: hidden;
+    }
+    .closing-box::before {
+      content: "";
+      position: absolute;
+      right: -150px;
+      top: -150px;
+      width: 340px;
+      height: 340px;
+      border: 52px solid rgba(234, 152, 47, .22);
+      border-radius: 50%;
+      animation: orbitRotate 16s linear infinite;
+    }
+    .closing-box h2 { font-size: 70px; }
+    .closing-box p {
+      color: rgba(255, 255, 255, .84);
+      font-size: 31px;
+      line-height: 1.32;
+    }
+    .closing-kinetic {
+      position: relative;
+      height: 280px;
+      margin-top: 36px;
+      border: 1px solid rgba(255, 255, 255, .16);
+      border-radius: 24px;
+      overflow: hidden;
+      background: rgba(12, 5, 30, .2);
+    }
+    .closing-kinetic .t3d {
+      animation: tSpinSmall 9s cubic-bezier(.45, 0, .2, 1) infinite;
+    }
+    .closing-kinetic .t3d .top {
+      width: 430px;
+      height: 102px;
+    }
+    .closing-caption {
+      position: absolute;
+      left: 28px;
+      bottom: 24px;
+      z-index: 4;
+      max-width: 430px;
+      color: rgba(255, 255, 255, .82);
+      font-size: 23px;
+      line-height: 1.25;
+      font-weight: 700;
+    }
+
+    @keyframes riseIn {
+      from { opacity: 0; transform: translate3d(0, 36px, 0); }
+      to { opacity: 1; transform: translate3d(0, 0, 0); }
+    }
+    @keyframes introLayer {
+      0%, 82% { opacity: 1; }
+      100% { opacity: 0; }
+    }
+    @keyframes keywordBurst {
+      0% { opacity: 0; transform: translate3d(0, 52px, 0) scale(.9); filter: blur(16px); }
+      24%, 68% { opacity: 1; transform: translate3d(0, 0, 0) scale(1); filter: blur(0); }
+      100% { opacity: 0; transform: translate3d(0, -48px, 0) scale(1.08); filter: blur(18px); }
+    }
+    @keyframes coverReveal {
+      from { opacity: 0; transform: translate3d(0, 34px, 0); filter: blur(8px); }
+      to { opacity: 1; transform: translate3d(0, 0, 0); filter: blur(0); }
+    }
+    @keyframes tSpin {
+      0%, 100% { transform: rotateX(50deg) rotateZ(-8deg) rotateY(-12deg); }
+      45% { transform: rotateX(48deg) rotateZ(4deg) rotateY(18deg); }
+      70% { transform: rotateX(54deg) rotateZ(-12deg) rotateY(8deg); }
+    }
+    @keyframes tSpinSmall {
+      0%, 100% { transform: scale(.42) rotateX(62deg) rotateZ(-22deg) rotateY(-18deg); }
+      45% { transform: scale(.42) rotateX(58deg) rotateZ(-2deg) rotateY(24deg); }
+      70% { transform: scale(.42) rotateX(66deg) rotateZ(-34deg) rotateY(12deg); }
+    }
+    @keyframes orbitRotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    @keyframes scanLine {
+      0% { transform: scaleX(.04); opacity: .35; }
+      42% { transform: scaleX(1); opacity: 1; }
+      100% { transform: scaleX(1); opacity: .24; }
+    }
+    @keyframes rulePulse {
+      0%, 100% { transform: scaleY(.18); opacity: .55; }
+      50% { transform: scaleY(1); opacity: 1; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .slide,
+      .slide.is-active,
+      .slide.is-exiting,
+      .t3d,
+      .orbit-ring,
+      .motion-board::after,
+      .orbit-map::before,
+      .orbit-map::after,
+      .dark .rule-card::after,
+      .closing-box::before {
+        animation: none !important;
+        transition: none !important;
+      }
+    }
+
+    @media print {
+      html, body { overflow: visible; background: #fff; }
+      .deck-viewport { position: static; display: block; background: #fff; }
+      .deck { transform: none !important; box-shadow: none; }
+      .slide {
+        position: relative;
+        display: block !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        transform: none !important;
+        page-break-after: always;
+      }
+      .counter { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="deck-viewport">
+    <main class="deck" id="deck" aria-live="polite">
+      <section class="slide dark is-active intro-running" data-screen-label="01 Tese">
+        <div class="intro-sequence" aria-hidden="true">
+          <div class="intro-word">Consistência</div>
+          <div class="intro-word">Velocidade</div>
+          <div class="intro-word">Governança</div>
+          <div class="intro-word">Escala</div>
+          <div class="intro-word">Experimentação</div>
+        </div>
+        <div class="brand-row"><span class="mark">T</span><span>Tecnopuc</span></div>
+        <div class="hero-content">
+          <p class="kicker">Design system como infraestrutura</p>
+          <h1>Inovar em rede exige uma linguagem comum.</h1>
+          <p class="lead">Para o Tecnopuc, o design system não é só identidade visual. É a base para transformar ciência, tecnologia e colaboração em experiências consistentes, rápidas e experimentáveis.</p>
+          <div class="hero-rule"></div>
+        </div>
+        <div class="hero-kinetic" aria-hidden="true">
+          <canvas class="particle-canvas"></canvas>
+          <div class="orbit-ring"></div>
+          <div class="t3d-wrap">
+            <div class="t3d">
+              <span class="top-shadow"></span>
+              <span class="stem-shadow"></span>
+              <span class="top"></span>
+              <span class="stem"></span>
+            </div>
+          </div>
+        </div>
+        <div class="counter"></div>
+      </section>
+
+      <section class="slide light" data-screen-label="02 O que é">
+        <div class="brand-row"><span class="mark">T</span><span>Tecnopuc</span></div>
+        <div class="definition-grid">
+          <div class="stack">
+            <p class="kicker">Antes dos argumentos</p>
+            <h2>Design system é uma infraestrutura de decisões.</h2>
+            <div class="statement">
+              <p>Ele reúne princípios, tokens, componentes, padrões de conteúdo e regras de uso para que cada experiência nasça com coerência, acessibilidade e intenção.</p>
+            </div>
+          </div>
+          <div class="definition-panel dark-card">
+            <h3>Não é só uma biblioteca visual.</h3>
+            <p class="muted">Identidade visual define a expressão da marca: logo, cores, tipografia, grafismos e tom. O design system transforma essa identidade em produto, comunicação e operação.</p>
+            <div class="identity-system">
+              <div class="compare-card">
+                <b>Identidade visual</b>
+                <p>Responde como a marca deve ser reconhecida e aplicada.</p>
+              </div>
+              <div class="compare-card">
+                <b>Design system</b>
+                <p>Responde como a marca se comporta em interfaces, campanhas, fluxos e decisões repetidas.</p>
+              </div>
+            </div>
+            <div class="ai-relevance">
+              <div class="ai-mark">IA</div>
+              <p>Em tempos de inteligência artificial, o sistema vira a memória operacional da marca: orienta geração, revisão e automação sem diluir o Tecnopuc em saídas genéricas.</p>
+            </div>
+          </div>
+        </div>
+        <div class="counter"></div>
+      </section>
+
+      <section class="slide dark" data-screen-label="03 Pilares">
+        <div class="brand-row"><span class="mark">T</span><span>Tecnopuc</span></div>
+        <div class="pillars-board">
+          <div>
+            <p class="kicker">Resumo da tese</p>
+            <h2>Os pilares do design system para o Tecnopuc.</h2>
+            <div class="pillar-list">
+              <article class="pillar-card" data-index="01">
+                <h3>Consistência de marca</h3>
+                <p>Uma presença reconhecível em landing pages, cards sociais, páginas institucionais e produtos digitais.</p>
+              </article>
+              <article class="pillar-card" data-index="02">
+                <h3>Velocidade de produção</h3>
+                <p>Menos tempo decidindo o básico. Mais tempo qualificando conteúdo, estratégia e experiência.</p>
+              </article>
+              <article class="pillar-card" data-index="03">
+                <h3>Qualidade e governança</h3>
+                <p>Contraste, hierarquia, voz, componentes e regras de uso reduzem retrabalho e risco de fragmentação.</p>
+              </article>
+              <article class="pillar-card" data-index="04">
+                <h3>Escala do ecossistema</h3>
+                <p>Uma linguagem comum acomoda universidade, empresas, startups, governo, hubs e programas.</p>
+              </article>
+              <article class="pillar-card accent" data-index="05">
+                <h3>Inovação e experimentação</h3>
+                <p>Fundamentos estáveis liberam novas campanhas, jornadas, hubs e protótipos sem perder coerência.</p>
+              </article>
+            </div>
+          </div>
+          <div class="pillar-orbit" aria-hidden="true">
+            <span class="orbit-label">Governança</span>
+            <span class="orbit-label">Velocidade</span>
+            <span class="orbit-label">Consistência</span>
+            <span class="orbit-label">Escala</span>
+            <span class="orbit-label">Experimentação</span>
+            <div class="pillar-center">Design<br>System</div>
+          </div>
+        </div>
+        <div class="counter"></div>
+      </section>
+
+      <section class="slide light split" data-screen-label="04 Consistência">
+        <div class="brand-row"><span class="mark">T</span><span>Tecnopuc</span></div>
+        <div class="stack">
+          <p class="kicker">1. Consistência de marca</p>
+          <h2>A marca fica reconhecível em qualquer superfície.</h2>
+          <div class="statement">
+            <p>Quando landing page, cards sociais e componentes usam a mesma paleta, tipografia, grafismos e voz, o ecossistema se apresenta como uma instituição única, não como peças soltas.</p>
+          </div>
+        </div>
+        <div class="before-after">
+          <div class="mock-panel">
+            <div class="mock-head"><span>Sem sistema</span><span>peças isoladas</span></div>
+            <div class="mock-body">
+              <div class="bad-block">Cores próximas, mas sem critério de função.</div>
+              <div class="bad-block">Botões, cards e chamadas variam a cada demanda.</div>
+              <div class="bad-block">A linguagem muda conforme o canal ou produtor.</div>
+              <div class="bad-block">A marca depende de revisão manual constante.</div>
+            </div>
+          </div>
+          <div class="mock-panel light-panel">
+            <div class="mock-head"><span>Com sistema</span><span>marca aplicada</span></div>
+            <div class="mock-body">
+              <div class="good-title">Onde ciência, tecnologia e pessoas criam futuro.</div>
+              <p class="good-copy">A mesma estrutura sustenta hero institucional, card de programa, chamada de evento e mensagem de sistema.</p>
+              <div class="good-chip-row"><span class="chip">Roxo institucional</span><span class="chip">Ocre como foco</span><span class="chip">Tom coletivo</span></div>
+              <span class="good-cta">Conhecer o ecossistema</span>
+            </div>
+          </div>
+        </div>
+        <div class="counter"></div>
+      </section>
+
+      <section class="slide light split" data-screen-label="05 Velocidade">
+        <div class="brand-row"><span class="mark">T</span><span>Tecnopuc</span></div>
+        <div class="stack">
+          <p class="kicker">2. Velocidade de produção</p>
+          <h2>Times deixam de redesenhar o básico.</h2>
+          <div class="statement">
+            <p>O sistema transforma decisões recorrentes em blocos reutilizáveis: tokens, cards, botões, filtros, tabs, CTAs, formatos de evento e mensagens. A energia do time vai para o conteúdo e a estratégia.</p>
+          </div>
+        </div>
+        <div class="proof-grid motion-board">
+          <article class="proof-card" data-step="01"><strong>Tokens</strong><p>Cores, tipografia, contraste e estados partem de uma base comum.</p></article>
+          <article class="proof-card" data-step="02"><strong>Componentes</strong><p>Cards de programa, botões e filtros já carregam hierarquia e ação.</p></article>
+          <article class="proof-card" data-step="03"><strong>Layouts</strong><p>Landing, cards sociais e páginas internas compartilham ritmo e espaçamento.</p></article>
+          <article class="proof-card" data-step="04"><strong>Interação</strong><p>Tabs, formulários e controles têm comportamento previsível desde o protótipo.</p></article>
+        </div>
+        <div class="counter"></div>
+      </section>
+
+      <section class="slide dark split" data-screen-label="06 Qualidade">
+        <div class="brand-row"><span class="mark">T</span><span>Tecnopuc</span></div>
+        <div class="stack">
+          <p class="kicker">3. Qualidade e governança</p>
+          <h2>O padrão protege clareza, contraste e decisão.</h2>
+          <p class="lead">Governança não precisa travar criação. Ela define o que deve permanecer estável para que cada iniciativa possa variar com segurança.</p>
+        </div>
+        <div class="stack">
+          <article class="rule-card">
+            <div class="label">Legibilidade</div>
+            <p>Títulos curtos, corpo objetivo e contraste AA ou superior em interfaces digitais.</p>
+          </article>
+          <article class="rule-card">
+            <div class="label">Uso da marca</div>
+            <p>Ocre como ponto de foco, roxo como território institucional e grafismos nas extremidades.</p>
+          </article>
+          <article class="rule-card">
+            <div class="label">Ação clara</div>
+            <p>Botões usam verbos diretos: conhecer, falar, inscrever-se, solicitar contato.</p>
+          </article>
+          <article class="rule-card">
+            <div class="label">Revisão menor</div>
+            <p>A discussão sai de “qual estilo usar?” e vai para “qual mensagem precisa ficar mais forte?”.</p>
+          </article>
+        </div>
+        <div class="counter"></div>
+      </section>
+
+      <section class="slide light split" data-screen-label="07 Escala">
+        <div class="brand-row"><span class="mark">T</span><span>Tecnopuc</span></div>
+        <div class="stack">
+          <p class="kicker">4. Escala do ecossistema</p>
+          <h2>Uma linguagem capaz de acomodar muitos atores.</h2>
+          <div class="statement">
+            <p>O Tecnopuc articula universidade, empresas, startups, governo, hubs e programas. O design system permite que essa diversidade cresça sem fragmentar a experiência.</p>
+          </div>
+        </div>
+        <div class="system-map orbit-map">
+          <div class="ecosystem-core">Ecossistema</div>
+          <article class="surface-card"><span>Página do sistema</span><h3>Quatro superfícies, uma linguagem.</h3><p>Amostra central organiza landing, app, tokens e social em uma navegação comum.</p></article>
+          <article class="surface-card"><span>Landing page</span><h3>Narrativa modular.</h3><p>Hero, pilares, hubs e CTA explicam valor sem alongar demais a experiência.</p></article>
+          <article class="surface-card"><span>Cards sociais</span><h3>Variação com controle.</h3><p>Evento, institucional e fundo claro mudam o formato, mas mantêm hierarquia e marca.</p></article>
+          <article class="surface-card"><span>Componentes</span><h3>Base para produção recorrente.</h3><p>Tokens, cards, mensagens e movimento tornam a escala mais previsível.</p></article>
+        </div>
+        <div class="counter"></div>
+      </section>
+
+      <section class="slide dark" data-screen-label="08 Inovação">
+        <div class="brand-row"><span class="mark">T</span><span>Tecnopuc</span></div>
+        <div class="experiment-grid">
+          <div>
+            <p class="kicker">Acima de tudo: inovação e experimentação</p>
+            <h2>O sistema cria liberdade porque reduz incerteza.</h2>
+            <p class="lead">Com fundamentos estáveis, o Tecnopuc pode testar novos formatos, campanhas, hubs e jornadas digitais sem perder coerência institucional.</p>
+            <div class="example-strip">
+              <div class="example"><b>Testar</b><p>Novas narrativas para programas, eventos e desafios de inovação.</p></div>
+              <div class="example"><b>Aprender</b><p>Comparar o que funciona em landing, social e componentes interativos.</p></div>
+              <div class="example"><b>Escalar</b><p>Transformar boas soluções em padrões reutilizáveis para a rede.</p></div>
+            </div>
+          </div>
+          <div class="closing-box">
+            <h2>Design system é método para criar futuro em rede.</h2>
+            <p>Ele conecta marca, produto, comunicação e governança para que o ecossistema Tecnopuc experimente mais, produza melhor e cresça com uma presença reconhecível.</p>
+            <div class="closing-kinetic" aria-hidden="true">
+              <canvas class="particle-canvas"></canvas>
+              <div class="t3d-wrap">
+                <div class="t3d compact-t">
+                  <span class="top-shadow"></span>
+                  <span class="stem-shadow"></span>
+                  <span class="top"></span>
+                  <span class="stem"></span>
+                </div>
+              </div>
+              <div class="closing-caption">Fundamentos estáveis liberam experimentação com mais segurança.</div>
+            </div>
+          </div>
+        </div>
+        <div class="counter"></div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const deck = document.querySelector("#deck");
+    const slides = Array.from(document.querySelectorAll(".slide"));
+    const particleCanvases = Array.from(document.querySelectorAll(".particle-canvas"));
+    const storageKey = "tecnopuc-design-system-importancia-current-slide";
+    let current = Math.min(Math.max(Number(localStorage.getItem(storageKey)) || 0, 0), slides.length - 1);
+    let previous = current;
+    let introTimer;
+
+    function fitDeck() {
+      const scale = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
+      deck.style.transform = `scale(${scale})`;
+      resizeParticles();
+    }
+
+    function renderSlide(index) {
+      previous = current;
+      current = Math.min(Math.max(index, 0), slides.length - 1);
+      slides.forEach((slide, slideIndex) => {
+        slide.classList.toggle("is-active", slideIndex === current);
+        slide.classList.toggle("is-exiting", slideIndex === previous && previous !== current);
+        slide.setAttribute("aria-hidden", slideIndex === current ? "false" : "true");
+        const counter = slide.querySelector(".counter");
+        if (counter) counter.textContent = `${String(slideIndex + 1).padStart(2, "0")} / ${String(slides.length).padStart(2, "0")}`;
+      });
+      localStorage.setItem(storageKey, String(current));
+      window.setTimeout(() => {
+        slides.forEach((slide) => slide.classList.remove("is-exiting"));
+      }, 820);
+      restartIntro();
+    }
+
+    function restartIntro() {
+      const firstSlide = slides[0];
+      window.clearTimeout(introTimer);
+      slides.forEach((slide, slideIndex) => {
+        if (slideIndex !== 0) slide.classList.remove("intro-running");
+      });
+      if (current !== 0 || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        firstSlide.classList.remove("intro-running");
+        return;
+      }
+      firstSlide.classList.remove("intro-running");
+      void firstSlide.offsetWidth;
+      firstSlide.classList.add("intro-running");
+      introTimer = window.setTimeout(() => firstSlide.classList.remove("intro-running"), 9600);
+    }
+
+    function nextSlide() { renderSlide(current + 1); }
+    function previousSlide() { renderSlide(current - 1); }
+
+    window.addEventListener("resize", fitDeck);
+    window.addEventListener("keydown", (event) => {
+      if (["ArrowRight", "PageDown", " "].includes(event.key)) {
+        event.preventDefault();
+        nextSlide();
+      }
+      if (["ArrowLeft", "PageUp", "Backspace"].includes(event.key)) {
+        event.preventDefault();
+        previousSlide();
+      }
+      if (event.key === "Home") renderSlide(0);
+      if (event.key === "End") renderSlide(slides.length - 1);
+    });
+    window.addEventListener("click", (event) => {
+      if (event.target.closest("a, button, input, textarea, select")) return;
+      if (event.clientX > window.innerWidth / 2) nextSlide();
+      else previousSlide();
+    });
+
+    const particleSystems = particleCanvases.map((canvas, canvasIndex) => {
+      const context = canvas.getContext("2d");
+      const count = canvas.closest(".closing-kinetic") ? 52 : 118;
+      const particles = Array.from({ length: count }, (_, index) => ({
+        angle: (Math.PI * 2 * index) / count,
+        orbit: 78 + (index % 9) * 28 + canvasIndex * 12,
+        speed: .0022 + (index % 7) * .00045,
+        size: 2 + (index % 4) * .7,
+        phase: index * 0.31
+      }));
+      return { canvas, context, particles, width: 0, height: 0 };
+    });
+
+    function resizeParticles() {
+      particleSystems.forEach((system) => {
+        const rect = system.canvas.getBoundingClientRect();
+        const ratio = window.devicePixelRatio || 1;
+        system.width = Math.max(1, Math.round(rect.width * ratio));
+        system.height = Math.max(1, Math.round(rect.height * ratio));
+        system.canvas.width = system.width;
+        system.canvas.height = system.height;
+        system.context.setTransform(ratio, 0, 0, ratio, 0, 0);
+      });
+    }
+
+    function drawParticles(time) {
+      particleSystems.forEach((system) => {
+        const rect = system.canvas.getBoundingClientRect();
+        const width = rect.width;
+        const height = rect.height;
+        const centerX = width / 2;
+        const centerY = height / 2;
+        const context = system.context;
+        context.clearRect(0, 0, width, height);
+        context.lineWidth = 1;
+        system.particles.forEach((particle, index) => {
+          const pulse = Math.sin(time * .0015 + particle.phase) * 18;
+          const angle = particle.angle + time * particle.speed;
+          const radius = particle.orbit + pulse;
+          const x = centerX + Math.cos(angle) * radius;
+          const y = centerY + Math.sin(angle * 1.18) * radius * .58;
+          const alpha = .28 + (Math.sin(time * .002 + particle.phase) + 1) * .22;
+          context.beginPath();
+          context.fillStyle = index % 5 === 0 ? `rgba(234, 152, 47, ${alpha + .2})` : `rgba(255, 252, 251, ${alpha})`;
+          context.arc(x, y, particle.size, 0, Math.PI * 2);
+          context.fill();
+          if (index % 11 === 0) {
+            context.beginPath();
+            context.strokeStyle = `rgba(201, 183, 203, ${alpha * .38})`;
+            context.moveTo(centerX, centerY);
+            context.lineTo(x, y);
+            context.stroke();
+          }
+        });
+      });
+      window.requestAnimationFrame(drawParticles);
+    }
+
+    fitDeck();
+    renderSlide(current);
+    resizeParticles();
+    window.requestAnimationFrame(drawParticles);
+  </script>
+</body>
+</html>

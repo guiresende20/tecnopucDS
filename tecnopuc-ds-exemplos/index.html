@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tecnopuc Design System — Amostras Digitais</title>
+  <style>
+    :root {
+      --purple-900: #3A245F;
+      --purple-800: #552583;
+      --purple-600: #8D3D8F;
+      --purple-300: #C9B7CB;
+      --magenta: #CC66CC;
+      --ochre: #EA982F;
+      --ochre-dark: #D07E1D;
+      --blue: #027DBD;
+      --bg: #FAFAFA;
+      --surface: rgba(255,255,255,.88);
+      --fg: #161617;
+      --body: #262626;
+      --muted: #6C6E71;
+      --border: rgba(58,36,95,.16);
+      --shadow: 0 24px 80px rgba(38, 20, 64, .20);
+      --font-display: "Gotham", "Gotham Book", "Montserrat", "Bahnschrift", system-ui, sans-serif;
+      --font-body: "Gotham", "Gotham Book", "Montserrat", "Bahnschrift", system-ui, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: var(--font-body);
+      color: var(--body);
+      background:
+        radial-gradient(circle at 86% 10%, rgba(204,102,204,.30), transparent 34rem),
+        radial-gradient(circle at 8% 16%, rgba(234,152,47,.18), transparent 28rem),
+        linear-gradient(135deg, var(--purple-900), var(--purple-800) 48%, #24153f);
+    }
+    a { color: inherit; text-decoration: none; }
+    .shell { width: min(1180px, calc(100% - 40px)); margin: 0 auto; }
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(18px);
+      background: rgba(58,36,95,.76);
+      border-bottom: 1px solid rgba(255,255,255,.14);
+    }
+    .nav {
+      min-height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      color: #FFFCFB;
+    }
+    .brand { display: flex; align-items: center; gap: 12px; font-weight: 800; letter-spacing: .01em; }
+    .mark {
+      width: 38px;
+      aspect-ratio: 1;
+      display: grid;
+      place-items: center;
+      border: 2px solid var(--ochre);
+      border-radius: 50%;
+      color: var(--ochre);
+      font-weight: 900;
+    }
+    .navlinks { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+    .navlinks a, .chip {
+      border: 1px solid rgba(255,255,255,.18);
+      background: rgba(255,255,255,.08);
+      color: #FFFCFB;
+      padding: 10px 14px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .hero {
+      position: relative;
+      min-height: calc(100vh - 72px);
+      display: grid;
+      align-items: center;
+      overflow: hidden;
+      color: #FFFCFB;
+      padding: clamp(44px, 7vw, 86px) 0;
+    }
+    .hero::before, .hero::after {
+      content: "";
+      position: absolute;
+      border: 1px solid rgba(255,255,255,.12);
+      transform: rotate(-18deg);
+      pointer-events: none;
+    }
+    .hero::before { width: 360px; height: 84px; right: -80px; top: 18%; background: rgba(255,255,255,.05); }
+    .hero::after { width: 220px; height: 220px; right: 10%; bottom: 4%; border-color: rgba(234,152,47,.46); }
+    .hero-grid {
+      position: relative;
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(320px, .95fr);
+      gap: clamp(32px, 6vw, 74px);
+      align-items: center;
+    }
+    .eyebrow { color: #F2B04D; text-transform: uppercase; letter-spacing: .16em; font-size: 12px; font-weight: 900; }
+    h1 {
+      margin: 16px 0 18px;
+      font: 850 clamp(44px, 7.5vw, 96px)/.93 var(--font-display);
+      letter-spacing: -.035em;
+      text-wrap: balance;
+      color: #FFFCFB;
+    }
+    .lead { max-width: 720px; color: #E3E3E4; font-size: clamp(18px, 2.2vw, 24px); line-height: 1.48; }
+    .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 30px; }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-height: 46px;
+      border-radius: 12px;
+      padding: 0 18px;
+      border: 1px solid rgba(255,255,255,.22);
+      font-weight: 850;
+      transition: transform .22s ease, background .22s ease, border .22s ease;
+    }
+    .btn:hover { transform: translateY(-2px); }
+    .btn.primary { background: var(--ochre); color: #24153f; border-color: var(--ochre); }
+    .btn.ghost { color: #FFFCFB; background: rgba(255,255,255,.08); }
+    .preview-card {
+      background: rgba(255,255,255,.90);
+      color: var(--fg);
+      border: 1px solid rgba(255,255,255,.60);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      transform: rotate(1.4deg);
+      animation: floatIn .8s ease both;
+    }
+    @keyframes floatIn { from { opacity: 0; transform: translateY(20px) rotate(1.4deg); } to { opacity: 1; transform: translateY(0) rotate(1.4deg); } }
+    .preview-head { padding: 16px; display: flex; gap: 8px; border-bottom: 1px solid var(--border); }
+    .dot { width: 11px; height: 11px; border-radius: 50%; background: var(--purple-300); }
+    .dot:nth-child(2) { background: var(--ochre); }
+    .dot:nth-child(3) { background: var(--blue); }
+    .preview-body { padding: 22px; display: grid; gap: 16px; }
+    .mini-hero { min-height: 154px; border-radius: 16px; background: linear-gradient(135deg, var(--purple-900), var(--purple-600)); padding: 20px; color: #fff; display: grid; align-content: end; }
+    .mini-lines { display: grid; gap: 9px; }
+    .mini-lines span { height: 10px; border-radius: 999px; background: rgba(58,36,95,.14); }
+    .mini-lines span:nth-child(1) { width: 92%; }
+    .mini-lines span:nth-child(2) { width: 66%; }
+    .mini-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    .mini-grid div { min-height: 74px; border-radius: 14px; background: #fff; border: 1px solid var(--border); }
+    .section {
+      background: var(--bg);
+      color: var(--body);
+      padding: clamp(52px, 8vw, 90px) 0;
+    }
+    .section h2 { margin: 0 0 12px; font-size: clamp(30px, 4vw, 54px); line-height: 1; letter-spacing: -.025em; color: var(--fg); }
+    .section p { color: var(--muted); line-height: 1.65; }
+    .filter-row { display: flex; gap: 10px; flex-wrap: wrap; margin: 26px 0 22px; }
+    .filter {
+      border: 1px solid var(--border);
+      background: #fff;
+      color: var(--purple-900);
+      border-radius: 999px;
+      padding: 11px 15px;
+      font-weight: 850;
+      cursor: pointer;
+    }
+    .filter[aria-pressed="true"] { background: var(--purple-900); color: #fff; border-color: var(--purple-900); }
+    .cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+    .screen-card {
+      min-height: 286px;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 16px 40px rgba(58,36,95,.08);
+      display: grid;
+      grid-template-rows: 136px 1fr;
+      transition: transform .24s ease, box-shadow .24s ease, border-color .24s ease;
+    }
+    .screen-card:hover { transform: translateY(-5px); box-shadow: 0 24px 70px rgba(58,36,95,.16); border-color: rgba(234,152,47,.55); }
+    .thumb { padding: 16px; background: linear-gradient(135deg, var(--purple-900), var(--purple-600)); position: relative; overflow: hidden; }
+    .thumb::after { content:""; position:absolute; width:140px; height:44px; border:1px solid rgba(255,255,255,.22); right:-32px; top:28px; transform:rotate(-18deg); }
+    .thumb.light { background: linear-gradient(135deg, #fff, #f0e9f2); }
+    .thumb.app { background: linear-gradient(135deg, #201334, #552583); }
+    .thumb.social { background: linear-gradient(135deg, #552583, #E83D78); }
+    .screen-card .copy { padding: 18px; }
+    .screen-card h3 { margin: 0 0 8px; font-size: 20px; line-height: 1.14; color: var(--fg); }
+    .screen-card p { margin: 0 0 16px; font-size: 14px; }
+    .open-link { color: var(--purple-800); font-weight: 900; }
+    .proof {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-top: 36px;
+    }
+    .proof article { background: #fff; border: 1px solid var(--border); border-radius: 16px; padding: 22px; }
+    .proof strong { display: block; color: var(--purple-800); font-size: 28px; margin-bottom: 6px; }
+    @media (max-width: 980px) {
+      .hero-grid { grid-template-columns: 1fr; }
+      .preview-card { transform: none; }
+      .cards { grid-template-columns: repeat(2, 1fr); }
+      .proof { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 560px) {
+      .shell { width: min(100% - 28px, 1180px); }
+      .nav { align-items: flex-start; flex-direction: column; padding: 14px 0; }
+      .navlinks a { padding: 9px 11px; font-size: 12px; }
+      h1 { font-size: clamp(40px, 13vw, 58px); }
+      .hero { min-height: auto; }
+      .cards { grid-template-columns: 1fr; }
+      .hero-actions .btn { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <nav class="shell nav" aria-label="Navegação principal">
+      <a class="brand" href="index.html" aria-label="Tecnopuc Design System">
+        <span class="mark">T</span>
+        <span>Tecnopuc Design System</span>
+      </a>
+      <div class="navlinks">
+        <a href="landing.html">Landing</a>
+        <a href="mobile-app.html">App</a>
+        <a href="components.html">Tokens</a>
+        <a href="social-cards.html">Social</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="shell hero-grid">
+        <div>
+          <div class="eyebrow">Guia vivo de aplicação digital</div>
+          <h1>Um sistema para transformar ciência em experiência.</h1>
+          <p class="lead">Amostras de interfaces que demonstram como a identidade Tecnopuc se comporta em produtos digitais, campanhas, componentes e jornadas responsivas.</p>
+          <div class="hero-actions">
+            <a class="btn primary" href="#amostras">Ver amostras</a>
+            <a class="btn ghost" href="components.html">Abrir tokens</a>
+          </div>
+        </div>
+        <aside class="preview-card" aria-label="Preview visual do sistema">
+          <div class="preview-head"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+          <div class="preview-body">
+            <div class="mini-hero"><strong>Ecossistema global de inovação</strong></div>
+            <div class="mini-lines"><span></span><span></span></div>
+            <div class="mini-grid"><div></div><div></div><div></div></div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section" id="amostras">
+      <div class="shell">
+        <div class="eyebrow">Amostras navegáveis</div>
+        <h2>Quatro superfícies, uma linguagem.</h2>
+        <p>Filtre por tipo de aplicação e abra cada arquivo para avaliar responsividade, hierarquia, transições e comportamento interativo.</p>
+        <div class="filter-row" role="toolbar" aria-label="Filtrar amostras">
+          <button class="filter" data-filter="all" aria-pressed="true">Todas</button>
+          <button class="filter" data-filter="marketing">Marketing</button>
+          <button class="filter" data-filter="produto">Produto</button>
+          <button class="filter" data-filter="sistema">Sistema</button>
+        </div>
+        <div class="cards" id="cards">
+          <a class="screen-card" data-type="marketing" href="landing.html">
+            <div class="thumb"></div>
+            <div class="copy">
+              <h3>Landing institucional</h3>
+              <p>Hero, prova de ecossistema, hubs, CTA e tabs de narrativa.</p>
+              <span class="open-link">Abrir tela</span>
+            </div>
+          </a>
+          <a class="screen-card" data-type="produto" href="mobile-app.html">
+            <div class="thumb app"></div>
+            <div class="copy">
+              <h3>App mobile</h3>
+              <p>Jornada de comunidade com agenda, conexões e estados clicáveis.</p>
+              <span class="open-link">Abrir tela</span>
+            </div>
+          </a>
+          <a class="screen-card" data-type="sistema" href="components.html">
+            <div class="thumb light"></div>
+            <div class="copy">
+              <h3>Tokens e componentes</h3>
+              <p>Paleta, tipografia, componentes, transições e partículas web.</p>
+              <span class="open-link">Abrir tela</span>
+            </div>
+          </a>
+          <a class="screen-card" data-type="marketing" href="social-cards.html">
+            <div class="thumb social"></div>
+            <div class="copy">
+              <h3>Cards sociais</h3>
+              <p>Peças 1:1 e 4:5 com grafismos, caixas de informação e CTA.</p>
+              <span class="open-link">Abrir tela</span>
+            </div>
+          </a>
+        </div>
+        <div class="proof">
+          <article><strong>AA</strong><p>Contraste priorizado em superfícies claras e escuras.</p></article>
+          <article><strong>360–1920</strong><p>Layouts fluidos para web responsiva moderna.</p></article>
+          <article><strong>1 acento</strong><p>Ocre usado com parcimônia para foco e marca.</p></article>
+        </div>
+      </div>
+    </section>
+  </main>
+  <script>
+    const filters = document.querySelectorAll(".filter");
+    const cards = document.querySelectorAll(".screen-card");
+    filters.forEach((button) => {
+      button.addEventListener("click", () => {
+        const value = button.dataset.filter;
+        filters.forEach((item) => item.setAttribute("aria-pressed", String(item === button)));
+        cards.forEach((card) => {
+          const show = value === "all" || card.dataset.type === value;
+          card.style.display = show ? "grid" : "none";
+        });
+      });
+    });
+  </script>
+</body>
+</html>
