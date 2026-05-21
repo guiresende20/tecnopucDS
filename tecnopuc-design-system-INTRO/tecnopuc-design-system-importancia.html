@@ -1384,8 +1384,7 @@
     const deck = document.querySelector("#deck");
     const slides = Array.from(document.querySelectorAll(".slide"));
     const particleCanvases = Array.from(document.querySelectorAll(".particle-canvas"));
-    const storageKey = "tecnopuc-design-system-importancia-current-slide";
-    let current = Math.min(Math.max(Number(localStorage.getItem(storageKey)) || 0, 0), slides.length - 1);
+    let current = 0;
     let previous = current;
     let introTimer;
 
@@ -1405,7 +1404,6 @@
         const counter = slide.querySelector(".counter");
         if (counter) counter.textContent = `${String(slideIndex + 1).padStart(2, "0")} / ${String(slides.length).padStart(2, "0")}`;
       });
-      localStorage.setItem(storageKey, String(current));
       window.setTimeout(() => {
         slides.forEach((slide) => slide.classList.remove("is-exiting"));
       }, 820);
