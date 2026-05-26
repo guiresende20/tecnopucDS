@@ -457,14 +457,14 @@
   .matrix div{padding:.8vh 1.1vw;border-bottom:1px solid rgba(127,127,127,.28);font-size:.92vw;line-height:1.28}
   .matrix .head{font-family:var(--mono);font-size:.75vw;letter-spacing:.16em;text-transform:uppercase;opacity:.58}
   .matrix .strong{font-weight:800;font-size:1.05vw}
-  .orbit{position:relative;height:56vh;margin-top:3vh}
-  .orbit .center-node{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:12vw;height:12vw;border:2px solid currentColor;border-radius:50%;display:grid;place-items:center;text-align:center;font-weight:900;font-size:1.18vw;background:rgba(234,152,47,.14)}
+  .orbit{position:relative;width:min(100%,54vh);aspect-ratio:1;margin:0 auto}
+  .orbit .center-node{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:32%;height:32%;border:2px solid currentColor;border-radius:50%;display:grid;place-items:center;text-align:center;font-weight:900;font-size:1.7vh;line-height:1.1;background:rgba(234,152,47,.14)}
   .orbit .ring{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);border:1px solid currentColor;border-radius:50%;opacity:.2}
-  .orbit .r1{width:30vw;height:30vw}.orbit .r2{width:46vw;height:46vw}
-  .orbit .node{position:absolute;width:13vw;border-top:2px solid currentColor;padding-top:1vh}
-  .orbit .node b{display:block;font-size:1.28vw;line-height:1.12}
-  .orbit .node span{display:block;font-size:.9vw;line-height:1.35;opacity:.72;margin-top:.7vh}
-  .node.n1{left:6vw;top:5vh}.node.n2{right:8vw;top:3vh}.node.n3{left:11vw;bottom:3vh}.node.n4{right:8vw;bottom:6vh}.node.n5{left:43vw;top:0}
+  .orbit .r1{width:52%;height:52%}.orbit .r2{width:90%;height:90%}
+  .orbit .node{position:absolute;width:30%;border-top:2px solid currentColor;padding-top:.7vh}
+  .orbit .node b{display:block;font-size:1.7vh;line-height:1.14}
+  .orbit .node span{display:block;font-size:1.2vh;line-height:1.32;opacity:.72;margin-top:.5vh}
+  .node.n1{left:0;top:6%}.node.n2{right:0;top:1%}.node.n3{left:1%;bottom:5%}.node.n4{right:1%;bottom:5%}.node.n5{left:35%;top:-3%}
   .insight-list{display:grid;grid-template-columns:repeat(2,1fr);gap:2.2vh 3vw;margin-top:5vh}
   .insight{border-left:4px solid var(--tp-ochre);padding:1vh 0 1vh 1.4vw}
   .insight b{display:block;font-size:1.5vw;line-height:1.18}
@@ -618,11 +618,11 @@
     <div class="right"><span>05 / 12</span></div>
   </div>
   <div class="t-mark"></div>
-  <div class="frame" style="display:grid;grid-template-columns:44fr 56fr;gap:4vw;align-items:center;min-height:78vh">
+  <div class="frame" style="display:grid;grid-template-columns:42fr 58fr;gap:3vw;align-items:center;min-height:70vh">
     <div>
       <div class="kicker">O mecanismo setorial</div>
-      <h1 class="h-hero" style="font-size:6.4vw;line-height:1">Hubs convertem comunidade em programas.</h1>
-      <p class="lead" style="margin-top:3vh;max-width:40vw">
+      <h1 class="h-hero" style="font-size:4.2vw;line-height:1.04">Hubs convertem comunidade em programas.</h1>
+      <p class="lead" style="margin-top:2.4vh;max-width:38vw;font-size:1.3vw">
         As verticais conectam startups, empresas, pesquisadores, investidores e parceiros públicos. É nelas que surgem ciclos como FutureGov, BioHub, Capital/FINE e Farol.
       </p>
     </div>
