@@ -440,21 +440,21 @@
   .t-mark::before{left:12%;right:12%;top:13%;height:23%}
   .t-mark::after{left:38%;width:24%;top:13%;bottom:10%}
   .program-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.4vw;align-items:stretch}
-  .program-card{border-top:2px solid currentColor;padding:1.8vh 1.2vw 0;min-height:25vh;display:flex;flex-direction:column;gap:1.1vh;background:rgba(255,255,255,.04)}
+  .program-card{border-top:2px solid currentColor;padding:1.8vh 1.2vw 0;min-height:21vh;display:flex;flex-direction:column;gap:1.1vh;background:rgba(255,255,255,.04)}
   .slide.light .program-card{background:rgba(85,37,131,.04)}
   .program-card .label{font-family:var(--mono);font-size:.78vw;letter-spacing:.18em;text-transform:uppercase;opacity:.62}
   .program-card .name{font-weight:800;font-size:1.7vw;line-height:1.12}
   .program-card .desc{font-size:1.02vw;line-height:1.45;opacity:.78}
-  .stage-map{display:grid;grid-template-columns:repeat(7,1fr);gap:.8vw;margin-top:5vh;align-items:start}
-  .stage{position:relative;border-top:2px solid currentColor;padding-top:1.4vh;min-height:28vh}
+  .stage-map{display:grid;grid-template-columns:repeat(7,1fr);gap:.8vw;margin-top:3vh;align-items:start}
+  .stage{position:relative;border-top:2px solid currentColor;padding-top:1.4vh;min-height:23vh}
   .stage::after{content:"";position:absolute;top:-2px;left:18%;right:-42%;height:2px;background:currentColor;opacity:.28}
   .stage:last-child::after{display:none}
   .stage .num{font-family:var(--serif-en);font-style:italic;font-size:2vw;opacity:.46}
   .stage .title{font-weight:800;font-size:1.28vw;line-height:1.15;margin-top:1vh}
   .stage .tagline{font-size:.9vw;line-height:1.42;opacity:.74;margin-top:1vh}
   .stage .program{font-family:var(--mono);font-size:.75vw;line-height:1.4;letter-spacing:.12em;text-transform:uppercase;color:var(--tp-ochre);margin-top:1.5vh}
-  .matrix{display:grid;grid-template-columns:1.2fr 1.2fr 1fr 1.6fr;gap:0;border-top:1px solid rgba(127,127,127,.32);margin-top:4vh}
-  .matrix div{padding:1.35vh 1.1vw;border-bottom:1px solid rgba(127,127,127,.28);font-size:.98vw;line-height:1.35}
+  .matrix{display:grid;grid-template-columns:1.2fr 1.2fr 1fr 1.6fr;gap:0;border-top:1px solid rgba(127,127,127,.32);margin-top:2vh}
+  .matrix div{padding:.8vh 1.1vw;border-bottom:1px solid rgba(127,127,127,.28);font-size:.92vw;line-height:1.28}
   .matrix .head{font-family:var(--mono);font-size:.75vw;letter-spacing:.16em;text-transform:uppercase;opacity:.58}
   .matrix .strong{font-weight:800;font-size:1.05vw}
   .orbit{position:relative;height:56vh;margin-top:3vh}
@@ -471,6 +471,15 @@
   .insight span{display:block;font-size:1.05vw;line-height:1.5;opacity:.78;margin-top:.8vh}
   .source-list{display:grid;grid-template-columns:1fr 1fr;gap:1.3vh 3vw;margin-top:4vh}
   .source-list a{font-size:.9vw;line-height:1.35;color:inherit;text-decoration:underline;text-underline-offset:.28em;opacity:.8}
+
+  /* Marca Tecnopuc (letra T + aro) no canto superior direito do chrome — todos os slides */
+  .chrome{opacity:1}
+  .chrome .left{opacity:.62}
+  .chrome .right>span{opacity:.62}
+  .chrome .right{gap:.9em}
+  .chrome-mark{width:1.8em;height:1.8em;flex:0 0 auto}
+  .slide.light .chrome-mark{color:#D07E1D}
+  .slide.dark .chrome-mark{color:#EA982F}
 </style>
 </head>
 <body>
@@ -597,15 +606,9 @@
       <div class="program-card" style="min-height:13vh"><div class="label">Tecnopuc Road</div><div class="name">12 meses</div><div class="desc">MVP funcional, validação de hipóteses e formalização da empresa.</div></div>
     </div>
   </div>
-  <div class="foot" style="opacity:1">
-    <div class="title" style="display:flex;align-items:center;gap:10px;opacity:1">
-      <svg width="30" height="30" viewBox="0 0 64 64" aria-hidden="true" style="flex:0 0 auto">
-        <circle cx="32" cy="32" r="29.5" fill="none" stroke="#D07E1D" stroke-width="3"/>
-        <text x="32" y="33" text-anchor="middle" dominant-baseline="central" font-family="Montserrat, Bahnschrift, system-ui, sans-serif" font-weight="700" font-size="33" fill="#D07E1D">T</text>
-      </svg>
-      Tecnopuc
-    </div>
-    <div style="opacity:.55">Core Programs</div>
+  <div class="foot">
+    <div class="title"></div>
+    <div>Core Programs</div>
   </div>
 </section>
 
@@ -646,8 +649,8 @@
   </div>
   <div class="frame" style="padding-top:5vh">
     <div class="kicker">Setor financeiro</div>
-    <h2 class="h-xl" style="font-size:4.8vw;max-width:78vw">A vertical financeira cria trilhas por estágio: ideação, aceleração e geração de negócios.</h2>
-    <div class="program-grid" style="grid-template-columns:repeat(3,1fr);margin-top:5vh">
+    <h2 class="h-xl" style="font-size:4vw;max-width:78vw">A vertical financeira cria trilhas por estágio: ideação, aceleração e geração de negócios.</h2>
+    <div class="program-grid" style="grid-template-columns:repeat(3,1fr);margin-top:3vh">
       <div class="program-card">
         <div class="label">Ideação · 2026</div>
         <div class="name">Fintech Factory Build</div>
@@ -664,7 +667,7 @@
         <div class="desc">19 startups conectadas a organizações âncora para provas de conceito e geração de novos negócios.</div>
       </div>
     </div>
-    <div class="callout" style="margin-top:5vh;max-width:72vw">
+    <div class="callout" style="margin-top:2.6vh;max-width:72vw">
       <div class="q-big">Leitura: o hub financeiro deixou de ser apenas comunidade. Virou uma sequência de produtos de desenvolvimento de negócios.</div>
     </div>
   </div>
@@ -718,8 +721,8 @@
   </div>
   <div class="frame" style="padding-top:5vh">
     <div class="kicker">Tecnopuc como operador de ecossistema</div>
-    <h2 class="h-xl" style="font-size:4.7vw;max-width:76vw">Além dos programas próprios, o Parque aparece como executor técnico e articulador.</h2>
-    <div class="program-grid" style="grid-template-columns:repeat(3,1fr);margin-top:5vh">
+    <h2 class="h-xl" style="font-size:4vw;max-width:76vw">Além dos programas próprios, o Parque aparece como executor técnico e articulador.</h2>
+    <div class="program-grid" style="grid-template-columns:repeat(3,1fr);margin-top:3vh">
       <div class="program-card">
         <div class="label">Banrisul</div>
         <div class="name">Banritech Fly</div>
@@ -736,7 +739,7 @@
         <div class="desc">Parceria recorrente em finanças: aceleração, modelagem de negócios, mentorias, matchmaking e conexão com investidores.</div>
       </div>
     </div>
-    <div class="callout" style="margin-top:5vh;max-width:76vw">
+    <div class="callout" style="margin-top:2.6vh;max-width:76vw">
       <div class="q-big">A vantagem competitiva é a curadoria: o Tecnopuc aproxima desafio real, startup certa, mentor técnico e ambiente de validação.</div>
     </div>
   </div>
@@ -754,17 +757,17 @@
   <div class="frame grid-2-8-4" style="padding-top:5vh">
     <div>
       <div class="kicker">Programa adjacente</div>
-      <h2 class="h-xl" style="font-size:5vw;max-width:65vw">Aceleradora Inclusiva não acelera startups. Acelera acesso ao mercado de tecnologia.</h2>
-      <p class="lead" style="margin-top:3vh;max-width:64vw">
+      <h2 class="h-xl" style="font-size:3.9vw;max-width:65vw">Aceleradora Inclusiva não acelera startups. Acelera acesso ao mercado de tecnologia.</h2>
+      <p class="lead" style="margin-top:2vh;max-width:64vw">
         Como parte da agenda do Farol Hub, a iniciativa conecta PUCRS, Tecnopuc, Thoughtworks e Globo para formar pessoas com deficiência física e/ou mobilidade reduzida em tecnologia.
       </p>
-      <div class="insight-list" style="grid-template-columns:repeat(3,1fr);margin-top:4vh">
+      <div class="insight-list" style="grid-template-columns:repeat(3,1fr);margin-top:2.5vh">
         <div class="insight"><b>8 meses</b><span>Formação 100% online na turma 2026.</span></div>
         <div class="insight"><b>R$ 750</b><span>Bolsa-auxílio mensal para participantes selecionados.</span></div>
         <div class="insight"><b>Impacto</b><span>Qualificação técnica, inclusão produtiva e acesso ao setor de TI.</span></div>
       </div>
     </div>
-    <div class="program-card" style="min-height:50vh;justify-content:center;background:rgba(85,37,131,.07)">
+    <div class="program-card" style="min-height:44vh;justify-content:center;background:rgba(85,37,131,.07)">
       <div class="label">Como classificar no relatório</div>
       <div class="name" style="font-size:2.3vw">Não é aceleração de negócios.</div>
       <div class="desc" style="font-size:1.18vw">É infraestrutura de talentos e impacto social. Deve aparecer como programa complementar, importante para o ecossistema, mas separado dos ciclos de startups.</div>
@@ -781,9 +784,9 @@
     <div class="left"><span>Matriz comparativa</span><span class="sep"></span><span>Uso executivo</span></div>
     <div class="right"><span>10 / 12</span></div>
   </div>
-  <div class="frame" style="padding-top:4vh">
+  <div class="frame" style="padding-top:2.5vh">
     <div class="kicker">Resumo operacional</div>
-    <h2 class="h-xl" style="font-size:4.4vw;max-width:78vw">Quem entra, em que estágio, e qual saída esperada.</h2>
+    <h2 class="h-xl" style="font-size:3.4vw;max-width:78vw">Quem entra, em que estágio, e qual saída esperada.</h2>
     <div class="matrix">
       <div class="head">Programa</div><div class="head">Público</div><div class="head">Estágio</div><div class="head">Saída principal</div>
       <div class="strong">Garage</div><div>Empreendedores com projeto inovador de base tecnológica.</div><div>Ideação</div><div>Modelo estruturado, validação prática e primeiro protótipo.</div>
@@ -985,11 +988,14 @@ let idx=0,total=slides.length,lock=false;
 // Importante: ajustar a largura do deck para total * 100vw, senão a navegação desalinha
 deck.style.width=(total*100)+'vw';
 
+const tpMark='<svg class="chrome-mark" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="29.5" fill="none" stroke="currentColor" stroke-width="3.5"/><text x="32" y="33" text-anchor="middle" dominant-baseline="central" font-family="Montserrat,Bahnschrift,system-ui,sans-serif" font-weight="700" font-size="33" fill="currentColor">T</text></svg>';
 slides.forEach((s,i)=>{
   const b=document.createElement('button');
   b.className='dot';b.dataset.i=i;b.setAttribute('aria-label','Page '+(i+1));
   b.onclick=()=>go(i);
   nav.appendChild(b);
+  const right=s.querySelector('.chrome .right');
+  if(right) right.insertAdjacentHTML('beforeend',tpMark);
 });
 
 function go(n){
