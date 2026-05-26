@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,10 +9,10 @@
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
   :root{
-    /* ============ 主题色(默认:🖋 墨水经典) ============
-       切换主题:从 references/themes.md 复制对应的 :root 块
-       整体替换这几行(--ink / --ink-rgb / --paper / --paper-rgb)
-       其他地方散落的 rgba() 都走 var(--ink-rgb) / var(--paper-rgb),无需逐处改 */
+    /* ============ Cores do tema (padrão: tinta clássica) ============
+       Para trocar de tema: copie o bloco :root correspondente de references/themes.md
+       e substitua estas linhas (--ink / --ink-rgb / --paper / --paper-rgb).
+       Os demais rgba() espalhados usam var(--ink-rgb) / var(--paper-rgb), sem precisar trocar um a um */
     --ink:#3A245F;
     --ink-rgb:58,36,95;
     --paper:#FAFAFA;
@@ -20,7 +20,7 @@
     --paper-tint:#C9B7CB;
     --ink-tint:#552583;
 
-    /* ============ 字体(跨主题固定) ============ */
+    /* ============ Fontes (fixas entre temas) ============ */
     --mono:"IBM Plex Mono",ui-monospace,monospace;
     --serif-en:"Montserrat","Bahnschrift","Segoe UI",system-ui,sans-serif;
     --serif-body-en:"Montserrat","Bahnschrift","Segoe UI",system-ui,sans-serif;
@@ -37,33 +37,33 @@
   *{box-sizing:border-box;margin:0;padding:0}
   html,body{width:100%;height:100%;overflow:hidden;background:var(--ink);color:var(--paper);font-family:var(--sans-zh);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
 
-  /* ============ WebGL 双背景 ============ */
+  /* ============ Fundo duplo em WebGL ============ */
   canvas.bg{position:fixed;inset:0;width:100vw;height:100vh;z-index:0;display:block;transition:opacity 1.2s ease}
   canvas#bg-light{opacity:0}
   canvas#bg-dark{opacity:1}
   body.light-bg canvas#bg-light{opacity:1}
   body.light-bg canvas#bg-dark{opacity:0}
 
-  /* ============ Deck 容器 + 翻页 ============ */
-  /* width: NSLIDES * 100vw，会在 JS 里动态矫正 */
+  /* ============ Container do deck + navegação ============ */
+  /* width: NSLIDES * 100vw — corrigido dinamicamente no JS */
   #deck{position:fixed;inset:0;width:10000vw;height:100vh;display:flex;flex-wrap:nowrap;transition:transform .9s cubic-bezier(.77,0,.175,1);z-index:10;will-change:transform}
   .slide{width:100vw;height:100vh;flex:0 0 100vw;position:relative;padding:6vh 6vw 10vh 6vw;display:flex;flex-direction:column;overflow:hidden}
   .slide.light{color:var(--ink)}
   .slide.dark{color:var(--paper)}
 
-  /* 默认页：遮罩较厚，保证文字可读 */
+  /* Página padrão: máscara mais densa para garantir a legibilidade do texto */
   .slide::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;transition:background .7s ease}
   .slide.light::before{background:rgba(var(--paper-rgb),.78);backdrop-filter:blur(3px)}
   .slide.dark::before{background:rgba(var(--ink-rgb),.78);backdrop-filter:blur(3px)}
-  /* Hero 页：遮罩大幅降低，让 WebGL 背景明显透出 */
+  /* Página hero: máscara bem reduzida para o fundo WebGL transparecer */
   .slide.hero.light::before{background:rgba(var(--paper-rgb),.16);backdrop-filter:none}
   .slide.hero.dark::before{background:rgba(var(--ink-rgb),.12);backdrop-filter:none}
-  /* Hero 页顶底微弱渐隐，保证 chrome/foot 区域可读 */
+  /* Hero: leve fade no topo e na base para manter chrome/foot legíveis */
   .slide.hero::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none}
   .slide.hero.light::after{background:linear-gradient(180deg,rgba(var(--paper-rgb),.28) 0%,rgba(var(--paper-rgb),0) 14%,rgba(var(--paper-rgb),0) 86%,rgba(var(--paper-rgb),.28) 100%)}
   .slide.hero.dark::after{background:linear-gradient(180deg,rgba(var(--ink-rgb),.32) 0%,rgba(var(--ink-rgb),0) 14%,rgba(var(--ink-rgb),0) 86%,rgba(var(--ink-rgb),.32) 100%)}
 
-  /* ============ Magazine chrome：顶部 meta + 底部 foot ============ */
+  /* ============ Chrome estilo revista: meta no topo + foot na base ============ */
   .chrome{display:flex;justify-content:space-between;align-items:flex-start;font-family:var(--mono);font-size:12px;letter-spacing:.18em;text-transform:uppercase;opacity:.7}
   .chrome .left,.chrome .right{display:flex;gap:2.4em;align-items:center}
   .chrome .sep{width:40px;height:1px;background:currentColor;opacity:.4}
@@ -74,10 +74,10 @@
   .rule{width:100%;height:1px;background:currentColor;opacity:.25;margin:3vh 0}
   .rule.v{width:1px;height:100%;margin:0}
 
-  /* ============ 字体规则 ============
-     · 衬线（Noto Serif SC / Playfair）：大标题、重点金句、数字
-     · 非衬线（Noto Sans SC）：正文描述、body、补充说明
-     · 等宽（IBM Plex Mono）：kicker、meta 小标签、foot 右侧
+  /* ============ Regras de tipografia ============
+     · Serifada (Noto Serif SC / Playfair): títulos grandes, frases de destaque, números
+     · Sem serifa (Noto Sans SC): descrições, corpo de texto, observações complementares
+     · Monoespaçada (IBM Plex Mono): kicker, meta, rótulos pequenos, foot à direita
   */
   .kicker{font-family:var(--mono);font-size:12px;letter-spacing:.3em;text-transform:uppercase;opacity:.6;margin-bottom:2.6vh}
   .display{font-family:var(--serif-en);font-weight:700;font-size:11vw;line-height:.92;letter-spacing:-.025em}
@@ -95,7 +95,7 @@
   em{font-style:italic;font-family:var(--serif-en)}
   .en{font-family:var(--serif-en);font-style:italic;font-weight:500}
 
-  /* ============ 布局工具 ============ */
+  /* ============ Utilitários de layout ============ */
   .col{display:flex;flex-direction:column;gap:2.4vh}
   .row{display:flex;align-items:center;gap:3vw}
   .grid-6{display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(2,1fr);gap:4vw 6vw;flex:1;align-content:center;padding:2vh 0}
@@ -110,34 +110,34 @@
   .bottom-right{position:absolute;right:6vw;bottom:9vh;max-width:50vw;text-align:right}
   .top-right{position:absolute;right:6vw;top:6vh;text-align:right}
 
-  /* ============ Stat（数字矩阵） ============ */
+  /* ============ Stat (matriz de números) ============ */
   .stat{display:flex;flex-direction:column;gap:1vh;align-items:flex-start}
   .stat .n{font-family:var(--serif-en);font-weight:800;font-size:8vw;line-height:.88;letter-spacing:-.03em;font-feature-settings:"tnum"}
   .stat .l{font-family:var(--sans-zh);font-size:max(13px,1.05vw);opacity:.7;margin-top:1vh;font-weight:400;line-height:1.5}
   .stat .m{font-family:var(--mono);font-size:10px;letter-spacing:.22em;text-transform:uppercase;opacity:.5;margin-bottom:.2vh}
 
-  /* ============ Callout（引用框） ============ */
+  /* ============ Callout (caixa de citação) ============ */
   .callout{padding:3vh 2.4vw;border-left:3px solid currentColor;position:relative;font-family:var(--serif-zh);font-size:max(15px,1.2vw);line-height:1.55;opacity:.92}
   .slide.light .callout{background:rgba(var(--ink-rgb),.05)}
   .slide.dark .callout{background:rgba(var(--paper-rgb),.06)}
   .callout .cite{display:block;margin-top:1.6vh;font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;opacity:.6}
   .callout .q-big{font-family:var(--serif-zh);font-weight:600;font-size:max(17px,1.6vw);line-height:1.42}
 
-  /* ============ Platform（平台卡） ============ */
+  /* ============ Platform (cartão de plataforma) ============ */
   .plat{display:flex;flex-direction:column;justify-content:flex-end;padding:2vh 0;border-top:1px solid currentColor;border-color:rgba(127,127,127,.35)}
   .plat .name{font-family:var(--serif-zh);font-weight:700;font-size:1.8vw;margin-bottom:.6vh}
   .plat .nb{font-family:var(--serif-en);font-weight:700;font-size:3.2vw;letter-spacing:-.02em;line-height:1;font-feature-settings:"tnum"}
   .plat .sub{font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;opacity:.55;margin-top:.6vh}
   .plat .fill{font-family:var(--sans-zh);font-weight:300;font-size:2.4vw;opacity:.28;letter-spacing:-.01em;line-height:1}
 
-  /* ============ Rowline（表格行） ============ */
+  /* ============ Rowline (linha de tabela) ============ */
   .rowline{display:grid;grid-template-columns:1fr 2fr 1fr;gap:2vw;padding:2.2vh 0;border-top:1px solid currentColor;align-items:center;border-color:rgba(127,127,127,.25)}
   .rowline:last-child{border-bottom:1px solid currentColor;border-color:rgba(127,127,127,.25)}
   .rowline .k{font-family:var(--serif-zh);font-weight:700;font-size:1.7vw}
   .rowline .v{font-family:var(--sans-zh);font-weight:400;font-size:max(14px,1.2vw);opacity:.85;line-height:1.55}
   .rowline .m{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;opacity:.6;justify-self:end}
 
-  /* ============ Pillar（支柱卡片） ============ */
+  /* ============ Pillar (cartão de pilar) ============ */
   .pillar{display:flex;flex-direction:column;gap:1.8vh}
   .pillar .ic{font-family:var(--serif-en);font-style:italic;font-size:2.6vw;opacity:.45;font-weight:400}
   .pillar .ic svg{width:2.8vw;height:2.8vw;stroke-width:1.2;opacity:.7}
@@ -157,7 +157,7 @@
   .ico-md{width:1.8vw;height:1.8vw;stroke-width:1.3;display:inline-block;vertical-align:-.4em}
   .ico-sm{width:1.1vw;height:1.1vw;stroke-width:1.4;display:inline-block;vertical-align:-.15em;opacity:.7}
 
-  /* ============ 图片占位（虚线框，提示设计师位置） ============ */
+  /* ============ Placeholder de imagem (moldura tracejada indicando a posição) ============ */
   .img-slot{border:1.5px dashed rgba(127,127,127,.4);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1vh;padding:2vh 2vw;font-family:var(--mono);font-size:10px;letter-spacing:.28em;text-transform:uppercase;opacity:.55;position:relative;aspect-ratio:16/9;width:100%;max-height:56vh;margin-inline:auto;box-sizing:border-box}
   .img-slot::before{content:"";position:absolute;inset:8px;border:1px solid currentColor;opacity:.2}
   .img-slot .plus{font-size:2vw;font-weight:300;opacity:.5;letter-spacing:0}
@@ -166,9 +166,9 @@
   .img-slot.r-3x2{aspect-ratio:3/2}
   .img-slot.r-1x1{aspect-ratio:1/1}
 
-  /* ============ 图片实填框（关键：固定高度 + 只裁底部） ============
-     重要约束：高度用内联 height:Nvh 精确控制，不要用 aspect-ratio（会撑破布局）
-     object-position:top center 保证严禁裁剪顶部和左右，只裁剪底部
+  /* ============ Moldura de imagem preenchida (chave: altura fixa + corte só na base) ============
+     Restrição importante: controle a altura com height:Nvh inline; não use aspect-ratio (quebra o layout)
+     object-position:top center garante que nunca corte o topo nem as laterais, apenas a base
   */
   .frame-img{overflow:hidden;position:relative;background:rgba(0,0,0,.04);box-sizing:border-box;width:100%;border-radius:4px}
   .slide.dark .frame-img{background:rgba(255,255,255,.04);border-color:rgba(255,255,255,.12)}
@@ -180,7 +180,7 @@
   figure.tile{display:flex;flex-direction:column;margin:0;min-width:0}
   figure.tile > .frame-img{flex:0 0 auto}
 
-  /* ============ 导航 ============ */
+  /* ============ Navegação ============ */
   #nav{position:fixed;left:50%;bottom:2.6vh;transform:translateX(-50%);z-index:30;display:flex;gap:10px;padding:8px 14px;border-radius:999px;background:rgba(0,0,0,.18);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
   #nav .dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.3);cursor:pointer;transition:all .3s ease;border:0;padding:0}
   #nav .dot:hover{background:rgba(255,255,255,.5);transform:scale(1.15)}
@@ -191,21 +191,21 @@
   #hint{position:fixed;bottom:3vh;right:3vw;z-index:30;font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;opacity:.4;mix-blend-mode:difference;color:#aaa}
 
   /* ============================================================
-     ============ LAYOUTS API · 面向 agent 的类（v2）============
-     所有 layouts.md 中的骨架都基于下面这套命名。
-     如果你在 layouts.md 里看到某个类，它必须在下面有定义。
+     ============ API de LAYOUTS · classes voltadas ao agente (v2) ============
+     Todos os esqueletos em layouts.md se baseiam nesta nomenclatura.
+     Se você vir uma classe em layouts.md, ela precisa estar definida abaixo.
      ============================================================ */
 
-  /* ---------- .frame：每页主内容容器 ---------- */
+  /* ---------- .frame: container principal de cada página ---------- */
   .frame{flex:1;display:flex;flex-direction:column;min-height:0}
-  /* 当 .frame 同时加了 grid 类时，grid 的 display:grid 覆盖 flex */
+  /* Quando .frame também recebe uma classe grid, o display:grid sobrepõe o flex */
   .frame.grid-2-7-5,
   .frame.grid-2-6-6,
   .frame.grid-2-8-4,
   .frame.grid-3-3,
   .frame.grid-6{display:grid}
 
-  /* ---------- 标题层级（API 名称，衬线为主） ---------- */
+  /* ---------- Hierarquia de títulos (nomes da API, serifada como padrão) ---------- */
   .h-hero{
     font-family:var(--serif-zh);
     font-weight:900;
@@ -234,10 +234,10 @@
     font-size:2.3vw;
     line-height:1.3;
   }
-  /* 英文标题专用（Playfair 衬线） */
+  /* Específico para títulos em inglês (serifada Playfair) */
   .h-hero-en,.h-xl-en{font-family:var(--serif-en);letter-spacing:-.025em}
 
-  /* ---------- lead 引语 ---------- */
+  /* ---------- lead (frase de abertura) ---------- */
   .lead{
     font-family:var(--serif-zh);
     font-weight:400;
@@ -246,7 +246,7 @@
     opacity:.86;
   }
 
-  /* ---------- meta-row 底部元数据 ---------- */
+  /* ---------- meta-row: metadados do rodapé ---------- */
   .meta-row{
     display:flex;
     gap:1.2em;
@@ -259,7 +259,7 @@
     opacity:.6;
   }
 
-  /* ---------- stat-card（数据大字报用） ---------- */
+  /* ---------- stat-card (para destaques de dados) ---------- */
   .stat-card{
     display:flex;
     flex-direction:column;
@@ -301,12 +301,12 @@
     opacity:.72;
     margin-top:.6vh;
   }
-  /* 当 stat-card 用于 grid-4（2x2），数字可以更大 */
+  /* Quando o stat-card está em grid-4 (2x2), o número pode ser maior */
   .grid-4 .stat-card .stat-nb{font-size:7.5vw}
-  /* 当只有 3 个，字也可以稍大 */
+  /* Quando há apenas 3, a fonte também pode ser um pouco maior */
   .grid-3 .stat-card .stat-nb{font-size:6.8vw}
 
-  /* ---------- pipeline（流水线） ---------- */
+  /* ---------- pipeline (esteira de etapas) ---------- */
   .pipeline-section{
     margin-top:4.4vh;
     padding-top:2.8vh;
@@ -363,8 +363,8 @@
     opacity:.72;
   }
 
-  /* ---------- 网格（layouts.md 所用） ---------- */
-  /* 这些类独立挂到任何容器上都能生效，不依赖 .frame 复合选择器 */
+  /* ---------- Grades (usadas em layouts.md) ---------- */
+  /* Estas classes funcionam em qualquer container, sem depender do seletor composto .frame */
   .grid-2-7-5{display:grid;grid-template-columns:7fr 5fr;gap:3vw 4vh;align-items:start}
   .grid-2-6-6{display:grid;grid-template-columns:1fr 1fr;gap:3vw 4vh;align-items:start}
   .grid-2-8-4{display:grid;grid-template-columns:8fr 4fr;gap:3vw 4vh;align-items:start}
@@ -374,10 +374,10 @@
     grid-auto-rows:minmax(0,1fr);
     gap:2.4vh 2vw;
   }
-  /* grid-6 已在旧样式里定义为 3x2，这里仅补 align */
+  /* grid-6 já foi definido como 3x2 no estilo antigo; aqui só completamos o align */
 
-  /* ---------- 图片 frame-img（layouts.md 主命名） ---------- */
-  /* 在旧样式里已定义，这里补 img-cap 命名别名与增强 */
+  /* ---------- Imagem frame-img (nomenclatura principal de layouts.md) ---------- */
+  /* Já definido no estilo antigo; aqui adicionamos o alias img-cap e melhorias */
   figure.frame-img{margin:0;display:flex;flex-direction:column;min-width:0}
   .img-cap{
     display:block;
@@ -388,7 +388,7 @@
     text-transform:uppercase;
     opacity:.6;
   }
-  /* callout src 命名别名 */
+  /* alias de nome para callout-src */
   .callout-src{
     display:block;
     margin-top:1.6vh;
@@ -399,11 +399,11 @@
     opacity:.6;
   }
 
-  /* ---------- chrome & foot 补位（layouts.md 简单写法） ---------- */
+  /* ---------- chrome & foot (forma simplificada usada em layouts.md) ---------- */
   .chrome{font-family:var(--mono);font-size:max(11px,.78vw);letter-spacing:.2em;text-transform:uppercase;opacity:.62}
   .foot{font-family:var(--mono);font-size:max(11px,.78vw);letter-spacing:.18em;text-transform:uppercase;opacity:.5}
 
-  /* ---------- 响应式降级 ---------- */
+  /* ---------- Degradação responsiva ---------- */
   @media (max-width:900px){
     .display{font-size:16vw}
     .display-zh{font-size:12vw}
@@ -477,14 +477,14 @@
 
 <canvas id="bg-dark" class="bg"></canvas>
 <canvas id="bg-light" class="bg"></canvas>
-<div id="hint">← → 翻页 · ESC 索引</div>
+<div id="hint">← → navegar · ESC índice</div>
 
 <div id="deck">
 
 <!-- ============================================================
-     SLIDES 插入区 · 在此处填充所有 <section class="slide ..."> 页面
-     每页模板参考 references/page-patterns.md
-     页面组件参考 references/components.md
+     Área de inserção dos SLIDES · coloque aqui todas as <section class="slide ...">
+     Modelo de cada página: references/page-patterns.md
+     Componentes de página: references/components.md
      ============================================================ -->
 
 <section class="slide hero dark" data-theme="dark" data-screen-label="01 Capa">
@@ -579,27 +579,33 @@
     <div class="left"><span>Programas-base</span><span class="sep"></span><span>Empreendedorismo</span></div>
     <div class="right"><span>04 / 12</span></div>
   </div>
-  <div class="frame grid-2-7-5" style="padding-top:5vh">
+  <div class="frame grid-2-7-5" style="padding-top:4vh;align-items:start">
     <div>
       <div class="kicker">Garage · Hangar · Road</div>
-      <h2 class="h-xl" style="font-size:5.2vw">A base é formar negócios antes de acelerar escala.</h2>
-      <p class="lead" style="margin-top:3vh">
+      <h2 class="h-xl" style="font-size:4.2vw">A base é formar negócios antes de acelerar escala.</h2>
+      <p class="lead" style="margin-top:2.2vh">
         Garage estrutura o negócio nascente. Hangar traduz pesquisa em oportunidade de mercado. Road entra quando já existe proposta de valor e modelo definidos.
       </p>
-      <div class="callout" style="margin-top:4vh">
+      <div class="callout" style="margin-top:2.6vh">
         <div class="q-big">O efeito institucional é criar fluxo: da ideia ao protótipo, do protótipo à empresa, da empresa ao ecossistema.</div>
         <div class="callout-src">Síntese analítica · fontes públicas</div>
       </div>
     </div>
-    <div class="program-grid" style="grid-template-columns:1fr;gap:2vh">
-      <div class="program-card" style="min-height:15vh"><div class="label">Tecnopuc Garage</div><div class="name">Até 3 meses</div><div class="desc">Workshops, mentorias, modelagem, validação e pitch para projetos de base tecnológica.</div></div>
-      <div class="program-card" style="min-height:15vh"><div class="label">Programa Hangar</div><div class="name">Laboratório ao mercado</div><div class="desc">Trilhas, mentorias, investidores e conexão com estruturas de pesquisa e negócios.</div></div>
-      <div class="program-card" style="min-height:15vh"><div class="label">Tecnopuc Road</div><div class="name">12 meses</div><div class="desc">MVP funcional, validação de hipóteses e formalização da empresa.</div></div>
+    <div class="program-grid" style="grid-template-columns:1fr;gap:1.6vh">
+      <div class="program-card" style="min-height:13vh"><div class="label">Tecnopuc Garage</div><div class="name">Até 3 meses</div><div class="desc">Workshops, mentorias, modelagem, validação e pitch para projetos de base tecnológica.</div></div>
+      <div class="program-card" style="min-height:13vh"><div class="label">Programa Hangar</div><div class="name">Laboratório ao mercado</div><div class="desc">Trilhas, mentorias, investidores e conexão com estruturas de pesquisa e negócios.</div></div>
+      <div class="program-card" style="min-height:13vh"><div class="label">Tecnopuc Road</div><div class="name">12 meses</div><div class="desc">MVP funcional, validação de hipóteses e formalização da empresa.</div></div>
     </div>
   </div>
-  <div class="foot">
-    <div class="title">Base empreendedora · tecnologia · ciência aplicada</div>
-    <div>Core Programs</div>
+  <div class="foot" style="opacity:1">
+    <div class="title" style="display:flex;align-items:center;gap:10px;opacity:1">
+      <svg width="30" height="30" viewBox="0 0 64 64" aria-hidden="true" style="flex:0 0 auto">
+        <circle cx="32" cy="32" r="30" fill="#EA982F"/>
+        <path d="M17 24 H47 M32 24 V48" fill="none" stroke="#3A245F" stroke-width="6"/>
+      </svg>
+      Tecnopuc
+    </div>
+    <div style="opacity:.55">Core Programs</div>
   </div>
 </section>
 
@@ -854,10 +860,10 @@
 <div id="nav"></div>
 
 <script>
-/* =============== WebGL 双背景 ===============
-   深色页：Holographic Dispersion（全息色散 · 钛金暗流）—— 彩虹微扰、鼠标径向涟漪
-   浅色页：Spiral Vortex（旋转涡流 · 银色珍珠）—— domain-warp 流动、无中心
-   修改风格请参考 references/webgl-backgrounds.md
+/* =============== Fundo duplo em WebGL ===============
+   Páginas escuras: Holographic Dispersion (dispersão holográfica) — leve perturbação de arco-íris e ondas radiais pelo cursor
+   Páginas claras: Spiral Vortex (vórtice em espiral) — fluxo domain-warp, sem centro
+   Para alterar o estilo, veja references/webgl-backgrounds.md
 */
 const VS = `attribute vec2 position;void main(){gl_Position=vec4(position,0.0,1.0);}`;
 
@@ -970,13 +976,13 @@ const t0=Date.now();
   requestAnimationFrame(loop);
 })();
 
-// =============== 导航（翻页 / 圆点 / 键盘 / 滚轮 / 触屏） ===============
+// =============== Navegação (páginas / pontos / teclado / scroll / toque) ===============
 const deck=document.getElementById('deck');
 const slides=deck.querySelectorAll('.slide');
 const nav=document.getElementById('nav');
 let idx=0,total=slides.length,lock=false;
 
-// 关键：矫正 deck 宽度为 total * 100vw，否则翻页会错位
+// Importante: ajustar a largura do deck para total * 100vw, senão a navegação desalinha
 deck.style.width=(total*100)+'vw';
 
 slides.forEach((s,i)=>{
@@ -995,14 +1001,14 @@ function go(n){
      No CSS targets it — do not remove. */
   slides.forEach((s,i)=>s.classList.toggle('active',i===idx));
   nav.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('active',i===idx));
-  /* 主题切换：优先读 data-theme，其次从 class（light/dark）推断 */
+  /* Troca de tema: lê primeiro data-theme; senão, infere pela classe (light/dark) */
   const el=slides[idx];
   const th=el.dataset.theme || (el.classList.contains('light')?'light':(el.classList.contains('dark')?'dark':'dark'));
   document.body.classList.toggle('light-bg',th==='light');
   lock=true;setTimeout(()=>lock=false,700);
 }
 
-/* =============== ESC 索引视图 =============== */
+/* =============== Visão em índice (ESC) =============== */
 let overviewOn=false;
 const ov=document.createElement('div');
 ov.id='overview';
@@ -1068,6 +1074,13 @@ go(0);
 </script>
 <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 <script>lucide.createIcons();</script>
+
+<style>
+  .portal-back{position:fixed;left:18px;bottom:18px;z-index:2147483000;display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:999px;font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",sans-serif;font-size:13px;font-weight:700;letter-spacing:.02em;color:#FAFAFA;background:rgba(58,36,95,.84);border:1px solid rgba(250,250,250,.32);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);text-decoration:none;box-shadow:0 8px 24px rgba(38,20,64,.42)}
+  .portal-back:hover,.portal-back:focus-visible{background:#EA982F;border-color:#EA982F;color:#3A245F;outline:none}
+  @media print{.portal-back{display:none}}
+</style>
+<a href="index.html" class="portal-back" aria-label="Voltar ao portal do Design System">‹ Voltar ao portal</a>
 </body>
 </html>
 
